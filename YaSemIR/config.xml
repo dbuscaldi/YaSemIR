@@ -1,0 +1,25 @@
+<config>
+	<basedir>/users/buscaldi/Works/YaSemIR</basedir>
+	<indexdir>indexOHSUMed87_sem</indexdir>
+	<termdir>term_index</termdir> <!-- terminology index to be created at indexing phase and to be used in search. Location: basedir/indexdir/ -->
+	<collection lang="en" >/users/buscaldi/Works/collabSIG/ohsumed87</collection>
+	<annotator>fr.lipn.yasemir.ontology.annotation.IndexBasedAnnotator</annotator>
+	<ontologies>
+		<ontology root="http://org.snu.bike/MeSH#All" ofile="/users/buscaldi/Works/collabSIG/meshonto.owl" />
+	</ontologies>
+	<params>
+		<weight val="fixed"/>
+		<distance val="pg3"/>
+		<ngrams val="false"/> <!-- enables CKPD schema -->
+		<search_mode val="hybrid" /> <!-- used for search: hybrid, classic or semantic -->
+	</params>
+	<semanticfields>
+		<field>tag</field>
+		<field>title</field>
+		<field>text</field>
+	</semanticfields>
+	<classicfields>
+		<field>title</field>
+		<field>text</field>
+	</classicfields>
+</config>
