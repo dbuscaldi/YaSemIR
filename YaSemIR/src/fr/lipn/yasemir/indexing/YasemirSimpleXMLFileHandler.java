@@ -5,7 +5,11 @@ import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Stack;
+import java.util.Vector;
+
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
@@ -13,29 +17,41 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
-public class XMLVilmorinFileHandler extends DefaultHandler {
-  /* A buffer for each XML element */
-  protected StringBuffer textBuffer = new StringBuffer();
-  protected StringBuffer titleBuffer = new StringBuffer();
-  protected StringBuffer parentBuffer = new StringBuffer();
-  protected String docID = new String();
+import fr.lipn.yasemir.configuration.Yasemir;
+/**
+ * This class provides an handler for XML files containing only one document
+ * @author buscaldi
+ *
+ */
+public class YasemirSimpleXMLFileHandler extends DefaultHandler {
+  protected HashMap<String, StringBuffer> fieldBuffers = new HashMap<String, StringBuffer>();
+  protected StringBuffer docIDBuffer = new StringBuffer();
   
   protected Stack<String> elemStack;
-  protected Document parsedDocument;
+  protected Document currDoc;
+  protected Vector<Document> parsedDocuments;
   
-  public XMLVilmorinFileHandler(File xmlFile) 
+  public YasemirSimpleXMLFileHandler(File xmlFile) 
   	throws ParserConfigurationException, SAXException, IOException {
     
-	// Now let's move to the parsing stuff
     SAXParserFactory spf = SAXParserFactory.newInstance();
-    
-    // use validating parser?
-    //spf.setValidating(false);
-    // make parser name space aware?
-    //spf.setNamespaceAware(true);
 
     SAXParser parser = spf.newSAXParser();
-    this.docID=xmlFile.getName();
+    
+    parsedDocuments=new Vector<Document>();
+    currDoc=new Document();
+    
+    //init fieldBuffers
+    HashSet<String> balises = new HashSet<String>();
+    balises.addAll(Yasemir.semBalises);
+    balises.addAll(Yasemir.clsBalises);
+    for(String sf : balises){
+    	StringBuffer buf = new StringBuffer();
+    	fieldBuffers.put(sf, buf);
+    }
+    
+    if(Yasemir.idField==null) this.docIDBuffer.append(xmlFile.getName()); // we use file name if a field ID is not given
+    
     //System.out.println("parser is validating: " + parser.isValidating());
     try {
       parser.parse(xmlFile, this);
@@ -49,7 +65,6 @@ public class XMLVilmorinFileHandler extends DefaultHandler {
 
   // call at document start
   public void startDocument() throws SAXException {
-	  parsedDocument=new Document();
 	  elemStack=new Stack<String>();
   }
 
@@ -63,34 +78,35 @@ public class XMLVilmorinFileHandler extends DefaultHandler {
      }
      
      elemStack.addElement(eName);
-     if(eName=="fiche") {
-     	textBuffer.setLength(0);
-     	titleBuffer.setLength(0);
-     	parentBuffer.setLength(0);
+     if(eName.equals(Yasemir.DOC_DELIM)){
+    	 currDoc=new Document();
+    	 for(String key : fieldBuffers.keySet()){
+    		 StringBuffer buf = fieldBuffers.get(key);
+    		 buf.setLength(0);
+    		 fieldBuffers.put(key, buf);
+    	 }
+    	 docIDBuffer.setLength(0);
+    	 if(Yasemir.ID_ASATTR && !(Yasemir.idField==null)){
+    		 if (attrs != null) {
+    			 docIDBuffer.append(attrs.getValue(Yasemir.idField));
+    		 }
+    	 }
      }
      
-     // list the attribute(s)
-     if (attrs != null) {
-       for (int i = 0; i < attrs.getLength(); i++) {
-         String aName = attrs.getLocalName(i); // Attr name
-         if ("".equals(aName)) { aName = attrs.getQName(i); }
-         // perform application specific action on attribute(s)
-         // for now just dump out attribute name and value
-         //System.out.println("attr " + aName+"="+attrs.getValue(i));
-       }
-     }
   }
 
   // call when cdata found
   public void characters(char[] text, int start, int length)
     throws SAXException {
-  	if(elemStack.peek().equalsIgnoreCase("taxon")){
-  		titleBuffer.append(text, start, length);
-  	} else if (elemStack.peek().equalsIgnoreCase("parent")) {
-  		parentBuffer.append(text, start, length);
-  	} else if (elemStack.peek().equalsIgnoreCase("titre") || elemStack.peek().equalsIgnoreCase("alinea") || elemStack.peek().equalsIgnoreCase("enonce")) {
-  		textBuffer.append(text, start, length);
-  	}
+	  String topElement=elemStack.peek();
+	  StringBuffer buf;
+	  if(Yasemir.isIDTag(topElement)) buf = docIDBuffer;
+	  else buf = fieldBuffers.get(topElement);
+	  
+	  if(buf!= null){
+		  buf.append(text, start, length);
+	  }
+  	
   }
 
   // call at element end
@@ -102,7 +118,8 @@ public class XMLVilmorinFileHandler extends DefaultHandler {
       eName = qualifiedName; // namespaceAware = false
     }
     elemStack.pop();
-    if (eName.equals("fiche")){
+    if (eName.equals(Yasemir.DOC_DELIM)){
+    	//TODO: annotazione semantica e mettere tutto al suo posto!!!
     	String fullText=titleBuffer.toString()+" "+parentBuffer.toString()+" "+textBuffer.toString();
     	parsedDocument.add(new Field("titre", titleBuffer.toString(), Field.Store.YES, Field.Index.NOT_ANALYZED));
     	parsedDocument.add(new Field("parent", parentBuffer.toString(), Field.Store.YES, Field.Index.NOT_ANALYZED));

@@ -31,6 +31,8 @@ import org.semanticweb.owlapi.model.OWLClass;
 import fr.lipn.yasemir.ontology.Ontology;
 import fr.lipn.yasemir.ontology.annotation.Annotation;
 import fr.lipn.yasemir.ontology.annotation.IndexBasedAnnotator;
+import fr.lipn.yasemir.ontology.annotation.KNNAnnotator;
+import fr.lipn.yasemir.ontology.annotation.SemanticAnnotator;
 
 public class OHSUMedIndexer {
 	static boolean SEMANTIC_INDEXING=true;
@@ -38,7 +40,7 @@ public class OHSUMedIndexer {
 	static public boolean VERBOSE=false;
 	static boolean EXPAND_TAGS=true;
 	
-	private static void indexOHSUFile(String filename, IndexWriter writer, IndexBasedAnnotator ann){
+	private static void indexOHSUFile(String filename, IndexWriter writer, SemanticAnnotator ann){
 		try {
 			
 			BufferedReader reader;
@@ -133,12 +135,12 @@ public class OHSUMedIndexer {
 
 	    IndexWriter writer = new IndexWriter(dir, iwc);
 	    
-	    IndexBasedAnnotator ann;
+	    SemanticAnnotator ann;
 	    if(SEMANTIC_INDEXING){
 	    	//Ontology.init("/users/buscaldi/Dropbox/Work/collabSIG/meshonto.owl");
 	    	//Ontology.init("/home/dbuscaldi/Ubuntu One/Works/collabSIG/meshonto.owl");
 	    	Ontology.init("/users/buscaldi/Works/collabSIG/meshonto.owl");
-	    	if(K_NN_ANNOTATOR) ann = new IndexBasedAnnotator("indexOHSUMed_train", termLabelIndex);
+	    	if(K_NN_ANNOTATOR) ann = new KNNAnnotator("indexOHSUMed_train", termLabelIndex);
 	    	else ann = new IndexBasedAnnotator(termLabelIndex);
 	    } else {
 	    	ann=null;

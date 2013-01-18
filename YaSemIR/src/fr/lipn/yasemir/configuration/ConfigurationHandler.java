@@ -48,9 +48,14 @@ public class ConfigurationHandler {
 	public static boolean NGRAMS_ENABLED;
 	public static String SEARCH_MODE;
 	public static String ANNOTENGINE;
+	public static String DOCIDFIELD;
+	public static String DOC_DELIM;
+	public static boolean IDFIELD_ASATTR;
 	
 	private static HashMap<String, String> ontoSKOSmap;
 	private static HashMap<String, String> ontoRootmap;
+	
+	
 	
 	public static Vector<String> getSemanticFields(){
 		return semanticallyIndexedFields;
@@ -109,6 +114,13 @@ public class ConfigurationHandler {
 						}
 						if(el.getNodeName().equals("annotator")){
 							ANNOTENGINE=el.getTextContent();
+						}
+						if(el.getNodeName().equals("idfield")){
+							DOCIDFIELD = el.getTextContent();
+							IDFIELD_ASATTR=Boolean.parseBoolean(el.getAttribute("isattr"));
+						}
+						if(el.getNodeName().equals("docdelim")){
+							DOC_DELIM = el.getTextContent();
 						}
 						if(el.getNodeName().equals("ontologies")){
 							NodeList ol = el.getChildNodes();

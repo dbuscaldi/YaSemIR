@@ -40,9 +40,9 @@ import java.util.Date;
 /**
  * @author Davide Buscaldi, LIPN
  */
-public class SimpleIndexer {
+public class YasemirIndexer {
 	
-	private SimpleIndexer() {}
+	private YasemirIndexer() {}
 	
 	/** Index all text files under a directory. */
 	  public static void main(String[] args) {

@@ -22,4 +22,6 @@
 		<field>title</field>
 		<field>text</field>
 	</classicfields>
+	<idfield isattr="false">id</idfield>
+	<docdelim>doc</docdelim>
 </config>

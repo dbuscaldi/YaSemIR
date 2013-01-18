@@ -4,6 +4,9 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.apache.commons.collections.BidiMap;
+import org.apache.commons.collections.bidimap.TreeBidiMap;
+
 import fr.lipn.yasemir.ontology.ConceptSimilarity;
 import fr.lipn.yasemir.ontology.Ontology;
 import fr.lipn.yasemir.ontology.skos.SKOSTerminology;
@@ -31,10 +34,13 @@ public class Yasemir {
 	public static boolean CKPD_ENABLED=false; //uses n-gram search or not
 	
 	public static HashMap<Ontology, SKOSTerminology> ontoSKOSmap; //maps ontologies into the related SKOS files
-	public static HashMap<Ontology, Integer> ontoIDmap; //maps ontologies into a numeric ID (used to indicate which annotation pertains to which ontology
-	
+	//public static HashMap<Ontology, Integer> ontoIDmap; //maps ontologies into a numeric ID (used to indicate which annotation pertains to which ontology
+	public static TreeBidiMap ontoIDmap; //bidirectional map: we can look both by key (Ontology) or value (Integer)
 	public static Set<String> semBalises; //for a parsed document, tags that delimit text to be annotated and semantically indexed
 	public static Set<String> clsBalises; //for a parsed document, tags that delimit text to be indexed classically
+	public static String idField;
+	public static boolean ID_ASATTR=false;
+	public static String DOC_DELIM;
 	
 	public static String YASEMIR_HOME;
 	public static String INDEX_DIR;
@@ -50,6 +56,9 @@ public class Yasemir {
 		INDEX_DIR=YASEMIR_HOME+System.getProperty("file.separator")+ConfigurationHandler.INDEXDIR;
 		TERM_DIR=YASEMIR_HOME+System.getProperty("file.separator")+INDEX_DIR+System.getProperty("file.separator")+ConfigurationHandler.TERMIDXDIR;
 		COLLECTION_DIR=ConfigurationHandler.CORPUSDIR;
+		idField=ConfigurationHandler.DOCIDFIELD;
+		ID_ASATTR=ConfigurationHandler.IDFIELD_ASATTR;
+		DOC_DELIM=ConfigurationHandler.DOC_DELIM;
 		
 		//setting search mode
 		String sm = ConfigurationHandler.SEARCH_MODE;
@@ -91,15 +100,14 @@ public class Yasemir {
 		clsBalises.addAll(ConfigurationHandler.getClassicFields());
 		
 		//setting ontologies and terminologies
-		//TODO: load ontologies and related terminologies
-		//TODO: if no terminology is given, create a SKOS from ontology
 		System.err.println("[YaSemIR]: Loading Knowledge Battery...");
 		
 		HashMap<String, String> ontoSKOSconf=ConfigurationHandler.getOntologySKOSMap();
 		HashMap<String, String> ontoRootconf = ConfigurationHandler.getOntologyRootMap();
 		
 		ontoSKOSmap= new HashMap<Ontology, SKOSTerminology>();
-		ontoIDmap = new HashMap<Ontology, Integer>();
+		ontoIDmap = new TreeBidiMap();
+		
 		
 		int i = 0;
 		for(String ontoLoc : ontoSKOSconf.keySet()){
@@ -124,5 +132,17 @@ public class Yasemir {
 		
 		
 		
+	}
+	
+	public static boolean isSemanticTag(String tag){
+		return semBalises.contains(tag);
+	}
+	
+	public static boolean isClassicTag(String tag){
+		return clsBalises.contains(tag);
+	}
+	
+	public static boolean isIDTag(String tag){
+		return tag.equalsIgnoreCase(idField);
 	}
 }
