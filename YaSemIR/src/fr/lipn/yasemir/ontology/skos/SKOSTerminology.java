@@ -24,6 +24,7 @@ package fr.lipn.yasemir.ontology.skos;
 
 import java.io.InputStream;
 import java.net.URI;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Vector;
 
@@ -49,6 +50,7 @@ public class SKOSTerminology {
 	String lang;
 	String dc, skos; //NameSpace Prefixes URIs
 	private String path;
+	private ResIterator sharedResIterator;
 	
 	/**
 	 * Creates an empty terminology
@@ -123,9 +125,85 @@ public class SKOSTerminology {
 			Literal l = rn.asLiteral();
 			labels.add(l.getLexicalForm());
 		}
-		return labels;
+		return labels;	
+	}
+	
+	
+	public void resetIterator(){
+		this.sharedResIterator = model.listSubjects();
+	}
+	
+	public boolean hasMoreLabels(){
+		return this.sharedResIterator.hasNext();
+	}
+	
+	public Vector<String> getNextLabels(){
+		Property pref = model.createProperty(skos, "prefLabel");
+		Property alt = model.createProperty(skos, "altLabel");
+		
+		Vector<String> ret = new Vector<String>();
+		
+		if(sharedResIterator.hasNext()){
+			Resource subj = sharedResIterator.next();
+			StringBuffer buf = new StringBuffer();
+			
+			ret.add(subj.getURI());
+			
+			NodeIterator ni = model.listObjectsOfProperty(subj, pref);
+			while(ni.hasNext()){
+				RDFNode rn = ni.next();
+				Literal l = rn.asLiteral();
+				buf.append(l.getLexicalForm());
+				buf.append(" ");
+			}
+			ni = model.listObjectsOfProperty(subj, alt);
+			while(ni.hasNext()){
+				RDFNode rn = ni.next();
+				Literal l = rn.asLiteral();
+				buf.append(l.getLexicalForm());
+				buf.append(" ");
+			}
+			
+			ret.add(buf.toString().trim());
+		}
+		
+		return ret;
+	}
+	/*
+	 
+	public HashMap<String, Vector<String>> getAllTerminologyData(){
+		Property pref = model.createProperty(skos, "prefLabel");
+		Property alt = model.createProperty(skos, "altLabel");
+		
+		HashMap<String, Vector<String>> ret = new HashMap<String, Vector<String>>();
+		
+		ResIterator ri = model.listSubjects();
+		
+		while(ri.hasNext()){
+			Resource subj = ri.next();
+			Vector<String> labels = new Vector<String>();
+			NodeIterator ni = model.listObjectsOfProperty(subj, pref);
+			while(ni.hasNext()){
+				RDFNode rn = ni.next();
+				Literal l = rn.asLiteral();
+				labels.add(l.getLexicalForm());
+			}
+			ni = model.listObjectsOfProperty(subj, alt);
+			while(ni.hasNext()){
+				RDFNode rn = ni.next();
+				Literal l = rn.asLiteral();
+				labels.add(l.getLexicalForm());
+			}
+			
+			ret.put(subj.getLocalName(), labels);
+			
+		}
+		
+		return ret; //NOTE: Too expensive?
 		
 	}
+	*/
+	
 
 	/**
 	 * This method creates a concept c with label label as a preferred label
@@ -153,6 +231,10 @@ public class SKOSTerminology {
 
 	public void setStemming(boolean b) {
 		this.isStemmed=b;
+	}
+	
+	public boolean isStemmed(){
+		return this.isStemmed;
 	}
 	
 }

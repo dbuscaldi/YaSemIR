@@ -36,6 +36,8 @@ public class KNNAnnotator implements SemanticAnnotator {
 	private final static int maxTags=5; //limit of tags to extract with the K_NN method
 	private String standardIndexPath;
 	
+	//TODO: adapt to YasemIR
+	
 	public KNNAnnotator(String standardIndexDir, String termIndexPath) {
 		this.standardIndexPath=standardIndexDir; //indexed training collection
 		this.termIndexPath=termIndexPath;
@@ -203,8 +205,8 @@ public class KNNAnnotator implements SemanticAnnotator {
 		  //we add the annotation and the supertypes to an extended index to be used during the beginning of the search process
 		  Set<OWLClass> expansion = new HashSet<OWLClass>();
 		  for(Annotation a : av){
-			  Set<OWLClass> sup_a = Ontology.getAllSuperClasses(a.getOWLClass());
-			  Set<OWLClass> roots = Ontology.getOntologyRoots(); //this is needed to calculate the frequencies of root classes
+			  Set<OWLClass> sup_a = a.getRelatedOntology().getAllSuperClasses(a.getOWLClass());
+			  Set<OWLClass> roots = a.getRelatedOntology().getOntologyRoots(); //this is needed to calculate the frequencies of root classes
 			  roots.retainAll(sup_a);
 			  ClassFrequencyCollector.add(roots);
 			  expansion.addAll(sup_a);

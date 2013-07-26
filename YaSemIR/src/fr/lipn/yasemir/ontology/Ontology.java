@@ -74,6 +74,10 @@ public class Ontology {
         System.err.println("[YaSemIR]: Loaded ontology: " + onto+ " with root class "+this.root);
 	}
 	
+	public String getOntologyID(){
+		return (""+this.getBaseAddr().hashCode());
+	}
+	
 	/**
 	 * Constructor that specifies a root concept different than OWL:Thing
 	 * @param ontologyFileLocation
@@ -302,6 +306,118 @@ public class Ontology {
 		}
 		
 		return terminology;
+	}
+	
+	/**
+	 * Picker method to select the concept similarity method
+	 * @param type
+	 * @param c1
+	 * @param c2
+	 * @param localRoot
+	 * @return
+	 */
+	public float computeSimilarity(int type, OWLClass c1, OWLClass c2, OWLClass localRoot){
+		float res=0f;
+		switch(type){
+			case ConceptSimilarity.WU: res=computeWuPalmerSimilarity(c1, c2, localRoot); break;
+			case ConceptSimilarity.PROXYGENEA1: res=computeProxiGenea(c1, c2, localRoot); break;
+			case ConceptSimilarity.PROXYGENEA2: res=computeProxiGenea2(c1, c2, localRoot); break;
+			case ConceptSimilarity.PROXYGENEA3: res=computeProxiGenea3(c1, c2, localRoot); break;
+			default: res=computeProxiGenea(c1, c2, localRoot);
+		}
+		return res;
+	}
+	
+	public float computeWuPalmerSimilarity(OWLClass c1, OWLClass c2, OWLClass localRoot)
+	{
+
+		Set<OWLClass> subsumers1 = this.getAllSuperClasses(c1);
+		subsumers1.add(c1);
+		Set<OWLClass> subsumers2 = this.getAllSuperClasses(c2);
+		subsumers2.add(c2);
+		subsumers1.retainAll(subsumers2);
+		subsumers1.removeAll(this.getAllSuperClasses(localRoot));
+		int greatestDepth = 1;
+		for (OWLClass father:subsumers1)
+		{
+			int currentDepth = this.computeDepth(father,localRoot);
+			if (currentDepth>greatestDepth)
+				greatestDepth = currentDepth;
+		}
+		int d_c1=this.computeDepth(c1,localRoot);
+		int d_c2=this.computeDepth(c2,localRoot);
+		if(greatestDepth > Math.min(d_c1, d_c2)) greatestDepth=Math.min(d_c1, d_c2); //FIXME: patch to overcome some strange issues
+		
+		float result = new Float(2*greatestDepth)/new Float(d_c1+d_c2);
+		return result;
+	}
+	
+	public float computeProxiGenea(OWLClass c1, OWLClass c2, OWLClass localRoot)
+	{
+		Set<OWLClass> subsumers1 = this.getAllSuperClasses(c1);
+		subsumers1.add(c1);
+		Set<OWLClass> subsumers2 = this.getAllSuperClasses(c2);
+		subsumers2.add(c2);
+		subsumers1.retainAll(subsumers2);
+		subsumers1.removeAll(this.getAllSuperClasses(localRoot));
+		subsumers1.remove(localRoot);
+		int greatestDepth = 1;
+		for (OWLClass father:subsumers1)
+		{
+			int currentDepth = this.computeDepth(father,localRoot);
+			if (currentDepth>greatestDepth)
+				greatestDepth = currentDepth;
+		}
+		int d_c1=this.computeDepth(c1,localRoot);
+		int d_c2=this.computeDepth(c2,localRoot);
+		if(greatestDepth > Math.min(d_c1, d_c2)) greatestDepth=Math.min(d_c1, d_c2); //FIXME: patch to overcome some strange issues
+		
+		float result = new Float(1+greatestDepth*greatestDepth)/new Float(1+d_c1*d_c2); //added 1 to num and den to avoid issues with root concepts
+		return result;
+	}
+	
+	public float computeProxiGenea2(OWLClass c1, OWLClass c2, OWLClass localRoot)
+	{
+		Set<OWLClass> subsumers1 = this.getAllSuperClasses(c1);
+		subsumers1.add(c1);
+		Set<OWLClass> subsumers2 = this.getAllSuperClasses(c2);
+		subsumers2.add(c2);
+		subsumers1.retainAll(subsumers2);
+		subsumers1.removeAll(this.getAllSuperClasses(localRoot));
+		int greatestDepth = 1;
+		for (OWLClass father:subsumers1)
+		{
+			int currentDepth = this.computeDepth(father,localRoot);
+			if (currentDepth>greatestDepth)
+				greatestDepth = currentDepth;
+		}
+		int d_c1=this.computeDepth(c1,localRoot);
+		int d_c2=this.computeDepth(c2,localRoot);
+		if(greatestDepth > Math.min(d_c1, d_c2)) greatestDepth=Math.min(d_c1, d_c2); //FIXME: patch to overcome some strange issues
+		float result = new Float(greatestDepth)/new Float(d_c1+d_c2-greatestDepth);
+		return result;
+	}
+	
+	public float computeProxiGenea3(OWLClass c1, OWLClass c2, OWLClass localRoot)
+	{
+		Set<OWLClass> subsumers1 = this.getAllSuperClasses(c1);
+		subsumers1.add(c1);
+		Set<OWLClass> subsumers2 = this.getAllSuperClasses(c2);
+		subsumers2.add(c2);
+		subsumers1.retainAll(subsumers2);
+		subsumers1.removeAll(this.getAllSuperClasses(localRoot));
+		int greatestDepth = 1;
+		for (OWLClass father:subsumers1)
+		{
+			int currentDepth = this.computeDepth(father,localRoot);
+			if (currentDepth>greatestDepth)
+				greatestDepth = currentDepth;
+		}
+		int d_c1=this.computeDepth(c1,localRoot);
+		int d_c2=this.computeDepth(c2,localRoot);
+		if(greatestDepth > Math.min(d_c1, d_c2)) greatestDepth=Math.min(d_c1, d_c2); //FIXME: patch to overcome some strange issues
+		float result = 1/new Float(1+d_c1+d_c2-2*greatestDepth);
+		return result;
 	}
 }
 

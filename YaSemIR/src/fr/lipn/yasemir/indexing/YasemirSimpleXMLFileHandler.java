@@ -118,19 +118,36 @@ public class YasemirSimpleXMLFileHandler extends DefaultHandler {
       eName = qualifiedName; // namespaceAware = false
     }
     elemStack.pop();
+    
     if (eName.equals(Yasemir.DOC_DELIM)){
-    	//TODO: annotazione semantica e mettere tutto al suo posto!!!
-    	String fullText=titleBuffer.toString()+" "+parentBuffer.toString()+" "+textBuffer.toString();
-    	parsedDocument.add(new Field("titre", titleBuffer.toString(), Field.Store.YES, Field.Index.NOT_ANALYZED));
-    	parsedDocument.add(new Field("parent", parentBuffer.toString(), Field.Store.YES, Field.Index.NOT_ANALYZED));
-    	parsedDocument.add(new Field("contenu", fullText, Field.Store.YES, Field.Index.ANALYZED));
-    	parsedDocument.add(new Field("name", this.docID, Field.Store.YES, Field.Index.NOT_ANALYZED));
-
+    	//ID
+    	System.err.println("[YaSemIR] indexing document "+this.docIDBuffer.toString());
+    	currDoc.add(new Field("id", this.docIDBuffer.toString(), Field.Store.YES, Field.Index.NOT_ANALYZED));
+    	//classicText
+    	StringBuffer plainText = new StringBuffer();
+    	StringBuffer semText = new StringBuffer(); //text to be labelled semantically
+    	for(String field : fieldBuffers.keySet()){
+    		if(Yasemir.clsBalises.contains(field)) plainText.append(fieldBuffers.get(field));
+    		if(Yasemir.semBalises.contains(field)) semText.append(fieldBuffers.get(field));
+    	}
+    	//base text
+    	currDoc.add(new Field("text", plainText.toString(), Field.Store.YES, Field.Index.NOT_ANALYZED));
+    	
+    	System.err.println("[YaSemIR] adding annotations to document "+this.docIDBuffer);
+    	//annotation of "semantic" content with each ontology and store one index per ontology
+    	Yasemir.annotator.addSemanticAnnotation(currDoc, semText.toString());
+    	
+    	//now store the parsed document 
+    	parsedDocuments.add(currDoc);
     }
   }
   
-  public Document getParsedDocument() {
-	  return this.parsedDocument;
+  public Document getLastParsedDocument() {
+	  return this.currDoc;
+  }
+  
+  public Vector<Document> getParsedDocuments() {
+	  return this.parsedDocuments;
   }
 	
 }

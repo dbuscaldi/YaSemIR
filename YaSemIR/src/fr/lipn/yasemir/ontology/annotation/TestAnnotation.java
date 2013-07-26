@@ -5,19 +5,20 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Vector;
 
-import fr.lipn.yasemir.ontology.Ontology;
+import fr.lipn.yasemir.configuration.Yasemir;
+
 
 public class TestAnnotation {
-	private static String ontologyLocation = "/users/buscaldi/Works/collabSIG/meshonto.owl";
-	
+
 	/**
 	 * @param args
 	 * @throws IOException 
 	 */
 	public static void main(String[] args) throws IOException {
-		Ontology.init(ontologyLocation);
+		Yasemir.init("config.xml");
 		
-		IndexBasedAnnotator sa = new IndexBasedAnnotator("termIndex_trivial"); 
+		IndexBasedAnnotator sa = new IndexBasedAnnotator(Yasemir.TERM_DIR);
+		
 		String queryString = null;
 		BufferedReader in = new BufferedReader(new InputStreamReader(System.in, "iso-8859-1"));
 		

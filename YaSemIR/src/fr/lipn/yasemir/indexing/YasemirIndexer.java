@@ -23,7 +23,14 @@ package fr.lipn.yasemir.indexing;
  */
 
 import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.analysis.ca.CatalanAnalyzer;
+import org.apache.lucene.analysis.de.GermanAnalyzer;
+import org.apache.lucene.analysis.en.EnglishAnalyzer;
+import org.apache.lucene.analysis.es.SpanishAnalyzer;
 import org.apache.lucene.analysis.fr.FrenchAnalyzer;
+import org.apache.lucene.analysis.it.ItalianAnalyzer;
+import org.apache.lucene.analysis.nl.DutchAnalyzer;
+import org.apache.lucene.analysis.pt.PortugueseAnalyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.IndexWriter;
@@ -32,6 +39,8 @@ import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Version;
+
+import fr.lipn.yasemir.configuration.Yasemir;
 
 import java.io.File;
 import java.io.IOException;
@@ -45,49 +54,41 @@ public class YasemirIndexer {
 	private YasemirIndexer() {}
 	
 	/** Index all text files under a directory. */
-	  public static void main(String[] args) {
-	    String usage = "java fr.irit.moano.indexing.SimpleIndexer"
-	                 + " [-index INDEX_PATH] -docs DOCS_PATH [-update]\n\n"
-	                 + "This indexes the documents in DOCS_PATH, creating a Lucene index"
-	                 + "in INDEX_PATH that can be searched with SearchFiles";
-	    String indexPath = "index";
-	    String docsPath = null;
-	    
-	    for(String arg : args){
-	    	System.err.println(arg);
-	    }
-	    
-	    boolean create = true;
-	    for(int i=0;i<args.length;i++) {
-	      if ("-index".equals(args[i])) {
-	        indexPath = args[i+1];
-	        i++;
-	      } else if ("-docs".equals(args[i])) {
-	        docsPath = args[i+1];
-	        i++;
-	      } else if ("-update".equals(args[i])) {
-	        create = false;
-	      }
-	    }
-
+	public static void main(String[] args) {
+		Yasemir.init("config.xml");
+		
+		String indexPath = Yasemir.INDEX_DIR;
+		String docsPath = Yasemir.COLLECTION_DIR;
+		String lang = Yasemir.COLLECTION_LANG;
+		  
+	    boolean create = true; //TODO: allow update mode?
+	
 	    if (docsPath == null) {
-	      System.err.println("Usage: " + usage);
+	      System.err.println("[YaSemIR] No collection specified in the config file!");
 	      System.exit(1);
 	    }
 
 	    final File docDir = new File(docsPath);
 	    if (!docDir.exists() || !docDir.canRead()) {
-	      System.out.println("Document directory '" +docDir.getAbsolutePath()+ "' does not exist or is not readable, please check the path");
+	      System.out.println("[YaSemIR] Document directory '" +docDir.getAbsolutePath()+ "' does not exist or is not readable, please check the path");
 	      System.exit(1);
 	    }
 	    
 	    Date start = new Date();
 	    try {
-	      System.out.println("Indexing to directory '" + indexPath + "'...");
+	      System.out.println("[YaSemIR] Indexing to directory '" + indexPath + "'...");
 
 	      Directory dir = FSDirectory.open(new File(indexPath));
-	      Analyzer analyzer = new FrenchAnalyzer(Version.LUCENE_31);
-	      IndexWriterConfig iwc = new IndexWriterConfig(Version.LUCENE_31, analyzer);
+	      Analyzer analyzer = null;
+	      if(lang.equals("fr")) analyzer = new FrenchAnalyzer(Version.LUCENE_36);
+	      else if(lang.equals("it")) analyzer = new ItalianAnalyzer(Version.LUCENE_36);
+	      else if(lang.equals("es")) analyzer = new SpanishAnalyzer(Version.LUCENE_36);
+	      else if(lang.equals("de")) analyzer = new GermanAnalyzer(Version.LUCENE_36);
+	      else if(lang.equals("pt")) analyzer = new PortugueseAnalyzer(Version.LUCENE_36);
+	      else if(lang.equals("ca")) analyzer = new CatalanAnalyzer(Version.LUCENE_36);
+	      else if(lang.equals("nl")) analyzer = new DutchAnalyzer(Version.LUCENE_36);
+	      else analyzer = new EnglishAnalyzer(Version.LUCENE_36);
+	      IndexWriterConfig iwc = new IndexWriterConfig(Version.LUCENE_36, analyzer);
 
 	      if (create) {
 	        // Create a new index in the directory, removing any
@@ -98,23 +99,8 @@ public class YasemirIndexer {
 	        iwc.setOpenMode(OpenMode.CREATE_OR_APPEND);
 	      }
 
-	      // Optional: for better indexing performance, if you
-	      // are indexing many documents, increase the RAM
-	      // buffer.  But if you do this, increase the max heap
-	      // size to the JVM (eg add -Xmx512m or -Xmx1g):
-	      //
-	      // iwc.setRAMBufferSizeMB(256.0);
-
 	      IndexWriter writer = new IndexWriter(dir, iwc);
 	      indexDocs(writer, docDir);
-
-	      // NOTE: if you want to maximize search performance,
-	      // you can optionally call forceMerge here.  This can be
-	      // a terribly costly operation, so generally it's only
-	      // worth it when your index is relatively static (ie
-	      // you're done adding documents to it):
-	      //
-	      // writer.forceMerge(1);
 
 	      writer.close();
 
@@ -127,21 +113,6 @@ public class YasemirIndexer {
 	    }
 	  }
 
-	  /**
-	   * Indexes the given file using the given writer, or if a directory is given,
-	   * recurses over files and directories found under the given directory.
-	   * 
-	   * NOTE: This method indexes one document per input file.  This is slow.  For good
-	   * throughput, put multiple documents into your input file(s).  An example of this is
-	   * in the benchmark module, which can create "line doc" files, one document per line,
-	   * using the
-	   * <a href="../../../../../contrib-benchmark/org/apache/lucene/benchmark/byTask/tasks/WriteLineDocTask.html"
-	   * >WriteLineDocTask</a>.
-	   *  
-	   * @param writer Writer to the index where the given file/dir info will be stored
-	   * @param file The file to index, or the directory to recurse into to find files to index
-	   * @throws IOException
-	   */
 	  static void indexDocs(IndexWriter writer, File file)
 	    throws IOException {
 	    // do not try to index files that cannot be read
@@ -156,14 +127,21 @@ public class YasemirIndexer {
 	        }
 	      } else {
 	    	if(file.getName().endsWith(".xml")) {
-	    		System.out.println("indexing " + file);
+	    		System.err.println("[YaSemIR] indexing " + file);
+	    		YasemirSimpleXMLFileHandler hdlr = null;
 	            try {
-	            		XMLVilmorinFileHandler hdlr = new XMLVilmorinFileHandler(file);
-	            		Document doc=hdlr.getParsedDocument();
-	            		writer.addDocument(doc);
+	            		hdlr = new YasemirSimpleXMLFileHandler(file);
+	            		
+	            		//Document doc=hdlr.getParsedDocument();
+	            		
 	            } catch (Exception e) {
 	            	e.printStackTrace();
-	            } 
+	            }
+	            
+	            for(Document doc : hdlr.getParsedDocuments()){
+        			writer.addDocument(doc);
+        		}
+	            
 		      }
 		    }
 	    }

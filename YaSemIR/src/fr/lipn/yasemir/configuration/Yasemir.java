@@ -8,7 +8,11 @@ import org.apache.commons.collections.BidiMap;
 import org.apache.commons.collections.bidimap.TreeBidiMap;
 
 import fr.lipn.yasemir.ontology.ConceptSimilarity;
+import fr.lipn.yasemir.ontology.KnowledgeBattery;
 import fr.lipn.yasemir.ontology.Ontology;
+import fr.lipn.yasemir.ontology.annotation.IndexBasedAnnotator;
+import fr.lipn.yasemir.ontology.annotation.KNNAnnotator;
+import fr.lipn.yasemir.ontology.annotation.SemanticAnnotator;
 import fr.lipn.yasemir.ontology.skos.SKOSTerminology;
 
 public class Yasemir {
@@ -30,12 +34,11 @@ public class Yasemir {
 	//public static boolean USE_MANUAL_TAGS=true; //consider using manually annotated tags for IR or not
 	public static int SIM_MEASURE=ConceptSimilarity.WU;
 	public static String ANNOTATOR="fr.lipn.yasemir.ontology.annotation.IndexBasedAnnotator";
+	public static SemanticAnnotator annotator;
+	
 	public static int CONCEPT_WEIGHTS=FIXED;
 	public static boolean CKPD_ENABLED=false; //uses n-gram search or not
 	
-	public static HashMap<Ontology, SKOSTerminology> ontoSKOSmap; //maps ontologies into the related SKOS files
-	//public static HashMap<Ontology, Integer> ontoIDmap; //maps ontologies into a numeric ID (used to indicate which annotation pertains to which ontology
-	public static TreeBidiMap ontoIDmap; //bidirectional map: we can look both by key (Ontology) or value (Integer)
 	public static Set<String> semBalises; //for a parsed document, tags that delimit text to be annotated and semantically indexed
 	public static Set<String> clsBalises; //for a parsed document, tags that delimit text to be indexed classically
 	public static String idField;
@@ -46,6 +49,7 @@ public class Yasemir {
 	public static String INDEX_DIR;
 	public static String TERM_DIR;
 	public static String COLLECTION_DIR;
+	public static String COLLECTION_LANG;
 	
 	public static void init(String configFile){
 		System.err.println("Reading config file...");
@@ -54,11 +58,13 @@ public class Yasemir {
 		//setting paths
 		YASEMIR_HOME=ConfigurationHandler.YASEMIR_HOME;
 		INDEX_DIR=YASEMIR_HOME+System.getProperty("file.separator")+ConfigurationHandler.INDEXDIR;
-		TERM_DIR=YASEMIR_HOME+System.getProperty("file.separator")+INDEX_DIR+System.getProperty("file.separator")+ConfigurationHandler.TERMIDXDIR;
+		TERM_DIR=YASEMIR_HOME+System.getProperty("file.separator")+ConfigurationHandler.TERMIDXDIR;
+		//TERM_DIR=INDEX_DIR+System.getProperty("file.separator")+ConfigurationHandler.TERMIDXDIR;
 		COLLECTION_DIR=ConfigurationHandler.CORPUSDIR;
 		idField=ConfigurationHandler.DOCIDFIELD;
 		ID_ASATTR=ConfigurationHandler.IDFIELD_ASATTR;
 		DOC_DELIM=ConfigurationHandler.DOC_DELIM;
+		COLLECTION_LANG=ConfigurationHandler.CORPUSLANG;
 		
 		//setting search mode
 		String sm = ConfigurationHandler.SEARCH_MODE;
@@ -87,6 +93,8 @@ public class Yasemir {
 		
 		//setting annotator
 		ANNOTATOR=ConfigurationHandler.ANNOTENGINE;
+		annotator=new IndexBasedAnnotator(TERM_DIR);
+		//annotator=new KNNAnnotator(TERM_DIR); //TODO: not finished
 		
 		//setting ngrams enabled or not
 		CKPD_ENABLED=ConfigurationHandler.NGRAMS_ENABLED;
@@ -103,13 +111,8 @@ public class Yasemir {
 		System.err.println("[YaSemIR]: Loading Knowledge Battery...");
 		
 		HashMap<String, String> ontoSKOSconf=ConfigurationHandler.getOntologySKOSMap();
-		HashMap<String, String> ontoRootconf = ConfigurationHandler.getOntologyRootMap();
-		
-		ontoSKOSmap= new HashMap<Ontology, SKOSTerminology>();
-		ontoIDmap = new TreeBidiMap();
-		
-		
-		int i = 0;
+		HashMap<String, String> ontoRootconf = ConfigurationHandler.getOntologyRootMap();		
+
 		for(String ontoLoc : ontoSKOSconf.keySet()){
 			String ontoRoot = ontoRootconf.get(ontoLoc);
 			Ontology o = null;
@@ -124,9 +127,8 @@ public class Yasemir {
 				t = o.generateTerminology();
 			}
 			System.err.println("[YaSemIR]: loaded terminology: "+t.getTerminologyID());
-			ontoSKOSmap.put(o, t);
-			ontoIDmap.put(o, new Integer(i));
-			i++;
+			KnowledgeBattery.addOntology(o, t);
+			KnowledgeBattery.createTermIndex();
 		}
 		System.err.println("[YaSemIR]: Done.");
 		

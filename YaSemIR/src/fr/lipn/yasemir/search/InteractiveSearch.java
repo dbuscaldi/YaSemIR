@@ -40,7 +40,7 @@ public class InteractiveSearch {
 	private static int MODE=SEMANTIC;
 	private static boolean USE_TAGS=true; //consider using manually annotated tags for IR or not
 	
-	private static int SIM_MEASURE=ConceptSimilarity.PROXYGENEA2;
+	private static int SIM_MEASURE=Ontology.PROXYGENEA2;
 	
 	 /** Simple command-line based on lucene search demo. */
 	  public static void main(String[] args) throws Exception {
