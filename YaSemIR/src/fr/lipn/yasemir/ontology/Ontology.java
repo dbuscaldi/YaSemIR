@@ -23,6 +23,9 @@ package fr.lipn.yasemir.ontology;
  */
 
 import java.io.File;
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -74,8 +77,19 @@ public class Ontology {
         System.err.println("[YaSemIR]: Loaded ontology: " + onto+ " with root class "+this.root);
 	}
 	
-	public String getOntologyID(){
-		return (""+this.getBaseAddr().hashCode());
+	public String getOntologyID() {
+		MessageDigest md5;
+		try {
+			md5 = MessageDigest.getInstance("MD5");
+			md5.update(this.getBaseAddr().getBytes());
+			BigInteger hash = new BigInteger(1, md5.digest());
+			hash.toString(32);
+			return (hash.toString(32));
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+			System.exit(-1);
+		}
+		return ""; //never attained
 	}
 	
 	/**

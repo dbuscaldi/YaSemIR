@@ -1,27 +1,27 @@
 <config>
 	<basedir>/users/buscaldi/Works/YaSemIR</basedir>
 	<indexdir>indexOHSUMed87_sem</indexdir>
-	<termdir>term_index</termdir> <!-- terminology index to be created at indexing phase and to be used in search. Location: basedir/indexdir/ -->
-	<collection lang="en" >/users/buscaldi/Works/collabSIG/ohsumed87</collection>
+	<termdir>term_index_0.6</termdir> <!-- terminology index to be created at indexing phase and to be used in search. Location: basedir/indexdir/ -->
+	<collection lang="en" >/tempo/corpora/OHSUMed/</collection>
 	<annotator>fr.lipn.yasemir.ontology.annotation.IndexBasedAnnotator</annotator>
 	<ontologies>
-		<ontology root="http://org.snu.bike/MeSH#All" ofile="/users/buscaldi/Works/collabSIG/meshonto.owl" />
+		<ontology root="http://org.snu.bike/MeSH#All" ofile="/users/buscaldi/Works/collabSIG/meshonto.owl"/>
 	</ontologies>
 	<params>
 		<weight val="fixed"/>
 		<distance val="pg3"/>
 		<ngrams val="false"/> <!-- enables CKPD schema -->
-		<search_mode val="hybrid" /> <!-- used for search: hybrid, classic or semantic -->
+		<search_mode val="semantic" /> <!-- used for search: hybrid, classic or semantic -->
 	</params>
 	<semanticfields>
-		<field>tag</field>
-		<field>title</field>
-		<field>text</field>
+		<field>TAG</field>
+		<field>TITLE</field>
+		<field>TEXT</field>
 	</semanticfields>
 	<classicfields>
-		<field>title</field>
-		<field>text</field>
+		<field>TITLE</field>
+		<field>TEXT</field>
 	</classicfields>
-	<idfield isattr="false">id</idfield>
-	<docdelim>doc</docdelim>
+	<idfield isattr="false">DOCNO</idfield>
+	<docdelim>DOC</docdelim>
 </config>

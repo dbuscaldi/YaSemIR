@@ -12,11 +12,18 @@ public class Annotation {
 
 	public Annotation(String str) {
 		cname=str;
-		refOnto=KnowledgeBattery.ontoForID(str);
+		refOnto=KnowledgeBattery.ontoForClassID(str);
 		if(refOnto != null) owlClass=refOnto.classForID(str);
 		else owlClass=null; //NOTE: class not found in the KB!
 	}
 	
+	public Annotation(String oid, String str) {
+		cname=str;
+		refOnto=KnowledgeBattery.ontoForID(oid);
+		if(refOnto != null) owlClass=refOnto.classForID(str);
+		else owlClass=null; //NOTE: class not found in the KB!
+	}
+
 	public OWLClass getOWLClass(){
 		return owlClass;
 	}
@@ -27,6 +34,10 @@ public class Annotation {
 	
 	public Ontology getRelatedOntology(){
 		return refOnto;
+	}
+	
+	public boolean fromSameOntology(Annotation another){
+		return another.refOnto.getOntologyID().equals(this.refOnto.getOntologyID());
 	}
 
 }

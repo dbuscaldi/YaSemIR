@@ -17,9 +17,9 @@ import fr.lipn.yasemir.ontology.skos.SKOSTerminology;
 
 public class Yasemir {
 	//search mode
-	private final static int CLASSIC=0;
-	private final static int SEMANTIC=1;
-	private final static int HYBRID=2;
+	public final static int CLASSIC=0;
+	public final static int SEMANTIC=1;
+	public final static int HYBRID=2;
 	
 	//Concept weights mode
 	private final static int FIXED=0;

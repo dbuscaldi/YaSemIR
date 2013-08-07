@@ -1,11 +1,11 @@
 package fr.lipn.yasemir.search;
 
+import java.util.HashMap;
 import java.util.Set;
 import java.util.Vector;
 
 import org.semanticweb.owlapi.model.OWLClass;
 
-import fr.lipn.yasemir.ontology.ConceptSimilarity;
 import fr.lipn.yasemir.ontology.Ontology;
 import fr.lipn.yasemir.ontology.annotation.Annotation;
 
@@ -15,15 +15,27 @@ public class SemanticallyRankedDocument implements Comparable<SemanticallyRanked
 	private Vector<Annotation> queryAnnot;
 	private Float weight;
 	
-	public SemanticallyRankedDocument(String docID, String docAnnAsText, Vector<Annotation> queryAnnot){
+	public SemanticallyRankedDocument(String docID, String docAnnAsText, HashMap<String, Vector<Annotation>> queryAnnot){
 		this.docID=docID;
-		this.queryAnnot=queryAnnot;
+		this.queryAnnot = new Vector<Annotation>();
+		
+		for(String k : queryAnnot.keySet()){
+			this.queryAnnot.addAll(queryAnnot.get(k));
+		}
+		
 		this.docAnnot=new Vector<Annotation>();
-		String [] classes = (docAnnAsText.trim()).split(" ");
-		for(String c : classes){
+		String [] tAnns = (docAnnAsText.trim()).split(" ");
+		for(String c : tAnns){
+			//FIXME: annotations with or without oid during indexing??? (cutpos sometimes -1)
+			System.err.println("c --> "+c);
 			if(!c.equals("")){
-				c=Ontology.getBaseAddr()+c; //rebuild class ID from index file - problems due to the prefix http:
-				docAnnot.add(new Annotation(c));
+				String [] els = c.split(":");
+				int cutpos = els[0].indexOf("annot");
+				if(cutpos != -1) {
+					System.err.println(els[0]);
+					String oid = els[0].substring(0, cutpos);
+					docAnnot.add(new Annotation(oid, els[1]));
+				}
 			}
 		}
 		this.weight=new Float(0);
@@ -48,16 +60,19 @@ public class SemanticallyRankedDocument implements Comparable<SemanticallyRanked
 			for(int j=0; j < docAnnot.size(); j++){
 				Annotation da = docAnnot.elementAt(j);
 				OWLClass d = da.getOWLClass();
-				Set<OWLClass> roots = Ontology.comparableRoots(q, d);
-				if(!roots.isEmpty()){
-					OWLClass localRoot=roots.iterator().next();
-					//OWLClass lcs = Ontology.leastCommonSubsumer(q, d); //not needed
-					float tmp = ConceptSimilarity.computeSimilarity(measure, q, d, localRoot);					
-					//System.err.println("Least common subsumer of "+q+" and "+" "+d+" : "+lcs);
-					if(tmp > max) {
-						max = tmp;
-						bestLocalRoot=localRoot;
-						//System.err.println("Best match: "+q+" and "+d+ " -> weight: "+tmp);
+				if(da.fromSameOntology(qa)) {
+					Ontology o = qa.getRelatedOntology();
+					Set<OWLClass> roots = o.comparableRoots(q, d);
+					if(!roots.isEmpty()){
+						OWLClass localRoot=roots.iterator().next();
+						//OWLClass lcs = Ontology.leastCommonSubsumer(q, d); //not needed
+						float tmp = o.computeSimilarity(measure, q, d, localRoot);					
+						//System.err.println("Least common subsumer of "+q+" and "+" "+d+" : "+lcs);
+						if(tmp > max) {
+							max = tmp;
+							bestLocalRoot=localRoot;
+							//System.err.println("Best match: "+q+" and "+d+ " -> weight: "+tmp);
+						}
 					}
 				}
 			}

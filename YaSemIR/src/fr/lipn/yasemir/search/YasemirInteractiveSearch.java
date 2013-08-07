@@ -5,15 +5,24 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Collections;
 import java.util.Date;
-import java.util.StringTokenizer;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
 import java.util.Vector;
 
 import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.analysis.ca.CatalanAnalyzer;
+import org.apache.lucene.analysis.de.GermanAnalyzer;
 import org.apache.lucene.analysis.en.EnglishAnalyzer;
+import org.apache.lucene.analysis.es.SpanishAnalyzer;
 import org.apache.lucene.analysis.fr.FrenchAnalyzer;
-import org.apache.lucene.analysis.standard.StandardAnalyzer;
+import org.apache.lucene.analysis.it.ItalianAnalyzer;
+import org.apache.lucene.analysis.nl.DutchAnalyzer;
+import org.apache.lucene.analysis.pt.PortugueseAnalyzer;
 import org.apache.lucene.document.Document;
+import org.apache.lucene.document.Fieldable;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.queryParser.QueryParser;
 import org.apache.lucene.search.IndexSearcher;
@@ -23,38 +32,29 @@ import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Version;
 
-import fr.lipn.yasemir.ontology.ConceptSimilarity;
+import fr.lipn.yasemir.configuration.Yasemir;
 import fr.lipn.yasemir.ontology.annotation.Annotation;
-import fr.lipn.yasemir.ontology.annotation.IndexBasedAnnotator;
 
-public class InteractiveSearch {
-	private final static int TITLE_ONLY=0;
-	private final static int TITLE_DESC=1;
-	private final static int CLASSIC=0;
-	private final static int SEMANTIC=1;
-	private final static int HYBRID=2;
-	private final static boolean CKPD_ENABLED=false;
-	
+
+public class YasemirInteractiveSearch {
 	private final static int MAX_HITS=1000;
-	
-	private static int MODE=SEMANTIC;
-	private static boolean USE_TAGS=true; //consider using manually annotated tags for IR or not
-	
-	private static int SIM_MEASURE=Ontology.PROXYGENEA2;
 	
 	 /** Simple command-line based on lucene search demo. */
 	  public static void main(String[] args) throws Exception {
 	    String usage =
-	      "Usage:\tjava fr.irit.moano.search.InteractiveSearch [-index dir] [-field f] [-repeat n] [-queries file] [-query string] [-raw] [-paging hitsPerPage]\n\nSee http://lucene.apache.org/java/4_0/demo.html for details.";
+	      "Usage:\tjava fr.lipn.yasemir.search.YasemirInteractiveSearch [-index dir] [-field f] [-repeat n] [-queries file] [-query string] [-raw] [-paging hitsPerPage]\n\nSee http://lucene.apache.org/java/4_0/demo.html for details.";
 	    if (args.length > 0 && ("-h".equals(args[0]) || "-help".equals(args[0]))) {
 	      System.out.println(usage);
 	      System.exit(0);
 	    }
-
-	    String index = "indexOHSUMed_sem";
-		String labelIndex = "termIndex_0.6";
 		
-	    String field = "text";
+		Yasemir.init("config.xml");
+		
+	    String index = Yasemir.INDEX_DIR;
+		String labelIndex = Yasemir.TERM_DIR;
+		String lang = Yasemir.COLLECTION_LANG;
+		
+	    String basefield = "text";
 	    String queries = null;
 	    int repeat = 0;
 	    boolean raw = false;
@@ -66,7 +66,7 @@ public class InteractiveSearch {
 	        index = args[i+1];
 	        i++;
 	      } else if ("-field".equals(args[i])) {
-	        field = args[i+1];
+	        basefield = args[i+1];
 	        i++;
 	      } else if ("-queries".equals(args[i])) {
 	        queries = args[i+1];
@@ -91,11 +91,15 @@ public class InteractiveSearch {
 	    
 	    IndexReader reader = IndexReader.open(FSDirectory.open(new File(index)));
 	    IndexSearcher searcher = new IndexSearcher(reader);
-	    //Analyzer analyzer = new FrenchAnalyzer(Version.LUCENE_31);
-	    Analyzer analyzer = new EnglishAnalyzer(Version.LUCENE_31);
-	    
-	    IndexBasedAnnotator sa = new IndexBasedAnnotator("termIndex_0.6"); 
-		
+	    Analyzer analyzer = null;
+	    if(lang.equals("fr")) analyzer = new FrenchAnalyzer(Version.LUCENE_36);
+	    else if(lang.equals("it")) analyzer = new ItalianAnalyzer(Version.LUCENE_36);
+	    else if(lang.equals("es")) analyzer = new SpanishAnalyzer(Version.LUCENE_36);
+	    else if(lang.equals("de")) analyzer = new GermanAnalyzer(Version.LUCENE_36);
+	    else if(lang.equals("pt")) analyzer = new PortugueseAnalyzer(Version.LUCENE_36);
+	    else if(lang.equals("ca")) analyzer = new CatalanAnalyzer(Version.LUCENE_36);
+	    else if(lang.equals("nl")) analyzer = new DutchAnalyzer(Version.LUCENE_36);
+	    else analyzer = new EnglishAnalyzer(Version.LUCENE_36);
 		
 	    BufferedReader in = null;
 	    if (queries != null) {
@@ -103,10 +107,11 @@ public class InteractiveSearch {
 	    } else {
 	      in = new BufferedReader(new InputStreamReader(System.in, "cp1252"));
 	    }
-	    QueryParser parser = new QueryParser(Version.LUCENE_31, field, analyzer);
+	    
+	    QueryParser parser = new QueryParser(Version.LUCENE_36, basefield, analyzer);
 	    while (true) {
 	      if (queries == null && queryString == null) {                        // prompt the user
-	        System.out.println("Enter query: ");
+	        System.out.println("[YaSemIr] Enter query: ");
 	      }
 
 	      String line = queryString != null ? queryString : in.readLine();
@@ -120,19 +125,10 @@ public class InteractiveSearch {
 	        break;
 	      }
 	      
-	      System.out.println("Annotating: " + line);
-	      Vector<Annotation> ann = new Vector<Annotation>();
-	      ann.addAll(sa.annotate(line));
-	      
-	      System.out.println("Annotation:");
-	      for(Annotation a : ann){
-	    	  System.out.println(a.getOWLClass().getIRI().getFragment());
-	      }
-	      System.out.println("---------------------------");
-	      
-	      Query query = parser.parse(line);
-	      if(MODE==CLASSIC){
-	    	  System.out.println("Searching for: " + query.toString(field));
+	      if(Yasemir.MODE==Yasemir.CLASSIC){
+	    	  Query query = parser.parse(line);
+	    	  
+	    	  System.out.println("[YaSemIr] Searching for: " + query.toString(basefield));
 	            
 		      if (repeat > 0) {                           // repeat & time as benchmark
 		        Date start = new Date();
@@ -142,14 +138,80 @@ public class InteractiveSearch {
 		        Date end = new Date();
 		        System.out.println("Time: "+(end.getTime()-start.getTime())+"ms");
 		      }
+		      
+		      doPagingSearch(in, searcher, query, hitsPerPage, raw, queries == null && queryString == null);
 	      } else {
-	    	  if(MODE==SEMANTIC){
-	    		  //TODO: integrare tutto quello che si fa sul SemanticSearcher
+	          HashMap<String, Vector<Annotation>> queryAnnotation = null;
+		      System.err.println("[YaSemIr] Annotating: " + line);
+		      queryAnnotation=Yasemir.annotator.annotate(line);
+		      
+		      System.err.println("[YaSemIr] Annotations:");
+		      for(String oid : queryAnnotation.keySet()) {
+		    	  Vector<Annotation> ann = queryAnnotation.get(oid);
+		    	  for(Annotation a : ann){
+			    	  System.err.println(a.getOWLClass().getIRI());
+			      }
+		      }
+		      
+		      System.err.println("---------------------------");
+		      
+	     	  
+		      if(Yasemir.MODE==Yasemir.SEMANTIC){
+	    		  StringBuffer extQueryText = new StringBuffer();
+		    	  for(String oid : queryAnnotation.keySet()) {
+			    	  Vector<Annotation> ann = queryAnnotation.get(oid);
+			    	  for(Annotation a : ann){
+			    		  extQueryText.append(oid+"annot_exp:\""+a.getOWLClass().getIRI().getFragment()+"\"");
+			    		  extQueryText.append(" ");
+				      }
+			      }
+		    	  Query query=parser.parse(extQueryText.toString().trim());
+		    	  System.err.println("[YaSemIr] Searching for: " + query.toString());
+		    	  TopDocs results = searcher.search(query, MAX_HITS);
+				  ScoreDoc[] hits = results.scoreDocs;
+				    
+				  int numTotalHits = results.totalHits;
+				  System.err.println("[YaSemIr] "+numTotalHits + " total matching documents");
+				  if(numTotalHits > 0) {
+			    	Vector<SemanticallyRankedDocument> srDocs= new Vector<SemanticallyRankedDocument>();
+			    	for (int i = 0; i < Math.min(numTotalHits, MAX_HITS); i++) {
+				        Document doc = searcher.doc(hits[i].doc);
+				        String id = doc.get("id");
+				        List<Fieldable> docFields =doc.getFields();
+				        StringBuffer concepts = new StringBuffer();
+				        for(Fieldable f : docFields){
+				        	String fname=f.name();
+				        	if(fname.endsWith("annot") || fname.endsWith("annot_exp")) {
+				        		concepts.append(fname+":"+doc.get(fname));
+				        		concepts.append(" ");
+				        	}
+				        }
+				        //String concepts = doc.get(field+"annot"); //here we have the annotation
+				        //System.err.println(concepts);
+				        SemanticallyRankedDocument srDoc = new SemanticallyRankedDocument(id, concepts.toString().trim(), queryAnnotation);
+				        srDoc.setWeight(Yasemir.SIM_MEASURE);
+				        srDocs.add(srDoc);
+				        //System.out.println(oq.getID()+"\tQ0\t"+id+"\t"+i+"\t"+hits[i].score+"\t"+conf_str);
+				    }
+			    	
+			    	Collections.sort(srDocs);
+			    	int rank=0;
+			    	for(SemanticallyRankedDocument srd : srDocs){
+			    		System.out.println("Q0\t"+srd.getID()+"\t"+rank+"\t"+String.format(Locale.US, "%.4f",srd.getScore()));
+			    		rank++;
+			    	}
+			    }
+				
+				doPagingSearch(in, searcher, query, hitsPerPage, raw, queries == null && queryString == null);
+	    	  }
+	    	  
+	    	  if(Yasemir.MODE==Yasemir.HYBRID) {
+	    		  
 	    	  }
 	      }
 	      
 
-	      doPagingSearch(in, searcher, query, hitsPerPage, raw, queries == null && queryString == null);
+	      
 
 	      if (queryString != null) {
 	        break;

@@ -82,7 +82,7 @@ public class IndexBasedAnnotator implements SemanticAnnotator {
 				    hits = searcher.search(query, numTotalHits).scoreDocs;
 				    for(int i=0; i<numTotalHits; i++){
 				    	Document doc = searcher.doc(hits[i].doc);
-				    	String ptrn = "(?i)("+doc.get("terms").replaceAll(", ", "|")+")";
+				    	String ptrn = "(?i)("+doc.get("labels").replaceAll(", ", "|")+")";
 				    	//System.err.println("OWLClass="+doc.get("id")+" score="+hits[i].score);
 				    	if(checkPattern(fragment, ptrn)){
 				    		//System.err.println("OWLClass="+doc.get("id")+" score="+hits[i].score);
@@ -125,7 +125,7 @@ public class IndexBasedAnnotator implements SemanticAnnotator {
 			for(Annotation a : anns.get(oid)){
 				av_repr.append(a.getOWLClass().getIRI().getFragment());
 				av_repr.append(" ");
-				String ontoID=a.getRelatedOntology().getOntologyID();
+				//String ontoID=a.getRelatedOntology().getOntologyID();
 			}
 			doc.add(new Field(oid+"annot", av_repr.toString().trim(), Field.Store.YES, Field.Index.ANALYZED));
 			//we add the annotation and the supertypes to an extended index to be used during the beginning of the search process

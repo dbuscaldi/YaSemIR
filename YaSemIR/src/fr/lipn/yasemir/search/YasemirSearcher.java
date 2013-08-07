@@ -28,7 +28,7 @@ import fr.lipn.yasemir.weighting.ckpd.NGramTerm;
 import fr.lipn.yasemir.weighting.ckpd.TermFactory;
 import fr.lipn.yasemir.weighting.ckpd.ranking.CKPDRankedDocument;
 
-public class SemanticSearcher {
+public class YasemirSearcher {
 	private final static int TITLE_ONLY=0;
 	private final static int TITLE_DESC=1;
 	private final static int CLASSIC=0;

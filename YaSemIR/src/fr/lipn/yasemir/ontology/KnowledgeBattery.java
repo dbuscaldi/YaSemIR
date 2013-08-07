@@ -100,11 +100,19 @@ public class KnowledgeBattery {
 	}
 	*/
 	
-	public static Ontology ontoForID(String str) {
+	public static Ontology ontoForClassID(String str) {
 		for(int i=0; i < ontologies.size(); i++){
 			Ontology o = ontologies.elementAt(i);
 			OWLClass cls = o.classForID(str);
 			if(cls != null) return o;
+		}
+		return null;
+	}
+	
+	public static Ontology ontoForID(String str) {
+		for(int i=0; i < ontologies.size(); i++){
+			Ontology o = ontologies.elementAt(i);
+			if(o.getOntologyID().equals(str)) return o;
 		}
 		return null;
 	}
