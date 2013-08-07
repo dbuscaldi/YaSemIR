@@ -224,6 +224,7 @@ public class Ontology {
 	 */
 	public OWLClass classForID(String id){
 		Set<OWLEntity> s = onto.getEntitiesInSignature(IRI.create(id));
+		if(s.isEmpty()) s= onto.getEntitiesInSignature(IRI.create(this.getBaseAddr()+id));
 		if(!s.isEmpty()) return s.iterator().next().asOWLClass();
 		else return null;
 	}

@@ -6,6 +6,7 @@ import java.util.Vector;
 
 import org.semanticweb.owlapi.model.OWLClass;
 
+import fr.lipn.yasemir.ontology.KnowledgeBattery;
 import fr.lipn.yasemir.ontology.Ontology;
 import fr.lipn.yasemir.ontology.annotation.Annotation;
 
@@ -27,15 +28,23 @@ public class SemanticallyRankedDocument implements Comparable<SemanticallyRanked
 		String [] tAnns = (docAnnAsText.trim()).split(" ");
 		for(String c : tAnns){
 			//FIXME: annotations with or without oid during indexing??? (cutpos sometimes -1)
-			System.err.println("c --> "+c);
-			if(!c.equals("")){
+			//System.err.println("c --> "+c);
+			if(!c.equals("") && !c.equals("Thing")){ //FIXME: why do we have annotations with Thing???
 				String [] els = c.split(":");
 				int cutpos = els[0].indexOf("annot");
+				String oid= null;
+				
 				if(cutpos != -1) {
-					System.err.println(els[0]);
-					String oid = els[0].substring(0, cutpos);
+					oid = els[0].substring(0, cutpos);
+					//System.err.println("recomposed: "+oid+":"+els[1]);
 					docAnnot.add(new Annotation(oid, els[1]));
+					
+				} else {
+					oid = KnowledgeBattery.ontoForClassID(c).getOntologyID();
+					//System.err.println("recomposed: "+oid+":"+c);
+					docAnnot.add(new Annotation(oid, c));
 				}
+				
 			}
 		}
 		this.weight=new Float(0);

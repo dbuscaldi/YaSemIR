@@ -193,13 +193,14 @@ public class YasemirInteractiveSearch {
 				        srDocs.add(srDoc);
 				        //System.out.println(oq.getID()+"\tQ0\t"+id+"\t"+i+"\t"+hits[i].score+"\t"+conf_str);
 				    }
-			    	
+			    	/*
 			    	Collections.sort(srDocs);
 			    	int rank=0;
 			    	for(SemanticallyRankedDocument srd : srDocs){
 			    		System.out.println("Q0\t"+srd.getID()+"\t"+rank+"\t"+String.format(Locale.US, "%.4f",srd.getScore()));
 			    		rank++;
-			    	}
+			    	}*/
+			    	//TODO: add ranking in paging search
 			    }
 				
 				doPagingSearch(in, searcher, query, hitsPerPage, raw, queries == null && queryString == null);
