@@ -24,10 +24,12 @@ import org.apache.lucene.util.Version;
 import org.semanticweb.owlapi.model.OWLClass;
 import org.tartarus.snowball.ext.EnglishStemmer;
 
-import fr.lipn.yasemir.indexing.ohsumed.ClassFrequencyCollector;
-import fr.lipn.yasemir.indexing.ohsumed.OHSUMedIndexer;
 import fr.lipn.yasemir.ontology.Ontology;
-
+/**
+ * This class implements the K-NN annotator by Trieschnigg et al., MeSH Up: effective MeSH text classification for document retrieval
+ * @author buscaldi
+ *
+ */
 public class KNNAnnotator implements SemanticAnnotator {
 	String termIndexPath;
 	//private boolean K_NN = true;
@@ -43,7 +45,7 @@ public class KNNAnnotator implements SemanticAnnotator {
 		this.termIndexPath=termIndexPath;
 	}
 	
-	public Vector<Annotation> annotate(String document){
+	public HashMap<String, Vector<Annotation>> annotate(String document){
 		Vector<Annotation> annotations = new Vector<Annotation>();
 		try {
 			IndexReader reader = IndexReader.open(FSDirectory.open(new File(termIndexPath)));
@@ -227,6 +229,12 @@ public class KNNAnnotator implements SemanticAnnotator {
 			annotations.add(ann);
 		}
 		return annotations;
+	}
+
+	@Override
+	public void addSemanticAnnotation(Document doc, String text) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 

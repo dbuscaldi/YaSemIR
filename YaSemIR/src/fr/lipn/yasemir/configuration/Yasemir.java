@@ -121,7 +121,10 @@ public class Yasemir {
 			System.err.println("[YaSemIR]: loaded ontology: "+o.getBaseAddr()+" at "+ontoLoc);
 			String termPath=ontoSKOSconf.get(ontoLoc);
 			SKOSTerminology t=null;
-			if(!termPath.trim().isEmpty()) t = new SKOSTerminology(termPath);
+			if(!termPath.trim().isEmpty()) {
+				System.err.println("[YaSemIR]: loading terminology from "+termPath);
+				t = new SKOSTerminology(termPath);
+			}
 			else {
 				System.err.println("[YaSemIR]: no terminology provided: generating trivial terminology...");
 				t = o.generateTerminology();

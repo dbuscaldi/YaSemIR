@@ -33,6 +33,8 @@ import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Version;
 
 import fr.lipn.yasemir.configuration.Yasemir;
+import fr.lipn.yasemir.ontology.KnowledgeBattery;
+import fr.lipn.yasemir.ontology.Ontology;
 import fr.lipn.yasemir.ontology.annotation.Annotation;
 
 
@@ -267,15 +269,45 @@ public class YasemirInteractiveSearch {
 
 	        Document doc = searcher.doc(hits[i].doc);
 	        String path = doc.get("id");
+	        
+	        List<Fieldable> fields =doc.getFields();
+	        Vector<String> annotationFields = new Vector<String>();
+	        Vector<String> expansionFields = new Vector<String>();
+	        for(Fieldable f : fields) {
+	        	//System.err.println("fieldName:"+f.name());
+	        	if(f.name().endsWith("annot")){
+	        		annotationFields.add(f.name());
+	        	}
+	        	if(f.name().endsWith("annot_exp")){
+	        		expansionFields.add(f.name());
+	        	}
+	        }
+	        
 	        if (path != null) {
 	          System.out.println((i+1) + ". " + path + " score="+hits[i].score);
 	          System.out.println("\tID: " + doc.get("id"));
-	          System.out.println("\tTags: " + doc.get("tag"));
-	          System.out.println("Titre: " + doc.get("title"));
+	          
+	          System.out.println("Text:");
 	          String text=doc.get("text");
 	          if(text!= null) System.out.println(formatTextWidth(doc.get("text"), 120));
+	          
+	          System.out.println("Annotations:");
+	          for(String fld : annotationFields) {
+	        	  String oid = fld.replaceAll("annot", "");
+	        	  String oname = KnowledgeBattery.ontoForID(oid).getBaseAddr();
+	        	  
+	        	  System.out.println(oname+" ("+oid+") : "+doc.get(fld));
+	          }
+	          System.out.println("Expanded Annotations:");
+	          for(String efld : expansionFields) {
+	        	  String oid = efld.replaceAll("annot_exp", "");
+	        	  String oname = KnowledgeBattery.ontoForID(oid).getBaseAddr();
+	        	  
+	        	  System.out.println(oname+" ("+oid+") : "+doc.get(efld));
+	          }
+	          
 	        } else {
-	          System.out.println((i+1) + ". " + "No title for this document");
+	          System.out.println((i+1) + ". " + "Unknown document");
 	        }
 	                  
 	      }

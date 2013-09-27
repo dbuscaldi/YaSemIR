@@ -3,6 +3,7 @@ package fr.lipn.yasemir.ontology.annotation;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.HashMap;
 import java.util.Vector;
 
 import fr.lipn.yasemir.configuration.Yasemir;
@@ -17,7 +18,7 @@ public class TestAnnotation {
 	public static void main(String[] args) throws IOException {
 		Yasemir.init("config.xml");
 		
-		IndexBasedAnnotator sa = new IndexBasedAnnotator(Yasemir.TERM_DIR);
+		//IndexBasedAnnotator sa = new IndexBasedAnnotator(Yasemir.TERM_DIR);
 		
 		String queryString = null;
 		BufferedReader in = new BufferedReader(new InputStreamReader(System.in, "iso-8859-1"));
@@ -39,13 +40,20 @@ public class TestAnnotation {
 		      }
 		      
 		      System.out.println("Annotating: " + line);
-		      Vector<Annotation> ann = new Vector<Annotation>();
-		      ann.addAll(sa.annotate(line));
 		      
-		      System.out.println("Annotation:");
-		      for(Annotation a : ann){
-		    	  System.out.println(a.getOWLClass().getIRI().getFragment());
+		      HashMap<String, Vector<Annotation>> anns= null;
+		      System.err.println("[YaSemIr] Annotating: " + line);
+		      anns = Yasemir.annotator.annotate(line);
+		      
+		      System.err.println("[YaSemIr] Annotations:");
+		      for(String oid : anns.keySet()) {
+		    	  System.err.println("oid: "+oid);
+		    	  Vector<Annotation> ann = anns.get(oid);
+		    	  for(Annotation a : ann){
+			    	  System.err.println(a.getOWLClass().getIRI());
+			      }
 		      }
+		     
 		      System.out.println("---------------------------");
 		}
 	}

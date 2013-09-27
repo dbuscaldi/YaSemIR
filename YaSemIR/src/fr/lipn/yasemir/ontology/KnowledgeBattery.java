@@ -7,6 +7,7 @@ import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
+import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.store.Directory;
@@ -54,6 +55,11 @@ public class KnowledgeBattery {
 			String termIndexPath = Yasemir.TERM_DIR;
 			
 			Directory dir = FSDirectory.open(new File(termIndexPath));
+		 	if(IndexReader.indexExists(dir)) {
+		 		System.err.println("[KnowledgeBattery] term index exists, skipping");
+		 		dir.close();
+		 		return;
+		 	}
 		    Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_36); //Whitespace?
 		    IndexWriterConfig iwc = new IndexWriterConfig(Version.LUCENE_36, analyzer);
 		    
