@@ -16,11 +16,12 @@ import org.apache.lucene.analysis.en.EnglishAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.index.IndexReader;
-import org.apache.lucene.queryParser.QueryParser;
+import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TopDocs;
+import org.apache.lucene.search.similarities.BM25Similarity;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Version;
 import org.semanticweb.owlapi.model.OWLClass;
@@ -43,7 +44,9 @@ public class IndexBasedAnnotator implements SemanticAnnotator {
 		try {
 			IndexReader reader = IndexReader.open(FSDirectory.open(new File(termIndexPath)));
 			IndexSearcher searcher = new IndexSearcher(reader);
-			Analyzer analyzer = new EnglishAnalyzer(Version.LUCENE_31);
+			searcher.setSimilarity(new BM25Similarity());
+			
+			Analyzer analyzer = new EnglishAnalyzer(Version.LUCENE_44);
 			
 			document=document.replaceAll("Support, .+?;", "");
 			document=document.replaceAll("\\[.*?\\]", "").trim();
@@ -68,7 +71,7 @@ public class IndexBasedAnnotator implements SemanticAnnotator {
 				if(fragment.length()==0) continue;
 				//System.err.println("Annotating: "+fragment);
 						
-				QueryParser parser = new QueryParser(Version.LUCENE_36, "labels", analyzer);
+				QueryParser parser = new QueryParser(Version.LUCENE_44, "labels", analyzer);
 				Query query = parser.parse(fragment);
 				//System.err.println("Searching for: " + query.toString("terms"));
 				
@@ -98,7 +101,6 @@ public class IndexBasedAnnotator implements SemanticAnnotator {
 			    }
 								 
 			}
-			searcher.close();
 			reader.close();
 		} catch (Exception e) {
 			e.printStackTrace();

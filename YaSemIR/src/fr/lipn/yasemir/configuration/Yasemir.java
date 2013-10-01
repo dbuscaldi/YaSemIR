@@ -51,6 +51,8 @@ public class Yasemir {
 	public static String COLLECTION_DIR;
 	public static String COLLECTION_LANG;
 	
+	public static String SCORE;
+	
 	public static void init(String configFile){
 		System.err.println("Reading config file...");
 		ConfigurationHandler.init(configFile);
@@ -106,6 +108,9 @@ public class Yasemir {
 		//setting classic fields
 		clsBalises=new HashSet<String>();
 		clsBalises.addAll(ConfigurationHandler.getClassicFields());
+		
+		//setting score type
+		SCORE=ConfigurationHandler.SCORE;
 		
 		//setting ontologies and terminologies
 		System.err.println("[YaSemIR]: Loading Knowledge Battery...");

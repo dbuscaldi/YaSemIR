@@ -51,6 +51,7 @@ public class ConfigurationHandler {
 	public static String DOCIDFIELD;
 	public static String DOC_DELIM;
 	public static boolean IDFIELD_ASATTR;
+	public static String SCORE;
 	
 	private static HashMap<String, String> ontoSKOSmap;
 	private static HashMap<String, String> ontoRootmap;
@@ -121,6 +122,9 @@ public class ConfigurationHandler {
 						}
 						if(el.getNodeName().equals("docdelim")){
 							DOC_DELIM = el.getTextContent();
+						}
+						if(el.getNodeName().equals("score")){
+							SCORE = el.getTextContent();
 						}
 						if(el.getNodeName().equals("ontologies")){
 							NodeList ol = el.getChildNodes();

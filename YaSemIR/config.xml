@@ -1,4 +1,5 @@
 <config>
+	<score>BM25</score>
 	<basedir>/users/buscaldi/Works/YaSemIR</basedir>
 	<indexdir>indexOHSUMed87_sem</indexdir>
 	<termdir>term_index_0.6</termdir> <!-- terminology index to be created at indexing phase and to be used in search. Location: basedir/indexdir/ -->

@@ -14,7 +14,7 @@ import org.apache.lucene.analysis.en.EnglishAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.index.IndexReader;
-import org.apache.lucene.queryParser.QueryParser;
+import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
@@ -181,11 +181,9 @@ public class KNNAnnotator implements SemanticAnnotator {
 			    	}
 				    
 			    }
-			    docsearcher.close();
 			    docreader.close();
 				
 			}
-			searcher.close();
 			reader.close();
 		} catch (Exception e) {
 			e.printStackTrace();

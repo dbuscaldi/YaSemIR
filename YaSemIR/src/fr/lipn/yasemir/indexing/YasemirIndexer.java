@@ -31,11 +31,12 @@ import org.apache.lucene.analysis.fr.FrenchAnalyzer;
 import org.apache.lucene.analysis.it.ItalianAnalyzer;
 import org.apache.lucene.analysis.nl.DutchAnalyzer;
 import org.apache.lucene.analysis.pt.PortugueseAnalyzer;
-import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig.OpenMode;
 import org.apache.lucene.index.IndexWriterConfig;
+import org.apache.lucene.search.similarities.BM25Similarity;
+import org.apache.lucene.search.similarities.DefaultSimilarity;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Version;
@@ -80,15 +81,19 @@ public class YasemirIndexer {
 
 	      Directory dir = FSDirectory.open(new File(indexPath));
 	      Analyzer analyzer = null;
-	      if(lang.equals("fr")) analyzer = new FrenchAnalyzer(Version.LUCENE_36);
-	      else if(lang.equals("it")) analyzer = new ItalianAnalyzer(Version.LUCENE_36);
-	      else if(lang.equals("es")) analyzer = new SpanishAnalyzer(Version.LUCENE_36);
-	      else if(lang.equals("de")) analyzer = new GermanAnalyzer(Version.LUCENE_36);
-	      else if(lang.equals("pt")) analyzer = new PortugueseAnalyzer(Version.LUCENE_36);
-	      else if(lang.equals("ca")) analyzer = new CatalanAnalyzer(Version.LUCENE_36);
-	      else if(lang.equals("nl")) analyzer = new DutchAnalyzer(Version.LUCENE_36);
-	      else analyzer = new EnglishAnalyzer(Version.LUCENE_36);
-	      IndexWriterConfig iwc = new IndexWriterConfig(Version.LUCENE_36, analyzer);
+	      if(lang.equals("fr")) analyzer = new FrenchAnalyzer(Version.LUCENE_44);
+	      else if(lang.equals("it")) analyzer = new ItalianAnalyzer(Version.LUCENE_44);
+	      else if(lang.equals("es")) analyzer = new SpanishAnalyzer(Version.LUCENE_44);
+	      else if(lang.equals("de")) analyzer = new GermanAnalyzer(Version.LUCENE_44);
+	      else if(lang.equals("pt")) analyzer = new PortugueseAnalyzer(Version.LUCENE_44);
+	      else if(lang.equals("ca")) analyzer = new CatalanAnalyzer(Version.LUCENE_44);
+	      else if(lang.equals("nl")) analyzer = new DutchAnalyzer(Version.LUCENE_44);
+	      else analyzer = new EnglishAnalyzer(Version.LUCENE_44);
+	      
+	      //IndexWriter Configuration
+	      IndexWriterConfig iwc = new IndexWriterConfig(Version.LUCENE_44, analyzer);
+	      if(Yasemir.SCORE.equals("BM25")) iwc.setSimilarity(new BM25Similarity());
+	      else iwc.setSimilarity(new DefaultSimilarity());
 
 	      if (create) {
 	        // Create a new index in the directory, removing any

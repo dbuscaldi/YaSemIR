@@ -1,16 +1,13 @@
 package fr.lipn.yasemir.search;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.HashMap;
-import java.util.Scanner;
-
 import org.semanticweb.owlapi.model.OWLClass;
 
 public class ClassWeightHandler {
+	//TODO: use Lucene to implement class frequency weights
 	private static HashMap<String, Integer> freqMap;
 	private static int N;
-	
+	/*
 	public static void init(){
 		freqMap=new HashMap<String, Integer>();
 		//read data from freqs.dat
@@ -61,6 +58,7 @@ public class ClassWeightHandler {
 			return Math.log((double)N/v);
 		} else return 1d;
 	}
+	*/
 	
 	public static double get1(OWLClass cls){
 		return 1d; //method that corresponds to giving all classes the same weight

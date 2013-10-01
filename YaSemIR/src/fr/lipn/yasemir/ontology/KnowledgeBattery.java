@@ -7,9 +7,10 @@ import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
-import org.apache.lucene.index.IndexReader;
+import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
+import org.apache.lucene.search.similarities.BM25Similarity;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Version;
@@ -55,13 +56,14 @@ public class KnowledgeBattery {
 			String termIndexPath = Yasemir.TERM_DIR;
 			
 			Directory dir = FSDirectory.open(new File(termIndexPath));
-		 	if(IndexReader.indexExists(dir)) {
+		 	if(DirectoryReader.indexExists(dir)) {
 		 		System.err.println("[KnowledgeBattery] term index exists, skipping");
 		 		dir.close();
 		 		return;
 		 	}
-		    Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_36); //Whitespace?
-		    IndexWriterConfig iwc = new IndexWriterConfig(Version.LUCENE_36, analyzer);
+		    Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_44); //Whitespace?
+		    IndexWriterConfig iwc = new IndexWriterConfig(Version.LUCENE_44, analyzer);
+		    iwc.setSimilarity(new BM25Similarity()); //NEW! set BM25 as default similarity for term index
 		    
 		    IndexWriter writer = new IndexWriter(dir, iwc);
 		    
