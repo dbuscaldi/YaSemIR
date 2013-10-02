@@ -8,26 +8,28 @@ import java.util.Vector;
 
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.TokenStream;
-import org.apache.lucene.analysis.tokenattributes.TermAttribute;
+import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
+import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.search.IndexSearcher;
 
 public class TermFactory {
-	public static IndexSearcher searcher; //we use this to calculate term frequencies
+	public static IndexReader reader; //we use this to calculate term frequencies
 	public static Analyzer analyzer;
 	
-	public static void init(IndexSearcher s, Analyzer a) {
-		searcher=s;
+	public static void init(IndexReader s, Analyzer a) {
+		reader=s;
 		analyzer=a;
 	}
 	
 	public static Vector<NGramTerm> makeTermSequence(String text){
 		List<String> result = new ArrayList<String>();
-        TokenStream stream  = analyzer.tokenStream("text", new StringReader(text));
+		try {
+			TokenStream stream  = analyzer.tokenStream("text", new StringReader(text));
 
-        try {
+        
             while(stream.incrementToken()) {
-                result.add(stream.getAttribute(TermAttribute.class).term());
-                //System.err.println(stream.getAttribute(TermAttribute.class).term());
+                //result.add(stream.getAttribute(TermAttribute.class).term()); //old way
+                result.add(stream.getAttribute(CharTermAttribute.class).toString());
             }
         }
         catch(IOException e) {

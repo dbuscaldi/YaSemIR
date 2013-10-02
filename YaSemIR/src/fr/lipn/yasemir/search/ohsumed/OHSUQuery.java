@@ -1,4 +1,4 @@
-package fr.lipn.yasemir.search;
+package fr.lipn.yasemir.search.ohsumed;
 
 import java.util.List;
 import java.util.Vector;

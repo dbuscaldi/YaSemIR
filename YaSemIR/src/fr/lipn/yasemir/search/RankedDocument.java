@@ -9,16 +9,33 @@ import org.semanticweb.owlapi.model.OWLClass;
 import fr.lipn.yasemir.ontology.KnowledgeBattery;
 import fr.lipn.yasemir.ontology.Ontology;
 import fr.lipn.yasemir.ontology.annotation.Annotation;
+import fr.lipn.yasemir.weighting.ckpd.NGramComparer;
+import fr.lipn.yasemir.weighting.ckpd.NGramTerm;
+import fr.lipn.yasemir.weighting.ckpd.TermFactory;
 
-public class SemanticallyRankedDocument implements Comparable<SemanticallyRankedDocument> {
+public class RankedDocument implements Comparable<RankedDocument> {
 	private String docID;
 	private Vector<Annotation> docAnnot;
 	private Vector<Annotation> queryAnnot;
 	private Float weight;
+	private String text;
 	
-	public SemanticallyRankedDocument(String docID, String docAnnAsText, HashMap<String, Vector<Annotation>> queryAnnot){
+	/**
+	 * constructor to be used if CKPD or classic search are used
+	 * @param docID
+	 * @param text
+	 * @param annotations
+	 */
+	public RankedDocument(String docID, String text, HashMap<String, Vector<Annotation>> queryAnnot){
+		this.docID=docID;
+		this.docAnnot=new Vector<Annotation>();
+		this.text=text;
+	}
+	
+	public RankedDocument(String docID, String text, String docAnnAsText, HashMap<String, Vector<Annotation>> queryAnnot){
 		this.docID=docID;
 		this.queryAnnot = new Vector<Annotation>();
+		this.text=text;
 		
 		for(String k : queryAnnot.keySet()){
 			this.queryAnnot.addAll(queryAnnot.get(k));
@@ -49,6 +66,14 @@ public class SemanticallyRankedDocument implements Comparable<SemanticallyRanked
 		}
 		this.weight=new Float(0);
 	}
+	
+	/**
+	 * This method set the document weight to a fixed score (to be used by classic search)
+	 */
+	public void setWeight(float score){
+		this.weight= new Float(score);
+	}
+	
 	/**
 	 * This method calculates the weight of the document with respect to the query, using the concept similarity measure
 	 * @param measure
@@ -106,7 +131,7 @@ public class SemanticallyRankedDocument implements Comparable<SemanticallyRanked
 	}
 
 	@Override
-	public int compareTo(SemanticallyRankedDocument o) {
+	public int compareTo(RankedDocument o) {
 		return (-this.weight.compareTo(o.weight));
 	}
 	
@@ -122,12 +147,34 @@ public class SemanticallyRankedDocument implements Comparable<SemanticallyRanked
 		float w= this.weight.floatValue();
 		this.weight=new Float(combMNZ(w,score));
 	}
+	/**
+	 * Calculates and include n-gram based weight
+	 * @param queryNGSet
+	 */
+	public void setCKPDWeight(Vector<NGramTerm> queryNGSet) {
+		if(queryNGSet==null) return;
+		Vector<NGramTerm> tv = TermFactory.makeTermSequence(text);
+		float CKPDweight=new Float(NGramComparer.compare(queryNGSet, tv));
+		
+		this.includeCKPDWeight(CKPDweight);
+		
+	}
 	
+	/**
+	 * Combine n-gram based weight using combMNZ
+	 * @param score
+	 */
 	public void includeCKPDWeight(float score) {
 		float w= this.weight.floatValue();
 		this.weight=new Float(combMNZ(w,score));
 	}
 	
+	/**
+	 * Calcultes the combMNZ score
+	 * @param scorea
+	 * @param scoreb
+	 * @return
+	 */
 	private float combMNZ(float scorea, float scoreb){
 		float nz=0f;
 		if(scorea==0 && scoreb==0) return 0f;
@@ -138,6 +185,36 @@ public class SemanticallyRankedDocument implements Comparable<SemanticallyRanked
 		return (scorea+scoreb)/nz;
 	}
 	
+	public String toString(){
+		StringBuffer tmp = new StringBuffer();
+		if(this.docAnnot != null) {
+		tmp.append("Annotations:\n");
+			for(Annotation a : docAnnot) {
+				tmp.append(a.getOWLClass());
+				tmp.append(" ");
+			}
+		}
+		tmp.append("\nText:\n");
+		tmp.append(formatTextWidth(text.toString(), 120));
+		return tmp.toString();
+	}
+	
+	private static String formatTextWidth(String input, int maxLineLength) {
+	    String [] fragments = input.split("[\\s]+");
+	    StringBuilder output = new StringBuilder(input.length());
+	    int lineLen = 0;
+	    for(String word: fragments) {
+	       
+	        if (lineLen + word.length() > maxLineLength) {
+	            output.append("\n");
+	            lineLen = 0;
+	        }
+	        output.append(word);
+	        output.append(" ");
+	        lineLen += (word.length()+1);
+	    }
+	    return output.toString();
+	}
 	
 	
 }

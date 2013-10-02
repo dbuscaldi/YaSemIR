@@ -6,7 +6,6 @@ import java.util.HashSet;
 import java.util.Vector;
 
 import org.apache.lucene.analysis.Analyzer;
-import org.apache.lucene.analysis.SimpleAnalyzer;
 import org.apache.lucene.analysis.en.EnglishAnalyzer;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.search.IndexSearcher;
@@ -21,13 +20,12 @@ public class TestNGrams {
 	public static void main(String[] args) throws IOException {
 		String index = "indexOHSUMed_sem";
 		IndexReader reader = IndexReader.open(FSDirectory.open(new File(index)));
-		IndexSearcher searcher = new IndexSearcher(reader);
 		Analyzer analyzer;
-		analyzer =  new EnglishAnalyzer(Version.LUCENE_31);
+		analyzer =  new EnglishAnalyzer(Version.LUCENE_44);
 		
 		String test = "The quick brown fox jumps over the lazy dog.";
 		
-		TermFactory.init(searcher, analyzer);
+		TermFactory.init(reader, analyzer);
 		Vector<NGramTerm> tv = TermFactory.makeTermSequence(test);
 		
 		HashSet<NGram> ngset =NGramFactory.getNGramSet(tv);

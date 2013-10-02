@@ -12,7 +12,7 @@
 		<weight val="fixed"/>
 		<distance val="pg3"/>
 		<ngrams val="false"/> <!-- enables CKPD schema -->
-		<search_mode val="semantic" /> <!-- used for search: hybrid, classic or semantic -->
+		<search_mode val="hybrid" /> <!-- used for search: hybrid, classic or semantic -->
 	</params>
 	<semanticfields>
 		<field>TAG</field>

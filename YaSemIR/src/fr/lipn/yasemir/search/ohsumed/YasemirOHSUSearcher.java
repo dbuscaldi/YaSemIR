@@ -1,4 +1,4 @@
-package fr.lipn.yasemir.search;
+package fr.lipn.yasemir.search.ohsumed;
 
 import java.io.File;
 import java.util.Collections;
@@ -29,11 +29,12 @@ import org.apache.lucene.util.Version;
 
 import fr.lipn.yasemir.configuration.Yasemir;
 import fr.lipn.yasemir.ontology.annotation.Annotation;
+import fr.lipn.yasemir.search.RankedDocument;
 import fr.lipn.yasemir.weighting.ckpd.NGramTerm;
 import fr.lipn.yasemir.weighting.ckpd.TermFactory;
 import fr.lipn.yasemir.weighting.ckpd.ranking.CKPDRankedDocument;
 
-public class YasemirSearcher {
+public class YasemirOHSUSearcher {
 	private final static int TITLE_ONLY=0;
 	private final static int TITLE_DESC=1;
 	
@@ -88,7 +89,7 @@ public class YasemirSearcher {
 				
 				if(Yasemir.MODE==Yasemir.CLASSIC){
 					conf_str+="n"; if(CONFIGURATION==TITLE_DESC) conf_str+="td";
-					if(Yasemir.CKPD_ENABLED) conf_str+="ckpd"; TermFactory.init(searcher, analyzer);
+					if(Yasemir.CKPD_ENABLED) conf_str+="ckpd"; TermFactory.init(reader, analyzer);
 
 						Query parsedQuery = parser.parse(query.toString().trim());
 						
@@ -160,10 +161,12 @@ public class YasemirSearcher {
 					    int numTotalHits = results.totalHits;
 					    //System.err.println("[YaSemIr] "+numTotalHits + " total matching documents");
 					    if(numTotalHits > 0) {
-				    	  Vector<SemanticallyRankedDocument> srDocs= new Vector<SemanticallyRankedDocument>();
+				    	  Vector<RankedDocument> srDocs= new Vector<RankedDocument>();
 				    	  for (int i = 0; i < Math.min(numTotalHits, MAX_HITS); i++) {
 					          Document doc = searcher.doc(hits[i].doc);
 					          String id = doc.get("id");
+					          String textAbst = doc.get("text");
+					          //textAbst=textAbst.substring(0, Math.min(1024, textAbst.length()-1));
 					          List<IndexableField> docFields =doc.getFields();
 					          StringBuffer concepts = new StringBuffer();
 					          for(IndexableField f : docFields){
@@ -174,7 +177,7 @@ public class YasemirSearcher {
 					        	  }
 					          }
 					        
-					        SemanticallyRankedDocument srDoc = new SemanticallyRankedDocument(id, concepts.toString().trim(), queryAnnotation);
+					        RankedDocument srDoc = new RankedDocument(id, textAbst, concepts.toString().trim(), queryAnnotation);
 					        srDoc.setWeight(Yasemir.SIM_MEASURE);
 					        srDocs.add(srDoc);
 					        
@@ -182,7 +185,7 @@ public class YasemirSearcher {
 				    	
 				    	Collections.sort(srDocs);
 				    	for (int i = 0; i < Math.min(srDocs.size(), MAX_HITS); i++) {
-				    		SemanticallyRankedDocument srd = srDocs.elementAt(i);
+				    		RankedDocument srd = srDocs.elementAt(i);
 				    		System.out.println(oq.getID()+"\tQ0\t"+srd.getID()+"\t"+i+"\t"+String.format(Locale.US, "%.4f",srd.getScore())+"\t"+conf_str);
 						}	
 				}
@@ -190,7 +193,7 @@ public class YasemirSearcher {
 				//HYBRID MODE (search classic and rank with concepts score * tfidf score)
 				conf_str+="h"; if(CONFIGURATION==TITLE_DESC) conf_str+="td";
 				analyzer =  new EnglishAnalyzer(Version.LUCENE_44);
-				if(Yasemir.CKPD_ENABLED) conf_str+="ckpd"; TermFactory.init(searcher, analyzer);
+				if(Yasemir.CKPD_ENABLED) conf_str+="ckpd"; TermFactory.init(reader, analyzer);
 				//System.err.println("Processing Query "+oq.getID());
 				StringBuffer extQueryText = new StringBuffer();
 				
@@ -215,10 +218,11 @@ public class YasemirSearcher {
 				    if(Yasemir.CKPD_ENABLED) {
 				    	queryNGT = TermFactory.makeTermSequence(query.toString());
 				    }
-				    Vector<SemanticallyRankedDocument> srDocs= new Vector<SemanticallyRankedDocument>();
+				    Vector<RankedDocument> srDocs= new Vector<RankedDocument>();
 				    for (int i = 0; i < Math.min(numTotalHits, MAX_HITS*2); i++) {
 				    	Document doc = searcher.doc(hits[i].doc);
 				        String id = doc.get("id");
+				        String textAbst = doc.get("text");
 				        List<IndexableField> docFields =doc.getFields();
 				        StringBuffer concepts = new StringBuffer();
 				        for(IndexableField f : docFields){
@@ -230,7 +234,7 @@ public class YasemirSearcher {
 				        }
 				        
 				        //if(concepts==null) continue;
-				        SemanticallyRankedDocument srDoc = new SemanticallyRankedDocument(id, concepts.toString().trim(), queryAnnotation);
+				        RankedDocument srDoc = new RankedDocument(id, textAbst, concepts.toString().trim(), queryAnnotation);
 				        srDoc.setWeight(Yasemir.SIM_MEASURE);
 				        srDoc.includeClassicWeight(hits[i].score); //model with both classic and CKPD weights
 				        srDocs.add(srDoc);
@@ -248,7 +252,7 @@ public class YasemirSearcher {
 				    	
 				    Collections.sort(srDocs);
 				    int rank=0;
-				    for(SemanticallyRankedDocument srd : srDocs){
+				    for(RankedDocument srd : srDocs){
 				    	System.out.println(oq.getID()+"\tQ0\t"+srd.getID()+"\t"+rank+"\t"+String.format(Locale.US, "%.4f",srd.getScore())+"\t"+conf_str);
 				    	rank++;
 				    	if(rank==(MAX_HITS-1)) break;

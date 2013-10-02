@@ -12,8 +12,8 @@ public class NGramTerm {
 		this.text=txt;
 		int nCount;
 		try {
-			nCount = TermFactory.searcher.docFreq(new Term("text", txt))+1; //+1 to avoid infinity
-			this.weight = 1.0-(Math.log10((double)nCount))/(Math.log10((double)TermFactory.searcher.maxDoc()));
+			nCount = TermFactory.reader.docFreq(new Term("text", txt))+1; //+1 to avoid infinity
+			this.weight = 1.0-(Math.log10((double)nCount))/(Math.log10((double)TermFactory.reader.maxDoc()));
 		} catch (IOException e) {
 			e.printStackTrace();
 			this.weight=0d;

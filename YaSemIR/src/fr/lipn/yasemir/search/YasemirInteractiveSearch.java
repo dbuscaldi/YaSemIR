@@ -177,10 +177,11 @@ public class YasemirInteractiveSearch {
 				  int numTotalHits = results.totalHits;
 				  System.err.println("[YaSemIr] "+numTotalHits + " total matching documents");
 				  if(numTotalHits > 0) {
-			    	Vector<SemanticallyRankedDocument> srDocs= new Vector<SemanticallyRankedDocument>();
+			    	Vector<RankedDocument> srDocs= new Vector<RankedDocument>();
 			    	for (int i = 0; i < Math.min(numTotalHits, MAX_HITS); i++) {
 				        Document doc = searcher.doc(hits[i].doc);
 				        String id = doc.get("id");
+				        String textAbst=doc.get("text");
 				        List<IndexableField> docFields =doc.getFields();
 				        StringBuffer concepts = new StringBuffer();
 				        for(IndexableField f : docFields){
@@ -192,7 +193,7 @@ public class YasemirInteractiveSearch {
 				        }
 				        //String concepts = doc.get(field+"annot"); //here we have the annotation
 				        //System.err.println(concepts);
-				        SemanticallyRankedDocument srDoc = new SemanticallyRankedDocument(id, concepts.toString().trim(), queryAnnotation);
+				        RankedDocument srDoc = new RankedDocument(id, textAbst, concepts.toString().trim(), queryAnnotation);
 				        srDoc.setWeight(Yasemir.SIM_MEASURE);
 				        srDocs.add(srDoc);
 				        //System.out.println(oq.getID()+"\tQ0\t"+id+"\t"+i+"\t"+hits[i].score+"\t"+conf_str);
@@ -200,7 +201,7 @@ public class YasemirInteractiveSearch {
 			    	
 			    	Collections.sort(srDocs);
 			    	int rank=0;
-			    	for(SemanticallyRankedDocument srd : srDocs){
+			    	for(RankedDocument srd : srDocs){
 			    		//System.out.println("Q0\t"+srd.getID()+"\t"+rank+"\t"+String.format(Locale.US, "%.4f",srd.getScore()));
 			    		System.out.println(rank);
 			    		System.out.println(srd.getID()+" : "+srd.getScore());
@@ -213,7 +214,6 @@ public class YasemirInteractiveSearch {
 			    		}
 			    	}
 			    }
-				//TODO: implement paging for semantic mode
 				//doPagingSearch(in, searcher, query, hitsPerPage, raw, queries == null && queryString == null);
 	    	  }
 	    	  
@@ -234,10 +234,11 @@ public class YasemirInteractiveSearch {
 				  int numTotalHits = results.totalHits;
 				  System.err.println("[YaSemIr] "+numTotalHits + " total matching documents");
 				  if(numTotalHits > 0) {
-			    	Vector<SemanticallyRankedDocument> srDocs= new Vector<SemanticallyRankedDocument>();
+			    	Vector<RankedDocument> srDocs= new Vector<RankedDocument>();
 			    	for (int i = 0; i < Math.min(numTotalHits, MAX_HITS); i++) {
 				        Document doc = searcher.doc(hits[i].doc);
 				        String id = doc.get("id");
+				        String textAbst=doc.get("text");
 				        List<IndexableField> docFields =doc.getFields();
 				        StringBuffer concepts = new StringBuffer();
 				        for(IndexableField f : docFields){
@@ -249,7 +250,7 @@ public class YasemirInteractiveSearch {
 				        }
 				        //String concepts = doc.get(field+"annot"); //here we have the annotation
 				        //System.err.println(concepts);
-				        SemanticallyRankedDocument srDoc = new SemanticallyRankedDocument(id, concepts.toString().trim(), queryAnnotation);
+				        RankedDocument srDoc = new RankedDocument(id, textAbst, concepts.toString().trim(), queryAnnotation);
 				        srDoc.setWeight(Yasemir.SIM_MEASURE);
 				        srDoc.includeClassicWeight(hits[i].score); //model with both classic and CKPD weights
 				        srDocs.add(srDoc);
@@ -258,7 +259,7 @@ public class YasemirInteractiveSearch {
 			    	
 			    	Collections.sort(srDocs);
 			    	int rank=0;
-			    	for(SemanticallyRankedDocument srd : srDocs){
+			    	for(RankedDocument srd : srDocs){
 			    		//System.out.println("Q0\t"+srd.getID()+"\t"+rank+"\t"+String.format(Locale.US, "%.4f",srd.getScore()));
 			    		System.out.println(rank);
 			    		System.out.println(srd.getID()+" : "+srd.getScore());

@@ -94,7 +94,8 @@ public class KnowledgeBattery {
 		
 		} catch(Exception e){
 			e.printStackTrace();
-			//TODO:take action
+			System.err.println("[YaSemIR] Term Index could not be created");
+			System.exit(-1);
 		}		
 	}
 	/*

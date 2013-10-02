@@ -16,6 +16,9 @@ import fr.lipn.yasemir.ontology.annotation.SemanticAnnotator;
 import fr.lipn.yasemir.ontology.skos.SKOSTerminology;
 
 public class Yasemir {
+	//debug mode
+	public static boolean DEBUG=true;
+	
 	//search mode
 	public final static int CLASSIC=0;
 	public final static int SEMANTIC=1;
@@ -96,7 +99,7 @@ public class Yasemir {
 		//setting annotator
 		ANNOTATOR=ConfigurationHandler.ANNOTENGINE;
 		annotator=new IndexBasedAnnotator(TERM_DIR);
-		//annotator=new KNNAnnotator(TERM_DIR); //TODO: not finished
+		//annotator=new KNNAnnotator(TERM_DIR); //TODO: not finished (select annotator depending on configuration file)
 		
 		//setting ngrams enabled or not
 		CKPD_ENABLED=ConfigurationHandler.NGRAMS_ENABLED;
