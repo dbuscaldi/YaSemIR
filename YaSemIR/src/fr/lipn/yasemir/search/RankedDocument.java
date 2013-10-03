@@ -6,16 +6,22 @@ import java.util.Vector;
 
 import org.semanticweb.owlapi.model.OWLClass;
 
+import fr.lipn.yasemir.ontology.ClassWeightHandler;
 import fr.lipn.yasemir.ontology.KnowledgeBattery;
 import fr.lipn.yasemir.ontology.Ontology;
 import fr.lipn.yasemir.ontology.annotation.Annotation;
 import fr.lipn.yasemir.weighting.ckpd.NGramComparer;
 import fr.lipn.yasemir.weighting.ckpd.NGramTerm;
 import fr.lipn.yasemir.weighting.ckpd.TermFactory;
-
+/**
+ * Note: this class has a natural ordering that is inconsistent with equals.
+ * @author buscaldi
+ *
+ */
 public class RankedDocument implements Comparable<RankedDocument> {
 	private String docID;
-	private Vector<Annotation> docAnnot;
+	private Vector<Annotation> docAnnot; //concepts found in document
+	private Vector<Annotation> parentAnnot; //parents derived from document annotation
 	private Vector<Annotation> queryAnnot;
 	private Float weight;
 	private String text;
@@ -26,15 +32,64 @@ public class RankedDocument implements Comparable<RankedDocument> {
 	 * @param text
 	 * @param annotations
 	 */
-	public RankedDocument(String docID, String text, HashMap<String, Vector<Annotation>> queryAnnot){
+	public RankedDocument(String docID, String text, String docAnnAsText, String parentsAsText){
 		this.docID=docID;
-		this.docAnnot=new Vector<Annotation>();
 		this.text=text;
+		
+		this.docAnnot=new Vector<Annotation>();
+		this.parentAnnot= new Vector<Annotation>();
+		
+		String [] tAnns = (docAnnAsText.trim()).split(" ");
+		String [] pAnns = (parentsAsText.trim()).split(" ");
+		for(String c : tAnns){
+			if(!c.equals("") && !c.equals("Thing")){
+				String [] els = c.split(":");
+				int cutpos = els[0].indexOf("annot");
+				String oid= null;
+				if(cutpos != -1) {
+					oid = els[0].substring(0, cutpos);
+					//System.err.println("recomposed: "+oid+":"+els[1]);
+					docAnnot.add(new Annotation(oid, els[1]));
+					
+				} else {
+					oid = KnowledgeBattery.ontoForClassID(c).getOntologyID();
+					//System.err.println("recomposed: "+oid+":"+c);
+					docAnnot.add(new Annotation(oid, c));
+				}
+				
+			}
+		}
+		
+		for(String p : pAnns){
+			if(!p.equals("") && !p.equals("Thing")){
+				String [] els = p.split(":");
+				int cutpos = els[0].indexOf("annot_exp");
+				String oid= null;
+				
+				if(cutpos != -1) {
+					oid = els[0].substring(0, cutpos);
+					parentAnnot.add(new Annotation(oid, els[1]));
+					
+				} else {
+					oid = KnowledgeBattery.ontoForClassID(p).getOntologyID();
+					parentAnnot.add(new Annotation(oid, p));
+				}
+				
+			}
+		}
 	}
-	
-	public RankedDocument(String docID, String text, String docAnnAsText, HashMap<String, Vector<Annotation>> queryAnnot){
+	/**
+	 * Constructor to be used for semantic or hybrid search
+	 * @param docID
+	 * @param text
+	 * @param docAnnAsText
+	 * @param parentsAsText
+	 * @param queryAnnot
+	 */
+	public RankedDocument(String docID, String text, String docAnnAsText, String parentsAsText, HashMap<String, Vector<Annotation>> queryAnnot){
 		this.docID=docID;
 		this.queryAnnot = new Vector<Annotation>();
+		
 		this.text=text;
 		
 		for(String k : queryAnnot.keySet()){
@@ -42,11 +97,11 @@ public class RankedDocument implements Comparable<RankedDocument> {
 		}
 		
 		this.docAnnot=new Vector<Annotation>();
+		this.parentAnnot= new Vector<Annotation>();
 		String [] tAnns = (docAnnAsText.trim()).split(" ");
+		String [] pAnns = (parentsAsText.trim()).split(" ");
 		for(String c : tAnns){
-			//FIXME: annotations with or without oid during indexing??? (cutpos sometimes -1)
-			//System.err.println("c --> "+c);
-			if(!c.equals("") && !c.equals("Thing")){ //FIXME: why do we have annotations with Thing???
+			if(!c.equals("") && !c.equals("Thing")){
 				String [] els = c.split(":");
 				int cutpos = els[0].indexOf("annot");
 				String oid= null;
@@ -64,11 +119,30 @@ public class RankedDocument implements Comparable<RankedDocument> {
 				
 			}
 		}
+		
+		for(String p : pAnns){
+			if(!p.equals("") && !p.equals("Thing")){
+				String [] els = p.split(":");
+				int cutpos = els[0].indexOf("annot_exp");
+				String oid= null;
+				
+				if(cutpos != -1) {
+					oid = els[0].substring(0, cutpos);
+					parentAnnot.add(new Annotation(oid, els[1]));
+					
+				} else {
+					oid = KnowledgeBattery.ontoForClassID(p).getOntologyID();
+					parentAnnot.add(new Annotation(oid, p));
+				}
+				
+			}
+		}
+		
 		this.weight=new Float(0);
 	}
 	
 	/**
-	 * This method set the document weight to a fixed score (to be used by classic search)
+	 * This method set the document weight to a fixed score (this method is not intended to be used in semantic search mode)
 	 */
 	public void setWeight(float score){
 		this.weight= new Float(score);
@@ -111,10 +185,7 @@ public class RankedDocument implements Comparable<RankedDocument> {
 				}
 			}
 			cWeights[i]=max;
-			clWeights[i]=ClassWeightHandler.get1(bestLocalRoot);
-			//clWeights[i]=ClassWeightHandler.getIDF(bestLocalRoot);
-			//clWeights[i]=ClassWeightHandler.getProb(bestLocalRoot);
-			//clWeights[i]=ClassWeightHandler.getGaussProb(bestLocalRoot);
+			clWeights[i]=ClassWeightHandler.getWeight(bestLocalRoot);
 			
 			//if(bestLocalRoot != null && clWeights[i] > 1) System.err.println(bestLocalRoot.toStringID()+" "+clWeights[i]);
 		}
@@ -124,7 +195,6 @@ public class RankedDocument implements Comparable<RankedDocument> {
 		for(int k=0; k< cWeights.length; k++) {
 			sum+=((float)clWeights[k]*cWeights[k]);
 		}
-		//sum=sum/(float)cWeights.length; //normalisation (we don't have roots weights w/r to TextViz
 		sum=sum/((float)clwSum); //normalisation with weights for each localRoot
 		//System.err.println("weight for document "+this.docID+" : "+sum);
 		this.weight=new Float(sum);
@@ -143,7 +213,11 @@ public class RankedDocument implements Comparable<RankedDocument> {
 		return this.docID;
 	}
 	
-	public void includeClassicWeight(float score) {
+	/**
+	 * Combine weights using combMNZ
+	 * @param score
+	 */
+	public void fuseWeights(float score) {
 		float w= this.weight.floatValue();
 		this.weight=new Float(combMNZ(w,score));
 	}
@@ -156,21 +230,11 @@ public class RankedDocument implements Comparable<RankedDocument> {
 		Vector<NGramTerm> tv = TermFactory.makeTermSequence(text);
 		float CKPDweight=new Float(NGramComparer.compare(queryNGSet, tv));
 		
-		this.includeCKPDWeight(CKPDweight);
-		
+		this.fuseWeights(CKPDweight);
 	}
 	
 	/**
-	 * Combine n-gram based weight using combMNZ
-	 * @param score
-	 */
-	public void includeCKPDWeight(float score) {
-		float w= this.weight.floatValue();
-		this.weight=new Float(combMNZ(w,score));
-	}
-	
-	/**
-	 * Calcultes the combMNZ score
+	 * Method that calcultes the combMNZ score
 	 * @param scorea
 	 * @param scoreb
 	 * @return
@@ -185,35 +249,54 @@ public class RankedDocument implements Comparable<RankedDocument> {
 		return (scorea+scoreb)/nz;
 	}
 	
-	public String toString(){
+	/**
+	 * Returns the annotation list as a single String
+	 * @return
+	 */
+	public String getBaseAnnotations(){
 		StringBuffer tmp = new StringBuffer();
 		if(this.docAnnot != null) {
-		tmp.append("Annotations:\n");
+		//tmp.append("Annotations:\n");
 			for(Annotation a : docAnnot) {
 				tmp.append(a.getOWLClass());
 				tmp.append(" ");
 			}
 		}
-		tmp.append("\nText:\n");
-		tmp.append(formatTextWidth(text.toString(), 120));
-		return tmp.toString();
+		return tmp.toString().trim();
+	}
+	/**
+	 * Returns the subsumers list as a single string
+	 * @return
+	 */
+	public String getSubsumerAnnotations(){
+		StringBuffer tmp = new StringBuffer();
+		if(this.parentAnnot != null) {
+		//tmp.append("Subsumers:\n");
+			for(Annotation a : parentAnnot) {
+				tmp.append(a.getOWLClass());
+				tmp.append(" ");
+			}
+		}
+		return tmp.toString().trim();
+	}
+	/**
+	 * Returns the document text
+	 * @return
+	 */
+	public String getText() {
+		return this.text;
 	}
 	
-	private static String formatTextWidth(String input, int maxLineLength) {
-	    String [] fragments = input.split("[\\s]+");
-	    StringBuilder output = new StringBuilder(input.length());
-	    int lineLen = 0;
-	    for(String word: fragments) {
-	       
-	        if (lineLen + word.length() > maxLineLength) {
-	            output.append("\n");
-	            lineLen = 0;
-	        }
-	        output.append(word);
-	        output.append(" ");
-	        lineLen += (word.length()+1);
-	    }
-	    return output.toString();
+	public boolean equals(Object o){
+		return this.docID.equals(((RankedDocument)o).docID);
+	}
+	/*
+	public boolean equals(RankedDocument d){
+		return this.docID.equals(d.docID);
+	}
+	*/
+	public int hashCode(){
+		return this.docID.hashCode();
 	}
 	
 	

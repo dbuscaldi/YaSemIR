@@ -56,13 +56,15 @@ public class YasemirIndexer {
 	
 	/** Index all text files under a directory. */
 	public static void main(String[] args) {
+		Yasemir.setIndexing(true); //activate indexing mode
 		Yasemir.init("config.xml");
+		
 		
 		String indexPath = Yasemir.INDEX_DIR;
 		String docsPath = Yasemir.COLLECTION_DIR;
 		String lang = Yasemir.COLLECTION_LANG;
 		  
-	    boolean create = true; //TODO: allow update mode?
+	    boolean create = true; //NOTE: should we allow an update mode?
 	
 	    if (docsPath == null) {
 	      System.err.println("[YaSemIR] No collection specified in the config file!");
@@ -71,13 +73,13 @@ public class YasemirIndexer {
 
 	    final File docDir = new File(docsPath);
 	    if (!docDir.exists() || !docDir.canRead()) {
-	      System.out.println("[YaSemIR] Document directory '" +docDir.getAbsolutePath()+ "' does not exist or is not readable, please check the path");
+	      System.err.println("[YaSemIR] Document directory '" +docDir.getAbsolutePath()+ "' does not exist or is not readable, please check the path");
 	      System.exit(1);
 	    }
 	    
 	    Date start = new Date();
 	    try {
-	      System.out.println("[YaSemIR] Indexing to directory '" + indexPath + "'...");
+	      System.err.println("[YaSemIR] Indexing to directory '" + indexPath + "'...");
 
 	      Directory dir = FSDirectory.open(new File(indexPath));
 	      Analyzer analyzer = null;
@@ -110,10 +112,10 @@ public class YasemirIndexer {
 	      writer.close();
 
 	      Date end = new Date();
-	      System.out.println(end.getTime() - start.getTime() + " total milliseconds");
+	      System.err.println(end.getTime() - start.getTime() + " total milliseconds");
 
 	    } catch (IOException e) {
-	      System.out.println(" caught a " + e.getClass() +
+	      System.err.println(" caught a " + e.getClass() +
 	       "\n with message: " + e.getMessage());
 	    }
 	  }
@@ -136,8 +138,6 @@ public class YasemirIndexer {
 	    		YasemirSimpleXMLFileHandler hdlr = null;
 	            try {
 	            		hdlr = new YasemirSimpleXMLFileHandler(file);
-	            		
-	            		//Document doc=hdlr.getParsedDocument();
 	            		
 	            } catch (Exception e) {
 	            	e.printStackTrace();

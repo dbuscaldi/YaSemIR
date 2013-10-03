@@ -1,4 +1,6 @@
-package fr.lipn.yasemir.ontology.skos;
+package fr.lipn.yasemir.test;
+
+import fr.lipn.yasemir.ontology.skos.SKOSTerminology;
 
 public class TestSKOSRead {
 

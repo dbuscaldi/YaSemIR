@@ -28,6 +28,7 @@ import org.apache.lucene.search.similarities.BM25Similarity;
 import org.apache.lucene.util.Version;
 
 import fr.lipn.yasemir.configuration.Yasemir;
+import fr.lipn.yasemir.ontology.ClassWeightHandler;
 import fr.lipn.yasemir.ontology.annotation.Annotation;
 import fr.lipn.yasemir.weighting.ckpd.NGramTerm;
 import fr.lipn.yasemir.weighting.ckpd.TermFactory;
@@ -54,6 +55,9 @@ public class SemanticSearcher {
 		this.searcher = new IndexSearcher(reader);
 	    if(Yasemir.SCORE.equals("BM25")) searcher.setSimilarity(new BM25Similarity());
 	    
+	    ClassWeightHandler.init(reader);
+	    if(Yasemir.CKPD_ENABLED) TermFactory.init(reader, analyzer);
+	    
 		parser = new QueryParser(Version.LUCENE_44, basefield, analyzer);
 	}
 	
@@ -62,11 +66,16 @@ public class SemanticSearcher {
 		
 		Vector<NGramTerm> queryNGT = null;
 		if(Yasemir.CKPD_ENABLED) queryNGT = TermFactory.makeTermSequence(line);
-			
-		if(Yasemir.MODE==Yasemir.CLASSIC){
+		
+		String debugStr;
+  	  	if(Yasemir.MODE==Yasemir.SEMANTIC) debugStr="SEMANTIC";
+  	  	else if(Yasemir.MODE==Yasemir.CLASSIC) debugStr="CLASSIC";
+  	  	else debugStr="HYBRID";
+  	  	
+  	  	if(Yasemir.MODE==Yasemir.CLASSIC || Yasemir.MODE==Yasemir.HYBRID){
 	    	  Query query = parser.parse(line);
 	    	  
-	    	  if(Yasemir.DEBUG) System.err.println("[YaSemIr - CLASSIC] Searching for: " + query.toString(basefield));
+	    	  if(Yasemir.DEBUG) System.err.println("[YaSemIr - "+debugStr+"] Searching for: " + query.toString(basefield));
 	            
 		      searcher.search(query, null, MAX_HITS);
 		      
@@ -78,19 +87,35 @@ public class SemanticSearcher {
 			  if(numTotalHits > 0) {
 		    	for (int i = 0; i < Math.min(numTotalHits, MAX_HITS); i++) {
 			        Document doc = searcher.doc(hits[i].doc);
+			        List<IndexableField> docFields =doc.getFields();
 			        String id = doc.get("id");
 			        String textAbst=doc.get("text");
 			        float docWeight = hits[i].score;
+			        StringBuffer concepts = new StringBuffer();
+			        StringBuffer parents = new StringBuffer();
+			        for(IndexableField f : docFields){
+			        	String fname=f.name();
+			        	if(fname.endsWith("annot")) {
+			        		concepts.append(fname+":"+doc.get(fname));
+			        		concepts.append(" ");
+			        	} else if(fname.endsWith("annot_exp")){
+			        		parents.append(fname+":"+doc.get(fname));
+			        		parents.append(" ");
+			        	}
+			        }
+			        
 
-			        RankedDocument srDoc = new RankedDocument(id, textAbst, null);
-			        srDoc.setWeight(docWeight);
+			        RankedDocument clDoc = new RankedDocument(id, textAbst, concepts.toString(), parents.toString());
+			        clDoc.setWeight(docWeight);
 			        
-			        if(Yasemir.CKPD_ENABLED) srDoc.setCKPDWeight(queryNGT);
+			        if(Yasemir.CKPD_ENABLED) clDoc.setCKPDWeight(queryNGT);
 			        
-			        ret.add(srDoc);
+			        ret.add(clDoc);
+			        
 		    	}
 		     }
-	      } else {
+	      }
+  	  	  if(Yasemir.MODE==Yasemir.SEMANTIC || Yasemir.MODE==Yasemir.HYBRID){
 	          HashMap<String, Vector<Annotation>> queryAnnotation = null;
 	          if(Yasemir.DEBUG)  System.err.println("[YaSemIr] Annotating: " + line);
 		      
@@ -107,53 +132,60 @@ public class SemanticSearcher {
 			      }
 			      System.err.println("---------------------------");
 		      }
-	     	  
-		      if(Yasemir.MODE==Yasemir.SEMANTIC || Yasemir.MODE==Yasemir.HYBRID){
-		    	  String debugStr;
-		    	  if(Yasemir.MODE==Yasemir.SEMANTIC) debugStr="SEMANTIC";
-		    	  else debugStr="HYBRID";
-		    	  
-	    		  StringBuffer extQueryText = new StringBuffer();
-		    	  for(String oid : queryAnnotation.keySet()) {
-			    	  Vector<Annotation> ann = queryAnnotation.get(oid);
-			    	  for(Annotation a : ann){
-			    		  extQueryText.append(oid+"annot_exp:\""+a.getOWLClass().getIRI().getFragment()+"\"");
-			    		  extQueryText.append(" ");
-				      }
+		      
+		      if(queryAnnotation.isEmpty()) return ret;
+		      
+    		  StringBuffer extQueryText = new StringBuffer();
+	    	  for(String oid : queryAnnotation.keySet()) {
+		    	  Vector<Annotation> ann = queryAnnotation.get(oid);
+		    	  for(Annotation a : ann){
+		    		  extQueryText.append(oid+"annot_exp:\""+a.getOWLClass().getIRI().getFragment()+"\"");
+		    		  extQueryText.append(" ");
 			      }
-		    	  Query query=parser.parse(extQueryText.toString().trim());
-		    	  if(Yasemir.DEBUG) System.err.println("[YaSemIr - "+debugStr+"] Searching for: " + query.toString());
-		    	 
-		    	  TopDocs results = searcher.search(query, MAX_HITS);
-				  ScoreDoc[] hits = results.scoreDocs;
-				    
-				  int numTotalHits = results.totalHits;
-				  if(Yasemir.DEBUG) System.err.println("[YaSemIr] "+numTotalHits + " total matching documents");
-				  if(numTotalHits > 0) {
-			    	for (int i = 0; i < Math.min(numTotalHits, MAX_HITS); i++) {
-				        Document doc = searcher.doc(hits[i].doc);
-				        String id = doc.get("id");
-				        String textAbst=doc.get("text");
-				        List<IndexableField> docFields =doc.getFields();
-				        StringBuffer concepts = new StringBuffer();
-				        for(IndexableField f : docFields){
-				        	String fname=f.name();
-				        	if(fname.endsWith("annot") || fname.endsWith("annot_exp")) {
-				        		concepts.append(fname+":"+doc.get(fname));
-				        		concepts.append(" ");
-				        	}
-				        }
-				        RankedDocument srDoc = new RankedDocument(id, textAbst, concepts.toString().trim(), queryAnnotation);
-				        srDoc.setWeight(Yasemir.SIM_MEASURE);
-				        if(Yasemir.MODE==Yasemir.HYBRID) srDoc.includeClassicWeight(hits[i].score);
-				        
-				        ret.add(srDoc);
-				    }
-			    	
-			    	
+		      }
+	    	  Query query=parser.parse(extQueryText.toString().trim());
+	    	  if(Yasemir.DEBUG) System.err.println("[YaSemIr - "+debugStr+"] Searching for: " + query.toString());
+	    	 
+	    	  TopDocs results = searcher.search(query, MAX_HITS);
+			  ScoreDoc[] hits = results.scoreDocs;
+			    
+			  int numTotalHits = results.totalHits;
+			  if(Yasemir.DEBUG) System.err.println("[YaSemIr] "+numTotalHits + " total matching documents");
+		
+			  if(numTotalHits > 0) {
+		    	for (int i = 0; i < Math.min(numTotalHits, MAX_HITS); i++) {
+			        Document doc = searcher.doc(hits[i].doc);
+			        String id = doc.get("id");
+			        String textAbst=doc.get("text");
+			        List<IndexableField> docFields =doc.getFields();
+			        StringBuffer concepts = new StringBuffer();
+			        StringBuffer parents = new StringBuffer();
+			        for(IndexableField f : docFields){
+			        	String fname=f.name();
+			        	if(fname.endsWith("annot")) {
+			        		concepts.append(fname+":"+doc.get(fname));
+			        		concepts.append(" ");
+			        	} else if(fname.endsWith("annot_exp")){
+			        		parents.append(fname+":"+doc.get(fname));
+			        		parents.append(" ");
+			        	}
+			        }
+			        RankedDocument srDoc = new RankedDocument(id, textAbst, concepts.toString(), parents.toString(), queryAnnotation);
+			        srDoc.setWeight(Yasemir.SIM_MEASURE);
+
+			        
+			        if(Yasemir.MODE==Yasemir.SEMANTIC) ret.add(srDoc);
+			        else {
+			        	int pos = ret.indexOf(srDoc);
+			        	if(pos > -1) {
+			        		ret.elementAt(pos).fuseWeights(srDoc.getScore());
+			        	} else ret.add(srDoc);
+			        }
 			    }
-	    	  }
-	    	
+		    	
+		    	
+		    }
+
 	      }
 		
 		if(Yasemir.MODE!=Yasemir.CLASSIC) Collections.sort(ret);

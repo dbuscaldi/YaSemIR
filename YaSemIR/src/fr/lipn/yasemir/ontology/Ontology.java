@@ -29,9 +29,10 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.model.IRI;
@@ -76,7 +77,11 @@ public class Ontology {
         
         System.err.println("[YaSemIR]: Loaded ontology: " + onto+ " with root class "+this.root);
 	}
-	
+	/**
+	 * This method returns a unique string identifier associated with the Ontology.
+	 * This identifier is used during the indexing process to specify the source of the annotation
+	 * @return
+	 */
 	public String getOntologyID() {
 		MessageDigest md5;
 		try {
@@ -188,21 +193,22 @@ public class Ontology {
 	private void buildHierarchy(OWLClass c, Set<OWLClassExpression> visited){
 		Set<OWLClassExpression> sc = c.getSuperClasses(onto);
 		for(OWLClassExpression ce : sc){
-			if(!isGeneric(ce.asOWLClass()) && !visited.contains(ce)){
-				visited.add(ce);
-				buildHierarchy(ce.asOWLClass(), visited);
+			if(!ce.isAnonymous()){
+				if(!isGeneric(ce.asOWLClass()) && !visited.contains(ce)){
+					visited.add(ce);
+					buildHierarchy(ce.asOWLClass(), visited);
+				}
 			}
 		}
 	}
 	
 	/**
-	 * Method that tells whether a class represents everything or the top concept
+	 * Method that tells whether a class represents the top concept
 	 * @param c
 	 * @return
 	 */
 	public boolean isGeneric(OWLClass c){
 		return c.equals(this.root);
-		//return (c.isTopEntity() || c.getIRI().getFragment().endsWith("All")); //ad hoc for MeSH
 	}
 	/**
 	 * Returns the classes corresponding to the top-domains in the Ontology (exactly under root or All for MeSH)
@@ -218,7 +224,7 @@ public class Ontology {
 	}
 	
 	/**
-	 * Returns an OWLClass corresponding to the passed id
+	 * Returns an OWLClass corresponding to the passed id string (IRI format)
 	 * @param id a String representing the class, e.g. "http://org.snu.bike/MeSH#All"
 	 * @return The corresponding OWLClass in the Ontology, null if it is not in the ontology
 	 */
@@ -229,6 +235,12 @@ public class Ontology {
 		else return null;
 	}
 	
+	/**
+	 * Returns the least common subsumer between two concepts a and b
+	 * @param a
+	 * @param b
+	 * @return
+	 */
 	public OWLClass leastCommonSubsumer(OWLClass a, OWLClass b){
 		Set<OWLClass> sup_a= getAllSuperClasses(a);
 		sup_a.add(a);//add itself
@@ -291,7 +303,10 @@ public class Ontology {
 	}
 	
 	/**
-	 * Generates a trivial terminology
+	 * Generates a trivial terminology composed by the concept labels.
+	 * It converts underscores and punctuation symbols to spaces.
+	 * It also attempts to split concept names on the basis of case variations:
+	 * for instance, "Segment4OfRCA" is split as: "Segment 4 of RCA"
 	 * @return
 	 */
 	public SKOSTerminology generateTerminology() {
@@ -300,6 +315,21 @@ public class Ontology {
 		Set<OWLClass> nodes = onto.getClassesInSignature();
 		for(OWLClass c : nodes) {
 			String concLabel = c.getIRI().getFragment();
+			
+			if(!concLabel.equals(concLabel.toUpperCase())){ //concept name is not all in capitals
+				Pattern p = Pattern.compile("([0-9]+|\\p{Lu}[^\\p{Lu}0-9]+|\\p{Lu}+)");
+				Matcher m = p.matcher(concLabel);
+				
+				StringBuffer clbuf = new StringBuffer();
+				while(m.find()){
+					String str = m.group();
+					clbuf.append(str);
+					clbuf.append(" ");
+				}
+
+				concLabel=clbuf.toString().trim();
+			}
+			
 			concLabel=concLabel.replace('_', ' ');
 			concLabel=concLabel.replaceAll("\\p{Punct}", " ");
 			concLabel=concLabel.replaceAll(" +", " ");
@@ -316,7 +346,7 @@ public class Ontology {
 			}
 			
 			String stemmed_label=fbuf.toString().trim();
-			
+			//System.err.println("Full label: "+c.getIRI()+" stemmed label: "+stemmed_label);
 			terminology.makeConceptLabel(c, stemmed_label);
 		}
 		
@@ -343,6 +373,13 @@ public class Ontology {
 		return res;
 	}
 	
+	/**
+	 * Method that computes Wu-Palmer conceptual similarity
+	 * @param c1
+	 * @param c2
+	 * @param localRoot
+	 * @return
+	 */
 	public float computeWuPalmerSimilarity(OWLClass c1, OWLClass c2, OWLClass localRoot)
 	{
 
@@ -366,7 +403,13 @@ public class Ontology {
 		float result = new Float(2*greatestDepth)/new Float(d_c1+d_c2);
 		return result;
 	}
-	
+	/**
+	 * Method that computes the ProxiGenea1 conceptual similarity [Ralalason 2010]
+	 * @param c1
+	 * @param c2
+	 * @param localRoot
+	 * @return
+	 */
 	public float computeProxiGenea(OWLClass c1, OWLClass c2, OWLClass localRoot)
 	{
 		Set<OWLClass> subsumers1 = this.getAllSuperClasses(c1);
@@ -391,6 +434,13 @@ public class Ontology {
 		return result;
 	}
 	
+	/**
+	 * Method that computes the ProxiGenea1 conceptual similarity [Ralalason 2010]
+	 * @param c1
+	 * @param c2
+	 * @param localRoot
+	 * @return
+	 */
 	public float computeProxiGenea2(OWLClass c1, OWLClass c2, OWLClass localRoot)
 	{
 		Set<OWLClass> subsumers1 = this.getAllSuperClasses(c1);
@@ -413,6 +463,13 @@ public class Ontology {
 		return result;
 	}
 	
+	/**
+	 * Method that computes the ProxiGenea1 conceptual similarity [Ralalason 2010]
+	 * @param c1
+	 * @param c2
+	 * @param localRoot
+	 * @return
+	 */
 	public float computeProxiGenea3(OWLClass c1, OWLClass c2, OWLClass localRoot)
 	{
 		Set<OWLClass> subsumers1 = this.getAllSuperClasses(c1);

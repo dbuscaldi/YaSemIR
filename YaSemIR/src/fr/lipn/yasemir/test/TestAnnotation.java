@@ -1,4 +1,4 @@
-package fr.lipn.yasemir.ontology.annotation;
+package fr.lipn.yasemir.test;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Vector;
 
 import fr.lipn.yasemir.configuration.Yasemir;
+import fr.lipn.yasemir.ontology.annotation.Annotation;
 
 
 public class TestAnnotation {

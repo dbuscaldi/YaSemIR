@@ -10,8 +10,6 @@ import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
 import org.apache.lucene.index.IndexReader;
-import org.apache.lucene.search.IndexSearcher;
-
 public class TermFactory {
 	public static IndexReader reader; //we use this to calculate term frequencies
 	public static Analyzer analyzer;

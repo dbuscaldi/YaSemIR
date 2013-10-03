@@ -1,4 +1,4 @@
-package fr.lipn.yasemir.ontology.annotation;
+package fr.lipn.yasemir.test;
 
 import java.io.File;
 import java.util.HashSet;

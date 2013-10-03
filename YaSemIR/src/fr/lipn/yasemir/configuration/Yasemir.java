@@ -7,6 +7,7 @@ import java.util.Set;
 import org.apache.commons.collections.BidiMap;
 import org.apache.commons.collections.bidimap.TreeBidiMap;
 
+import fr.lipn.yasemir.ontology.ClassWeightHandler;
 import fr.lipn.yasemir.ontology.ConceptSimilarity;
 import fr.lipn.yasemir.ontology.KnowledgeBattery;
 import fr.lipn.yasemir.ontology.Ontology;
@@ -24,22 +25,14 @@ public class Yasemir {
 	public final static int SEMANTIC=1;
 	public final static int HYBRID=2;
 	
-	//Concept weights mode
-	private final static int FIXED=0;
-	private final static int IDF=1;
-	private final static int CF=2;
-	
 	public final static int MAX_HITS=1000;
-	public final static String BASE_ANN_FIELD="txtannot"; //name of the Lucene document field that will contain the annotation
-	//exemple: txtannot_1 will indicate the annotation related to ontology 1 (to be looked up into ontoIDmap)
 	
 	public static int MODE=CLASSIC;
-	//public static boolean USE_MANUAL_TAGS=true; //consider using manually annotated tags for IR or not
 	public static int SIM_MEASURE=ConceptSimilarity.WU;
 	public static String ANNOTATOR="fr.lipn.yasemir.ontology.annotation.IndexBasedAnnotator";
 	public static SemanticAnnotator annotator;
 	
-	public static int CONCEPT_WEIGHTS=FIXED;
+	public static int CONCEPT_WEIGHTS=ClassWeightHandler.FIXED; //by default, all concepts weigh the same 
 	public static boolean CKPD_ENABLED=false; //uses n-gram search or not
 	
 	public static Set<String> semBalises; //for a parsed document, tags that delimit text to be annotated and semantically indexed
@@ -55,6 +48,8 @@ public class Yasemir {
 	public static String COLLECTION_LANG;
 	
 	public static String SCORE;
+
+	private static boolean INDEXING_MODE=false;
 	
 	public static void init(String configFile){
 		System.err.println("Reading config file...");
@@ -91,9 +86,10 @@ public class Yasemir {
 		//setting concept weights
 		String cw = ConfigurationHandler.CONCEPTWEIGHT;
 		if(cw!=null){
-			if(cw.equalsIgnoreCase("fixed")) CONCEPT_WEIGHTS=FIXED;
-			else if(cw.equalsIgnoreCase("idf")) CONCEPT_WEIGHTS=IDF;
-			else if(cw.equalsIgnoreCase("cf")) CONCEPT_WEIGHTS=CF;
+			if(cw.equalsIgnoreCase("fixed")) CONCEPT_WEIGHTS=ClassWeightHandler.FIXED;
+			else if(cw.equalsIgnoreCase("idf")) CONCEPT_WEIGHTS=ClassWeightHandler.IDF;
+			else if(cw.equalsIgnoreCase("prob")) CONCEPT_WEIGHTS=ClassWeightHandler.PROB;
+			else if(cw.equalsIgnoreCase("gauss")) CONCEPT_WEIGHTS=ClassWeightHandler.GAUSSPROB;
 		}
 		
 		//setting annotator
@@ -139,8 +135,9 @@ public class Yasemir {
 			}
 			System.err.println("[YaSemIR]: loaded terminology: "+t.getTerminologyID());
 			KnowledgeBattery.addOntology(o, t);
-			KnowledgeBattery.createTermIndex();
+			
 		}
+		if(INDEXING_MODE) KnowledgeBattery.createTermIndex();
 		System.err.println("[YaSemIR]: Done.");
 		
 		
@@ -157,5 +154,14 @@ public class Yasemir {
 	
 	public static boolean isIDTag(String tag){
 		return tag.equalsIgnoreCase(idField);
+	}
+	
+	/**
+	 * This method specifies if indexing mode should be enabled or not.
+	 * Indexing mode creates the index and the terminology, while default mode (search) only reads the index and the terminology
+	 * @param b
+	 */
+	public static void setIndexing(boolean b) {
+		INDEXING_MODE=b;
 	}
 }

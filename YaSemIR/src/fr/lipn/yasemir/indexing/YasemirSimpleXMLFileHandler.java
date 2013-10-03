@@ -131,9 +131,9 @@ public class YasemirSimpleXMLFileHandler extends DefaultHandler {
     		if(Yasemir.semBalises.contains(field)) semText.append(fieldBuffers.get(field));
     	}
     	//base text
-    	currDoc.add(new Field("text", plainText.toString(), Field.Store.YES, Field.Index.NOT_ANALYZED));
+    	currDoc.add(new Field("text", plainText.toString(), Field.Store.YES, Field.Index.ANALYZED));
     	
-    	System.err.println("[YaSemIR] adding annotations to document "+this.docIDBuffer);
+    	if(Yasemir.DEBUG) System.err.println("[YaSemIR] adding annotations to document "+this.docIDBuffer);
     	//annotation of "semantic" content with each ontology and store one index per ontology
     	Yasemir.annotator.addSemanticAnnotation(currDoc, semText.toString());
     	

@@ -6,10 +6,11 @@
 	<collection lang="en" >/tempo/corpora/OHSUMed/</collection>
 	<annotator>fr.lipn.yasemir.ontology.annotation.IndexBasedAnnotator</annotator>
 	<ontologies>
-		<ontology root="http://org.snu.bike/MeSH#All" ofile="/users/buscaldi/Works/collabSIG/meshonto.owl"/>
+		<ontology root="http://org.snu.bike/MeSH#All" ofile="/users/buscaldi/Works/YaSemIR/ontologies/meshonto.owl"/>
+		<ontology root="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#AnatomicalConcept" ofile="/users/buscaldi/Works/YaSemIR/ontologies/heart.owl"/>
 	</ontologies>
 	<params>
-		<weight val="fixed"/>
+		<weight val="fixed"/> <!-- used to assign weights to concepts: fixed, idf, prob or gauss -->
 		<distance val="pg3"/>
 		<ngrams val="false"/> <!-- enables CKPD schema -->
 		<search_mode val="hybrid" /> <!-- used for search: hybrid, classic or semantic -->
