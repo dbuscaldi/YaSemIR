@@ -1,0 +1,2268 @@
+<?xml version="1.0"?>
+<rdf:RDF xmlns="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#"
+     xml:base="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+     xmlns:heart="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#"
+     xmlns:owl="http://www.w3.org/2002/07/owl#"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+    <owl:Ontology rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Object Properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#contains -->
+
+    <owl:ObjectProperty rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#contains">
+        <rdfs:domain rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#AnatomicalCavity"/>
+        <rdfs:range rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#AnatomicalConcept"/>
+        <owl:inverseOf rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isContainedWithin"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#hasAnatomicalPart -->
+
+    <owl:ObjectProperty rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#hasAnatomicalPart">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#TransitiveProperty"/>
+        <rdfs:domain rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#AnatomicalConcept"/>
+        <rdfs:range rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#AnatomicalConcept"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#hasBranch -->
+
+    <owl:ObjectProperty rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#hasBranch">
+        <rdfs:domain rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#BloodVessel"/>
+        <rdfs:range rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#BloodVessel"/>
+        <rdfs:subPropertyOf rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#hasRegionalPart"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#hasDirectAnatomicalPart -->
+
+    <owl:ObjectProperty rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#hasDirectAnatomicalPart">
+        <rdfs:range rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#AnatomicalConcept"/>
+        <rdfs:domain rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#AnatomicalConcept"/>
+        <rdfs:subPropertyOf rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#hasAnatomicalPart"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#hasDirectRegionalPart -->
+
+    <owl:ObjectProperty rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#hasDirectRegionalPart">
+        <rdfs:range rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#AnatomicalConcept"/>
+        <rdfs:domain rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#AnatomicalConcept"/>
+        <rdfs:subPropertyOf rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#hasRegionalPart"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#hasDirectSubCavity -->
+
+    <owl:ObjectProperty rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#hasDirectSubCavity">
+        <rdfs:range rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#AnatomicalCavity"/>
+        <rdfs:domain rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#AnatomicalCavity"/>
+        <rdfs:subPropertyOf rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#hasSubCavity"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#hasLayer -->
+
+    <owl:ObjectProperty rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#hasLayer">
+        <rdfs:range rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#AnatomicalConcept"/>
+        <rdfs:domain rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#AnatomicalConcept"/>
+        <rdfs:subPropertyOf rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#hasAnatomicalPart"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#hasRegionalPart -->
+
+    <owl:ObjectProperty rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#hasRegionalPart">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#TransitiveProperty"/>
+        <rdfs:domain rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#AnatomicalConcept"/>
+        <rdfs:range rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#AnatomicalConcept"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#hasSegment -->
+
+    <owl:ObjectProperty rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#hasSegment">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#TransitiveProperty"/>
+        <rdfs:domain rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#BloodVessel"/>
+        <rdfs:range rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#BloodVessel"/>
+        <rdfs:subPropertyOf rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#hasRegionalPart"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#hasSubCavity -->
+
+    <owl:ObjectProperty rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#hasSubCavity">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#TransitiveProperty"/>
+        <rdfs:range rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#AnatomicalCavity"/>
+        <rdfs:domain rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#AnatomicalCavity"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#hasValveInput -->
+
+    <owl:ObjectProperty rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#hasValveInput">
+        <rdfs:range rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#AnatomicalConcept"/>
+        <rdfs:domain rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#Valve"/>
+        <rdfs:subPropertyOf rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isContinuousWith"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#hasValveOutput -->
+
+    <owl:ObjectProperty rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#hasValveOutput">
+        <rdfs:range rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#AnatomicalConcept"/>
+        <rdfs:domain rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#Valve"/>
+        <rdfs:subPropertyOf rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isContinuousWith"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isAnatomicalPartOf -->
+
+    <owl:ObjectProperty rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isAnatomicalPartOf">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#TransitiveProperty"/>
+        <rdfs:domain rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#AnatomicalConcept"/>
+        <rdfs:range rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#AnatomicalConcept"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isBranchOf -->
+
+    <owl:ObjectProperty rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isBranchOf">
+        <rdfs:range rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#AnatomicalConcept"/>
+        <rdfs:subPropertyOf rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isRegionalPartOf"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isContainedWithin -->
+
+    <owl:ObjectProperty rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isContainedWithin">
+        <rdfs:range rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#AnatomicalCavity"/>
+        <rdfs:domain rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#AnatomicalConcept"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isContinuousWith -->
+
+    <owl:ObjectProperty rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isContinuousWith">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#SymmetricProperty"/>
+        <rdfs:domain rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#AnatomicalConcept"/>
+        <rdfs:range rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#AnatomicalConcept"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isContinuousWithInputOf -->
+
+    <owl:ObjectProperty rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isContinuousWithInputOf">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#SymmetricProperty"/>
+        <rdfs:range rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#BloodVessel"/>
+        <rdfs:domain rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#BloodVessel"/>
+        <rdfs:subPropertyOf rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isContinuousWith"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isContinuousWithOutputOf -->
+
+    <owl:ObjectProperty rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isContinuousWithOutputOf">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#SymmetricProperty"/>
+        <rdfs:domain rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#BloodVessel"/>
+        <rdfs:range rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#BloodVessel"/>
+        <rdfs:subPropertyOf rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isContinuousWith"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isContinuousWithValveInput -->
+
+    <owl:ObjectProperty rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isContinuousWithValveInput">
+        <rdfs:domain rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#AnatomicalConcept"/>
+        <rdfs:range rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#Valve"/>
+        <rdfs:subPropertyOf rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isContinuousWith"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isContinuousWithValveOutput -->
+
+    <owl:ObjectProperty rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isContinuousWithValveOutput">
+        <rdfs:domain rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#AnatomicalConcept"/>
+        <rdfs:range rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#Valve"/>
+        <rdfs:subPropertyOf rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isContinuousWith"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isDirectAnatomicalPartOf -->
+
+    <owl:ObjectProperty rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isDirectAnatomicalPartOf">
+        <rdfs:range rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#AnatomicalConcept"/>
+        <rdfs:domain rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#AnatomicalConcept"/>
+        <rdfs:subPropertyOf rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isAnatomicalPartOf"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isDirectRegionalPartOf -->
+
+    <owl:ObjectProperty rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isDirectRegionalPartOf">
+        <rdfs:domain rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#AnatomicalConcept"/>
+        <rdfs:range rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#AnatomicalConcept"/>
+        <rdfs:subPropertyOf rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isRegionalPartOf"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isDirectSubCavityOf -->
+
+    <owl:ObjectProperty rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isDirectSubCavityOf">
+        <rdfs:range rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#AnatomicalCavity"/>
+        <rdfs:domain rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#AnatomicalCavity"/>
+        <rdfs:subPropertyOf rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isSubCavityOf"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isLayerOf -->
+
+    <owl:ObjectProperty rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isLayerOf">
+        <rdfs:range rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#AnatomicalConcept"/>
+        <rdfs:domain rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#AnatomicalConcept"/>
+        <rdfs:subPropertyOf rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isAnatomicalPartOf"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isRegionalPartOf -->
+
+    <owl:ObjectProperty rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isRegionalPartOf">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#TransitiveProperty"/>
+        <rdfs:domain rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#AnatomicalConcept"/>
+        <rdfs:range rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#AnatomicalConcept"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isSegmentOf -->
+
+    <owl:ObjectProperty rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isSegmentOf">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#TransitiveProperty"/>
+        <rdfs:range rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#AnatomicalConcept"/>
+        <rdfs:domain rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#BloodVessel"/>
+        <rdfs:subPropertyOf rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isRegionalPartOf"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isSubCavityOf -->
+
+    <owl:ObjectProperty rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isSubCavityOf">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#TransitiveProperty"/>
+        <rdfs:range rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#AnatomicalCavity"/>
+        <rdfs:domain rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#AnatomicalCavity"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isSuppliedBy -->
+
+    <owl:ObjectProperty rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isSuppliedBy">
+        <rdfs:domain rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#AnatomicalConcept"/>
+        <rdfs:range rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#BloodVessel"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#supplies -->
+
+    <owl:ObjectProperty rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#supplies">
+        <rdfs:range rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#AnatomicalConcept"/>
+        <rdfs:domain rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#BloodVessel"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Classes
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#AnatomicalCavity -->
+
+    <owl:Class rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#AnatomicalCavity">
+        <rdfs:subClassOf rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#AnatomicalConcept"/>
+        <rdfs:subClassOf>
+            <owl:Class>
+                <owl:complementOf>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#hasDirectAnatomicalPart"/>
+                        <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#AnatomicalConcept"/>
+                    </owl:Restriction>
+                </owl:complementOf>
+            </owl:Class>
+        </rdfs:subClassOf>
+        <owl:disjointWith rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#Heart"/>
+        <owl:disjointWith rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#Valve"/>
+    </owl:Class>
+    
+
+
+    <!-- http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#AnatomicalConcept -->
+
+    <owl:Class rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#AnatomicalConcept"/>
+    
+
+
+    <!-- http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#AnteriorPartOfWallOfLeftVentricle -->
+
+    <owl:Class rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#AnteriorPartOfWallOfLeftVentricle">
+        <rdfs:subClassOf rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#AnatomicalConcept"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isSuppliedBy"/>
+                <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#DiagonalBranchOfLeftAnteriorDescendingBranchOfLCA"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isDirectRegionalPartOf"/>
+                <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#WallOfLeftVentricle"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#AnteriorPartOfWallOfRightVentricle -->
+
+    <owl:Class rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#AnteriorPartOfWallOfRightVentricle">
+        <rdfs:subClassOf rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#AnatomicalConcept"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isSuppliedBy"/>
+                <owl:allValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#RightDiagonalArtery"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isSuppliedBy"/>
+                <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#RightDiagonalArtery"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isDirectRegionalPartOf"/>
+                <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#WallOfRightVentricle"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#Aorta -->
+
+    <owl:Class rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#Aorta">
+        <rdfs:subClassOf rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#Artery"/>
+        <rdfs:subClassOf rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#NonSeveredBloodVessel"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isContinuousWithValveOutput"/>
+                <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#AorticValve"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isContinuousWith"/>
+                <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#RightCoronaryArtery"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isContinuousWith"/>
+                <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#LeftCoronaryArtery"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#AorticValve -->
+
+    <owl:Class rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#AorticValve">
+        <rdfs:subClassOf rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#SemiLunarValve"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#hasValveInput"/>
+                <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#LeftVentricleCavity"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#hasValveOutput"/>
+                <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#Aorta"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#ApexOfHeart -->
+
+    <owl:Class rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#ApexOfHeart">
+        <rdfs:subClassOf rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#AnatomicalConcept"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isSuppliedBy"/>
+                <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#Segment2OfLCA"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#Artery -->
+
+    <owl:Class rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#Artery">
+        <rdfs:subClassOf rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#AnatomicalConcept"/>
+        <rdfs:subClassOf rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#BloodVessel"/>
+    </owl:Class>
+    
+
+
+    <!-- http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#AtrioVentricularSeptum -->
+
+    <owl:Class rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#AtrioVentricularSeptum">
+        <owl:equivalentClass>
+            <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#Septum"/>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isDirectAnatomicalPartOf"/>
+                        <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#LeftAtrium"/>
+                    </owl:Restriction>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isDirectAnatomicalPartOf"/>
+                        <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#LeftVentricle"/>
+                    </owl:Restriction>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isDirectAnatomicalPartOf"/>
+                        <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#RightAtrium"/>
+                    </owl:Restriction>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isDirectAnatomicalPartOf"/>
+                        <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#RightVentricle"/>
+                    </owl:Restriction>
+                </owl:intersectionOf>
+            </owl:Class>
+        </owl:equivalentClass>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isDirectAnatomicalPartOf"/>
+                <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#Heart"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#AtrioVentricularValve -->
+
+    <owl:Class rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#AtrioVentricularValve">
+        <owl:equivalentClass>
+            <owl:Class>
+                <owl:unionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#MitralValve"/>
+                    <rdf:Description rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#TricuspidValve"/>
+                </owl:unionOf>
+            </owl:Class>
+        </owl:equivalentClass>
+        <owl:equivalentClass>
+            <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#Valve"/>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#hasValveInput"/>
+                        <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#AtriumCavity"/>
+                    </owl:Restriction>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#hasValveOutput"/>
+                        <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#VentricularCavity"/>
+                    </owl:Restriction>
+                </owl:intersectionOf>
+            </owl:Class>
+        </owl:equivalentClass>
+    </owl:Class>
+    
+
+
+    <!-- http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#Atrium -->
+
+    <owl:Class rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#Atrium">
+        <owl:equivalentClass>
+            <owl:Class>
+                <owl:unionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#LeftAtrium"/>
+                    <rdf:Description rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#RightAtrium"/>
+                </owl:unionOf>
+            </owl:Class>
+        </owl:equivalentClass>
+        <rdfs:subClassOf rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#AnatomicalConcept"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#hasDirectAnatomicalPart"/>
+                <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#AtrioVentricularSeptum"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isDirectRegionalPartOf"/>
+                <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#Heart"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#hasDirectAnatomicalPart"/>
+                <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#InteratrialSeptum"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#AtriumCavity -->
+
+    <owl:Class rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#AtriumCavity">
+        <owl:equivalentClass>
+            <owl:Class>
+                <owl:unionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#LeftAtriumCavity"/>
+                    <rdf:Description rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#RightAtriumCavity"/>
+                </owl:unionOf>
+            </owl:Class>
+        </owl:equivalentClass>
+        <rdfs:subClassOf rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#AnatomicalCavity"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isAnatomicalPartOf"/>
+                <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#Heart"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#BloodVessel -->
+
+    <owl:Class rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#BloodVessel">
+        <rdfs:subClassOf rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#AnatomicalConcept"/>
+    </owl:Class>
+    
+
+
+    <!-- http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#CardiacSeptum -->
+
+    <owl:Class rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#CardiacSeptum">
+        <owl:equivalentClass>
+            <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#Septum"/>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isAnatomicalPartOf"/>
+                        <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#Heart"/>
+                    </owl:Restriction>
+                </owl:intersectionOf>
+            </owl:Class>
+        </owl:equivalentClass>
+    </owl:Class>
+    
+
+
+    <!-- http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#ConusArtery -->
+
+    <owl:Class rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#ConusArtery">
+        <rdfs:subClassOf rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#Artery"/>
+        <rdfs:subClassOf rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#NonSeveredBloodVessel"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#supplies"/>
+                <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#Septum"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isContinuousWithOutputOf"/>
+                <owl:allValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#Segment1OfRCA"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isContinuousWithOutputOf"/>
+                <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#Segment1OfRCA"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#CoronaryArtery -->
+
+    <owl:Class rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#CoronaryArtery">
+        <owl:equivalentClass>
+            <owl:Class>
+                <owl:unionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#LeftCoronaryArtery"/>
+                    <rdf:Description rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#RightCoronaryArtery"/>
+                </owl:unionOf>
+            </owl:Class>
+        </owl:equivalentClass>
+        <rdfs:subClassOf rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#Artery"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isContinuousWithOutputOf"/>
+                <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#Aorta"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#CoronaryArteryOrPartOrBranch -->
+
+    <owl:Class rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#CoronaryArteryOrPartOrBranch">
+        <owl:equivalentClass>
+            <owl:Class>
+                <owl:unionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#CoronaryArtery"/>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isContinuousWithOutputOf"/>
+                        <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#CoronaryArtery"/>
+                    </owl:Restriction>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isContinuousWithOutputOf"/>
+                        <owl:someValuesFrom>
+                            <owl:Restriction>
+                                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isSegmentOf"/>
+                                <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#CoronaryArtery"/>
+                            </owl:Restriction>
+                        </owl:someValuesFrom>
+                    </owl:Restriction>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isSegmentOf"/>
+                        <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#CoronaryArtery"/>
+                    </owl:Restriction>
+                </owl:unionOf>
+            </owl:Class>
+        </owl:equivalentClass>
+        <rdfs:subClassOf rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#Artery"/>
+    </owl:Class>
+    
+
+
+    <!-- http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#DiagonalBranchOfLeftAnteriorDescendingBranchOfLCA -->
+
+    <owl:Class rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#DiagonalBranchOfLeftAnteriorDescendingBranchOfLCA">
+        <rdfs:subClassOf rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#Artery"/>
+        <rdfs:subClassOf rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#NonSeveredBloodVessel"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#supplies"/>
+                <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#AnteriorPartOfWallOfLeftVentricle"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#supplies"/>
+                <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#LateralPartOfWallOfLeftVentricle"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isContinuousWithOutputOf"/>
+                <owl:allValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#Segment2OfLCA"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isContinuousWithOutputOf"/>
+                <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#Segment2OfLCA"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#FunctionallyImpairedBloodVessel -->
+
+    <owl:Class rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#FunctionallyImpairedBloodVessel">
+        <owl:equivalentClass>
+            <owl:Class>
+                <owl:unionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#SeveredBloodVessel"/>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isContinuousWithOutputOf"/>
+                        <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#FunctionallyImpairedBloodVessel"/>
+                    </owl:Restriction>
+                </owl:unionOf>
+            </owl:Class>
+        </owl:equivalentClass>
+        <rdfs:subClassOf rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#BloodVessel"/>
+    </owl:Class>
+    
+
+
+    <!-- http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#Heart -->
+
+    <owl:Class rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#Heart">
+        <owl:equivalentClass>
+            <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#hasDirectRegionalPart"/>
+                        <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#LeftAtrium"/>
+                    </owl:Restriction>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#hasDirectRegionalPart"/>
+                        <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#LeftVentricle"/>
+                    </owl:Restriction>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#hasDirectRegionalPart"/>
+                        <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#RightAtrium"/>
+                    </owl:Restriction>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#hasDirectRegionalPart"/>
+                        <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#RightVentricle"/>
+                    </owl:Restriction>
+                </owl:intersectionOf>
+            </owl:Class>
+        </owl:equivalentClass>
+        <rdfs:subClassOf rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#AnatomicalConcept"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#hasDirectAnatomicalPart"/>
+                <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#RightAtriumCavity"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#hasDirectAnatomicalPart"/>
+                <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#InteratrialSeptum"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#hasDirectAnatomicalPart"/>
+                <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#RightVentricleCavity"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#hasDirectAnatomicalPart"/>
+                <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#LeftVentricleCavity"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#hasDirectAnatomicalPart"/>
+                <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#AtrioVentricularSeptum"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#hasDirectAnatomicalPart"/>
+                <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#InterventricularSeptum"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#hasDirectAnatomicalPart"/>
+                <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#WallOfHeart"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#hasDirectAnatomicalPart"/>
+                <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#LeftAtriumCavity"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#hasDirectRegionalPart"/>
+                        <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#LeftAtrium"/>
+                    </owl:Restriction>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#hasDirectRegionalPart"/>
+                        <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#LeftVentricle"/>
+                    </owl:Restriction>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#hasDirectRegionalPart"/>
+                        <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#RightAtrium"/>
+                    </owl:Restriction>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#hasDirectRegionalPart"/>
+                        <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#RightVentricle"/>
+                    </owl:Restriction>
+                </owl:intersectionOf>
+            </owl:Class>
+        </rdfs:subClassOf>
+    </owl:Class>
+    <rdf:Description>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#AllDisjointClasses"/>
+        <owl:members rdf:parseType="Collection">
+            <rdf:Description rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#Heart"/>
+        </owl:members>
+    </rdf:Description>
+    
+
+
+    <!-- http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#InteratrialSeptum -->
+
+    <owl:Class rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#InteratrialSeptum">
+        <owl:equivalentClass>
+            <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#Septum"/>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isDirectAnatomicalPartOf"/>
+                        <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#LeftAtrium"/>
+                    </owl:Restriction>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isDirectAnatomicalPartOf"/>
+                        <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#RightAtrium"/>
+                    </owl:Restriction>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isDirectAnatomicalPartOf"/>
+                        <owl:allValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#Atrium"/>
+                    </owl:Restriction>
+                </owl:intersectionOf>
+            </owl:Class>
+        </owl:equivalentClass>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isDirectAnatomicalPartOf"/>
+                <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#Heart"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#InterventricularSeptum -->
+
+    <owl:Class rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#InterventricularSeptum">
+        <owl:equivalentClass>
+            <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#Septum"/>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isDirectAnatomicalPartOf"/>
+                        <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#LeftVentricle"/>
+                    </owl:Restriction>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isDirectAnatomicalPartOf"/>
+                        <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#RightVentricle"/>
+                    </owl:Restriction>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isDirectAnatomicalPartOf"/>
+                        <owl:allValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#Ventricle"/>
+                    </owl:Restriction>
+                </owl:intersectionOf>
+            </owl:Class>
+        </owl:equivalentClass>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isDirectAnatomicalPartOf"/>
+                <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#Heart"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isSuppliedBy"/>
+                <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#Segment2OfLCA"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#IschemicAnatomicalEntity -->
+
+    <owl:Class rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#IschemicAnatomicalEntity">
+        <owl:equivalentClass>
+            <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#AnatomicalConcept"/>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isSuppliedBy"/>
+                        <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#FunctionallyImpairedBloodVessel"/>
+                    </owl:Restriction>
+                </owl:intersectionOf>
+            </owl:Class>
+        </owl:equivalentClass>
+    </owl:Class>
+    
+
+
+    <!-- http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#IschemicAnatomicalEntityPartially -->
+
+    <owl:Class rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#IschemicAnatomicalEntityPartially">
+        <owl:equivalentClass>
+            <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#IschemicAnatomicalEntity"/>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isSuppliedBy"/>
+                        <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#NonIschemicBloodVessel"/>
+                    </owl:Restriction>
+                </owl:intersectionOf>
+            </owl:Class>
+        </owl:equivalentClass>
+    </owl:Class>
+    
+
+
+    <!-- http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#IschemicAnatomicalEntityTotally -->
+
+    <owl:Class rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#IschemicAnatomicalEntityTotally">
+        <owl:equivalentClass>
+            <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#IschemicAnatomicalEntity"/>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isSuppliedBy"/>
+                        <owl:allValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#FunctionallyImpairedBloodVessel"/>
+                    </owl:Restriction>
+                </owl:intersectionOf>
+            </owl:Class>
+        </owl:equivalentClass>
+    </owl:Class>
+    
+
+
+    <!-- http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#LateralPartOfWallOfLeftVentricle -->
+
+    <owl:Class rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#LateralPartOfWallOfLeftVentricle">
+        <rdfs:subClassOf rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#AnatomicalConcept"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isSuppliedBy"/>
+                <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#RamusIntermediusOfLCA"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isSuppliedBy"/>
+                <owl:allValuesFrom>
+                    <owl:Class>
+                        <owl:unionOf rdf:parseType="Collection">
+                            <rdf:Description rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#DiagonalBranchOfLeftAnteriorDescendingBranchOfLCA"/>
+                            <rdf:Description rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#LeftCircumflexArtery"/>
+                            <rdf:Description rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#RamusIntermediusOfLCA"/>
+                        </owl:unionOf>
+                    </owl:Class>
+                </owl:allValuesFrom>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isSuppliedBy"/>
+                <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#LeftCircumflexArtery"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isSuppliedBy"/>
+                <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#DiagonalBranchOfLeftAnteriorDescendingBranchOfLCA"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isDirectRegionalPartOf"/>
+                <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#WallOfLeftVentricle"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#LateralPartOfWallOfRightVentricle -->
+
+    <owl:Class rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#LateralPartOfWallOfRightVentricle">
+        <rdfs:subClassOf rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#AnatomicalConcept"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isDirectRegionalPartOf"/>
+                <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#WallOfRightVentricle"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isSuppliedBy"/>
+                <owl:allValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#RightMarginalArtery"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isSuppliedBy"/>
+                <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#RightMarginalArtery"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#LeftAtrium -->
+
+    <owl:Class rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#LeftAtrium">
+        <rdfs:subClassOf rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#Atrium"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isSuppliedBy"/>
+                <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#LeftCircumflexArtery"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#hasDirectAnatomicalPart"/>
+                <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#WallOfLeftAtrium"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#LeftAtriumCavity -->
+
+    <owl:Class rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#LeftAtriumCavity">
+        <rdfs:subClassOf rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#AtriumCavity"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isContinuousWithValveInput"/>
+                <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#MitralValve"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#LeftCircumflexArtery -->
+
+    <owl:Class rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#LeftCircumflexArtery">
+        <rdfs:subClassOf rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#Artery"/>
+        <rdfs:subClassOf rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#NonSeveredBloodVessel"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isContinuousWithOutputOf"/>
+                <owl:allValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#Segment1OfLCA"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#supplies"/>
+                <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#LeftAtrium"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#supplies"/>
+                <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#LateralPartOfWallOfLeftVentricle"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#supplies"/>
+                <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#PosteriorPartOfWallOfLeftVentricle"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isContinuousWithOutputOf"/>
+                <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#Segment1OfLCA"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#LeftCoronaryArtery -->
+
+    <owl:Class rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#LeftCoronaryArtery">
+        <rdfs:subClassOf rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#CoronaryArtery"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#hasSegment"/>
+                <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#Segment3OfLCA"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#hasSegment"/>
+                <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#Segment2OfLCA"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#hasSegment"/>
+                <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#Segment1OfLCA"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#LeftPulmonaryArtery -->
+
+    <owl:Class rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#LeftPulmonaryArtery">
+        <rdfs:subClassOf rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#PulmonaryArtery"/>
+    </owl:Class>
+    
+
+
+    <!-- http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#LeftVentricle -->
+
+    <owl:Class rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#LeftVentricle">
+        <rdfs:subClassOf rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#Ventricle"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#hasDirectAnatomicalPart"/>
+                <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#WallOfLeftVentricle"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#LeftVentricleCavity -->
+
+    <owl:Class rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#LeftVentricleCavity">
+        <rdfs:subClassOf rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#VentricularCavity"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isContinuousWithValveOutput"/>
+                <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#MitralValve"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isContinuousWithValveInput"/>
+                <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#AorticValve"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#MitralValve -->
+
+    <owl:Class rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#MitralValve">
+        <rdfs:subClassOf rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#Valve"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#hasValveOutput"/>
+                <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#LeftVentricleCavity"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#hasValveInput"/>
+                <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#LeftAtriumCavity"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#NonIschemicBloodVessel -->
+
+    <owl:Class rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#NonIschemicBloodVessel">
+        <owl:equivalentClass>
+            <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#NonSeveredBloodVessel"/>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isContinuousWithOutputOf"/>
+                        <owl:allValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#NonIschemicBloodVessel"/>
+                    </owl:Restriction>
+                </owl:intersectionOf>
+            </owl:Class>
+        </owl:equivalentClass>
+    </owl:Class>
+    
+
+
+    <!-- http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#NonSeveredBloodVessel -->
+
+    <owl:Class rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#NonSeveredBloodVessel">
+        <owl:equivalentClass>
+            <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#BloodVessel"/>
+                    <owl:Class>
+                        <owl:complementOf rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#SeveredBloodVessel"/>
+                    </owl:Class>
+                </owl:intersectionOf>
+            </owl:Class>
+        </owl:equivalentClass>
+    </owl:Class>
+    
+
+
+    <!-- http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#PartialValve -->
+
+    <owl:Class rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#PartialValve">
+        <rdfs:subClassOf rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#Valve"/>
+    </owl:Class>
+    
+
+
+    <!-- http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#PosteriorPartOfWallOfLeftVentricle -->
+
+    <owl:Class rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#PosteriorPartOfWallOfLeftVentricle">
+        <rdfs:subClassOf rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#AnatomicalConcept"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isSuppliedBy"/>
+                <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#Segment4OfRCA"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isDirectRegionalPartOf"/>
+                <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#WallOfLeftVentricle"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isSuppliedBy"/>
+                <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#RamusIntermediusOfLCA"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isSuppliedBy"/>
+                <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#LeftCircumflexArtery"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#PosteriorPartOfWallOfRightVentricle -->
+
+    <owl:Class rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#PosteriorPartOfWallOfRightVentricle">
+        <rdfs:subClassOf rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#AnatomicalConcept"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isSuppliedBy"/>
+                <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#Segment4OfRCA"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isDirectRegionalPartOf"/>
+                <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#WallOfRightVentricle"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#PulmonaryArtery -->
+
+    <owl:Class rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#PulmonaryArtery">
+        <owl:equivalentClass>
+            <owl:Class>
+                <owl:unionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#LeftPulmonaryArtery"/>
+                    <rdf:Description rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#RightPulmonaryArtery"/>
+                </owl:unionOf>
+            </owl:Class>
+        </owl:equivalentClass>
+        <rdfs:subClassOf rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#Artery"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isContinuousWith"/>
+                <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#PulmonaryTrunk"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#PulmonaryTrunk -->
+
+    <owl:Class rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#PulmonaryTrunk">
+        <owl:equivalentClass>
+            <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#Artery"/>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isContinuousWith"/>
+                        <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#LeftPulmonaryArtery"/>
+                    </owl:Restriction>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isContinuousWith"/>
+                        <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#RightPulmonaryArtery"/>
+                    </owl:Restriction>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isContinuousWithValveOutput"/>
+                        <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#PulmonaryValve"/>
+                    </owl:Restriction>
+                </owl:intersectionOf>
+            </owl:Class>
+        </owl:equivalentClass>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isContinuousWith"/>
+                <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#PulmonaryValve"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#PulmonaryValve -->
+
+    <owl:Class rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#PulmonaryValve">
+        <rdfs:subClassOf rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#SemiLunarValve"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#hasValveInput"/>
+                <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#RightVentricleCavity"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#hasValveOutput"/>
+                <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#PulmonaryTrunk"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#RamusIntermediusOfLCA -->
+
+    <owl:Class rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#RamusIntermediusOfLCA">
+        <rdfs:subClassOf rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#Artery"/>
+        <rdfs:subClassOf rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#NonSeveredBloodVessel"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#supplies"/>
+                <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#PosteriorPartOfWallOfLeftVentricle"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isContinuousWithOutputOf"/>
+                <owl:allValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#Segment1OfLCA"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isContinuousWithOutputOf"/>
+                <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#Segment1OfLCA"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#supplies"/>
+                <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#LateralPartOfWallOfLeftVentricle"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#RightAtrioVentricularArtery -->
+
+    <owl:Class rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#RightAtrioVentricularArtery">
+        <rdfs:subClassOf rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#Artery"/>
+        <rdfs:subClassOf rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#NonSeveredBloodVessel"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isContinuousWithOutputOf"/>
+                <owl:allValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#Segment3OfRCA"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isContinuousWithOutputOf"/>
+                <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#Segment3OfRCA"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#supplies"/>
+                <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#RightAtrium"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#RightAtrium -->
+
+    <owl:Class rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#RightAtrium">
+        <rdfs:subClassOf rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#Atrium"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isSuppliedBy"/>
+                <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#RightAtrioVentricularArtery"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#hasDirectAnatomicalPart"/>
+                <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#WallOfRightAtrium"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#RightAtriumCavity -->
+
+    <owl:Class rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#RightAtriumCavity">
+        <rdfs:subClassOf rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#AtriumCavity"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isContinuousWithValveInput"/>
+                <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#TricuspidValve"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isContinuousWithValveOutput"/>
+                <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#ValveOfCoronarySinus"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isContinuousWithValveOutput"/>
+                <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#ValveOfInferiorVenaCava"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#RightCoronaryArtery -->
+
+    <owl:Class rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#RightCoronaryArtery">
+        <rdfs:subClassOf rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#CoronaryArtery"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#hasSegment"/>
+                <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#Segment2OfRCA"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#hasSegment"/>
+                <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#Segment1OfRCA"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#hasSegment"/>
+                <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#Segment3OfRCA"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#hasSegment"/>
+                <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#Segment4OfRCA"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#RightDiagonalArtery -->
+
+    <owl:Class rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#RightDiagonalArtery">
+        <rdfs:subClassOf rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#Artery"/>
+        <rdfs:subClassOf rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#NonSeveredBloodVessel"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isContinuousWithOutputOf"/>
+                <owl:allValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#Segment2OfRCA"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#supplies"/>
+                <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#AnteriorPartOfWallOfRightVentricle"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isContinuousWithOutputOf"/>
+                <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#Segment2OfRCA"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#RightMarginalArtery -->
+
+    <owl:Class rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#RightMarginalArtery">
+        <rdfs:subClassOf rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#Artery"/>
+        <rdfs:subClassOf rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#NonSeveredBloodVessel"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isContinuousWithOutputOf"/>
+                <owl:allValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#Segment3OfRCA"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#supplies"/>
+                <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#LateralPartOfWallOfRightVentricle"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isContinuousWithOutputOf"/>
+                <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#Segment3OfRCA"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#RightPulmonaryArtery -->
+
+    <owl:Class rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#RightPulmonaryArtery">
+        <rdfs:subClassOf rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#PulmonaryArtery"/>
+    </owl:Class>
+    
+
+
+    <!-- http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#RightVentricle -->
+
+    <owl:Class rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#RightVentricle">
+        <rdfs:subClassOf rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#Ventricle"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#hasDirectAnatomicalPart"/>
+                <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#WallOfRightVentricle"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#RightVentricleCavity -->
+
+    <owl:Class rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#RightVentricleCavity">
+        <rdfs:subClassOf rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#VentricularCavity"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isContinuousWithValveInput"/>
+                <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#PulmonaryValve"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isContinuousWithValveOutput"/>
+                <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#TricuspidValve"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#Segment1OfLCA -->
+
+    <owl:Class rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#Segment1OfLCA">
+        <rdfs:subClassOf rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#Artery"/>
+        <rdfs:subClassOf rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#NonSeveredBloodVessel"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isContinuousWithOutputOf"/>
+                <owl:allValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#NonIschemicBloodVessel"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isContinuousWithInputOf"/>
+                <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#LeftCircumflexArtery"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isContinuousWithInputOf"/>
+                <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#RamusIntermediusOfLCA"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isContinuousWithInputOf"/>
+                <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#Segment2OfLCA"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isSegmentOf"/>
+                <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#LeftCoronaryArtery"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#Segment1OfRCA -->
+
+    <owl:Class rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#Segment1OfRCA">
+        <rdfs:subClassOf rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#Artery"/>
+        <rdfs:subClassOf rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#NonSeveredBloodVessel"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isContinuousWithInputOf"/>
+                <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#ConusArtery"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isContinuousWithInputOf"/>
+                <owl:allValuesFrom>
+                    <owl:Class>
+                        <owl:unionOf rdf:parseType="Collection">
+                            <rdf:Description rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#ConusArtery"/>
+                            <rdf:Description rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#Segment2OfRCA"/>
+                        </owl:unionOf>
+                    </owl:Class>
+                </owl:allValuesFrom>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isContinuousWithOutputOf"/>
+                <owl:allValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#NonIschemicBloodVessel"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isContinuousWithInputOf"/>
+                <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#Segment2OfRCA"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isSegmentOf"/>
+                <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#RightCoronaryArtery"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#Segment2OfLCA -->
+
+    <owl:Class rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#Segment2OfLCA">
+        <rdfs:subClassOf rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#Artery"/>
+        <rdfs:subClassOf rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#NonSeveredBloodVessel"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#supplies"/>
+                <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#InterventricularSeptum"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isContinuousWithOutputOf"/>
+                <owl:allValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#Segment1OfLCA"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isContinuousWithInputOf"/>
+                <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#DiagonalBranchOfLeftAnteriorDescendingBranchOfLCA"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#supplies"/>
+                <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#ApexOfHeart"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isSegmentOf"/>
+                <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#LeftCoronaryArtery"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isContinuousWithInputOf"/>
+                <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#Segment3OfLCA"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isContinuousWithOutputOf"/>
+                <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#Segment1OfLCA"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isContinuousWithInputOf"/>
+                <owl:allValuesFrom>
+                    <owl:Class>
+                        <owl:unionOf rdf:parseType="Collection">
+                            <rdf:Description rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#DiagonalBranchOfLeftAnteriorDescendingBranchOfLCA"/>
+                            <rdf:Description rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#Segment3OfLCA"/>
+                        </owl:unionOf>
+                    </owl:Class>
+                </owl:allValuesFrom>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#Segment2OfRCA -->
+
+    <owl:Class rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#Segment2OfRCA">
+        <rdfs:subClassOf rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#Artery"/>
+        <rdfs:subClassOf rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#SeveredBloodVessel"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isContinuousWithInputOf"/>
+                <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#RightDiagonalArtery"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isContinuousWithInputOf"/>
+                <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#Segment3OfRCA"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isSegmentOf"/>
+                <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#RightCoronaryArtery"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isContinuousWithOutputOf"/>
+                <owl:allValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#Segment1OfRCA"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isContinuousWithInputOf"/>
+                <owl:allValuesFrom>
+                    <owl:Class>
+                        <owl:unionOf rdf:parseType="Collection">
+                            <rdf:Description rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#RightDiagonalArtery"/>
+                            <rdf:Description rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#Segment3OfRCA"/>
+                        </owl:unionOf>
+                    </owl:Class>
+                </owl:allValuesFrom>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isContinuousWithOutputOf"/>
+                <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#Segment1OfRCA"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#Segment3OfLCA -->
+
+    <owl:Class rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#Segment3OfLCA">
+        <rdfs:subClassOf rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#Artery"/>
+        <rdfs:subClassOf rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#NonSeveredBloodVessel"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isContinuousWithOutputOf"/>
+                <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#Segment2OfLCA"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isContinuousWithOutputOf"/>
+                <owl:allValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#Segment2OfLCA"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isSegmentOf"/>
+                <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#LeftCoronaryArtery"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#Segment3OfRCA -->
+
+    <owl:Class rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#Segment3OfRCA">
+        <rdfs:subClassOf rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#Artery"/>
+        <rdfs:subClassOf rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#NonSeveredBloodVessel"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isContinuousWithOutputOf"/>
+                <owl:allValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#Segment2OfRCA"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isContinuousWithOutputOf"/>
+                <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#Segment2OfRCA"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isContinuousWithInputOf"/>
+                <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#Segment4OfRCA"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isContinuousWithInputOf"/>
+                <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#RightAtrioVentricularArtery"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isContinuousWithInputOf"/>
+                <owl:allValuesFrom>
+                    <owl:Class>
+                        <owl:unionOf rdf:parseType="Collection">
+                            <rdf:Description rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#RightAtrioVentricularArtery"/>
+                            <rdf:Description rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#RightMarginalArtery"/>
+                            <rdf:Description rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#Segment4OfRCA"/>
+                        </owl:unionOf>
+                    </owl:Class>
+                </owl:allValuesFrom>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isContinuousWithInputOf"/>
+                <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#RightMarginalArtery"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isSegmentOf"/>
+                <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#RightCoronaryArtery"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#Segment4OfRCA -->
+
+    <owl:Class rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#Segment4OfRCA">
+        <rdfs:subClassOf rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#Artery"/>
+        <rdfs:subClassOf rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#NonSeveredBloodVessel"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isContinuousWithOutputOf"/>
+                <owl:allValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#Segment3OfRCA"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isContinuousWithOutputOf"/>
+                <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#Segment3OfRCA"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#supplies"/>
+                <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#PosteriorPartOfWallOfRightVentricle"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#supplies"/>
+                <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#PosteriorPartOfWallOfLeftVentricle"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isSegmentOf"/>
+                <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#RightCoronaryArtery"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#SemiLunarValve -->
+
+    <owl:Class rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#SemiLunarValve">
+        <owl:equivalentClass>
+            <owl:Class>
+                <owl:unionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#AorticValve"/>
+                    <rdf:Description rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#PulmonaryValve"/>
+                </owl:unionOf>
+            </owl:Class>
+        </owl:equivalentClass>
+        <rdfs:subClassOf rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#Valve"/>
+    </owl:Class>
+    
+
+
+    <!-- http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#Septum -->
+
+    <owl:Class rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#Septum">
+        <rdfs:subClassOf rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#AnatomicalConcept"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isSuppliedBy"/>
+                <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#ConusArtery"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#SeveredBloodVessel -->
+
+    <owl:Class rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#SeveredBloodVessel">
+        <rdfs:subClassOf rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#BloodVessel"/>
+    </owl:Class>
+    
+
+
+    <!-- http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#TricuspidValve -->
+
+    <owl:Class rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#TricuspidValve">
+        <rdfs:subClassOf rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#Valve"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#hasValveInput"/>
+                <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#RightAtriumCavity"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#hasValveOutput"/>
+                <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#RightVentricleCavity"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#Valve -->
+
+    <owl:Class rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#Valve">
+        <rdfs:subClassOf rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#AnatomicalConcept"/>
+    </owl:Class>
+    
+
+
+    <!-- http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#ValveOfCoronarySinus -->
+
+    <owl:Class rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#ValveOfCoronarySinus">
+        <rdfs:subClassOf rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#PartialValve"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#hasValveOutput"/>
+                <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#RightAtriumCavity"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#ValveOfInferiorVenaCava -->
+
+    <owl:Class rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#ValveOfInferiorVenaCava">
+        <rdfs:subClassOf rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#PartialValve"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#hasValveOutput"/>
+                <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#RightAtriumCavity"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#Ventricle -->
+
+    <owl:Class rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#Ventricle">
+        <owl:equivalentClass>
+            <owl:Class>
+                <owl:unionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#LeftVentricle"/>
+                    <rdf:Description rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#RightVentricle"/>
+                </owl:unionOf>
+            </owl:Class>
+        </owl:equivalentClass>
+        <rdfs:subClassOf rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#AnatomicalConcept"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#hasDirectAnatomicalPart"/>
+                <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#AtrioVentricularSeptum"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isDirectRegionalPartOf"/>
+                <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#Heart"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#hasDirectAnatomicalPart"/>
+                <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#InterventricularSeptum"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#VentricularCavity -->
+
+    <owl:Class rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#VentricularCavity">
+        <owl:equivalentClass>
+            <owl:Class>
+                <owl:unionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#LeftVentricleCavity"/>
+                    <rdf:Description rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#RightVentricleCavity"/>
+                </owl:unionOf>
+            </owl:Class>
+        </owl:equivalentClass>
+        <rdfs:subClassOf rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#AnatomicalCavity"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isAnatomicalPartOf"/>
+                <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#Heart"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#VestigialCardiacValve -->
+
+    <owl:Class rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#VestigialCardiacValve">
+        <owl:equivalentClass>
+            <owl:Class>
+                <owl:unionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#ValveOfCoronarySinus"/>
+                    <rdf:Description rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#ValveOfInferiorVenaCava"/>
+                </owl:unionOf>
+            </owl:Class>
+        </owl:equivalentClass>
+        <rdfs:subClassOf rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#Valve"/>
+    </owl:Class>
+    
+
+
+    <!-- http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#WallOfHeart -->
+
+    <owl:Class rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#WallOfHeart">
+        <owl:equivalentClass>
+            <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#hasDirectRegionalPart"/>
+                        <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#WallOfLeftAtrium"/>
+                    </owl:Restriction>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#hasDirectRegionalPart"/>
+                        <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#WallOfLeftVentricle"/>
+                    </owl:Restriction>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#hasDirectRegionalPart"/>
+                        <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#WallOfRightAtrium"/>
+                    </owl:Restriction>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#hasDirectRegionalPart"/>
+                        <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#WallOfRightVentricle"/>
+                    </owl:Restriction>
+                </owl:intersectionOf>
+            </owl:Class>
+        </owl:equivalentClass>
+        <rdfs:subClassOf rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#AnatomicalConcept"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isDirectAnatomicalPartOf"/>
+                <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#Heart"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#WallOfLeftAtrium -->
+
+    <owl:Class rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#WallOfLeftAtrium">
+        <owl:equivalentClass>
+            <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isDirectAnatomicalPartOf"/>
+                        <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#LeftAtrium"/>
+                    </owl:Restriction>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isDirectRegionalPartOf"/>
+                        <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#WallOfHeart"/>
+                    </owl:Restriction>
+                </owl:intersectionOf>
+            </owl:Class>
+        </owl:equivalentClass>
+        <rdfs:subClassOf rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#AnatomicalConcept"/>
+    </owl:Class>
+    
+
+
+    <!-- http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#WallOfLeftVentricle -->
+
+    <owl:Class rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#WallOfLeftVentricle">
+        <owl:equivalentClass>
+            <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isDirectAnatomicalPartOf"/>
+                        <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#LeftVentricle"/>
+                    </owl:Restriction>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isDirectRegionalPartOf"/>
+                        <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#WallOfHeart"/>
+                    </owl:Restriction>
+                </owl:intersectionOf>
+            </owl:Class>
+        </owl:equivalentClass>
+        <owl:equivalentClass>
+            <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#hasDirectRegionalPart"/>
+                        <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#AnteriorPartOfWallOfLeftVentricle"/>
+                    </owl:Restriction>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#hasDirectRegionalPart"/>
+                        <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#LateralPartOfWallOfLeftVentricle"/>
+                    </owl:Restriction>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#hasDirectRegionalPart"/>
+                        <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#PosteriorPartOfWallOfLeftVentricle"/>
+                    </owl:Restriction>
+                </owl:intersectionOf>
+            </owl:Class>
+        </owl:equivalentClass>
+        <rdfs:subClassOf rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#AnatomicalConcept"/>
+    </owl:Class>
+    
+
+
+    <!-- http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#WallOfRightAtrium -->
+
+    <owl:Class rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#WallOfRightAtrium">
+        <owl:equivalentClass>
+            <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isDirectAnatomicalPartOf"/>
+                        <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#RightAtrium"/>
+                    </owl:Restriction>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isDirectRegionalPartOf"/>
+                        <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#WallOfHeart"/>
+                    </owl:Restriction>
+                </owl:intersectionOf>
+            </owl:Class>
+        </owl:equivalentClass>
+        <rdfs:subClassOf rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#AnatomicalConcept"/>
+    </owl:Class>
+    
+
+
+    <!-- http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#WallOfRightVentricle -->
+
+    <owl:Class rdf:about="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#WallOfRightVentricle">
+        <owl:equivalentClass>
+            <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#hasDirectRegionalPart"/>
+                        <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#AnteriorPartOfWallOfRightVentricle"/>
+                    </owl:Restriction>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#hasDirectRegionalPart"/>
+                        <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#LateralPartOfWallOfRightVentricle"/>
+                    </owl:Restriction>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#hasDirectRegionalPart"/>
+                        <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#PosteriorPartOfWallOfRightVentricle"/>
+                    </owl:Restriction>
+                </owl:intersectionOf>
+            </owl:Class>
+        </owl:equivalentClass>
+        <owl:equivalentClass>
+            <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isDirectAnatomicalPartOf"/>
+                        <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#RightVentricle"/>
+                    </owl:Restriction>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#isDirectRegionalPartOf"/>
+                        <owl:someValuesFrom rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#WallOfHeart"/>
+                    </owl:Restriction>
+                </owl:intersectionOf>
+            </owl:Class>
+        </owl:equivalentClass>
+        <rdfs:subClassOf rdf:resource="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#AnatomicalConcept"/>
+    </owl:Class>
+</rdf:RDF>
+
+
+
+<!-- Generated by the OWL API (version 3.0.0.1450) http://owlapi.sourceforge.net -->
+

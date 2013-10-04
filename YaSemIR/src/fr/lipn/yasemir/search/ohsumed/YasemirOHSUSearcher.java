@@ -35,13 +35,9 @@ public class YasemirOHSUSearcher {
 			
 			Yasemir.init("config.xml");
 			
-		    String index = Yasemir.INDEX_DIR;
-			String lang = Yasemir.COLLECTION_LANG;
-			
 			String basefield = "text";
 			
-			IndexReader reader = IndexReader.open(FSDirectory.open(new File(index)));
-			SemanticSearcher ssearcher = new SemanticSearcher(lang, reader);
+			SemanticSearcher ssearcher = new SemanticSearcher();
 			
 			String conf_str="run_";
 			if(Yasemir.MODE==Yasemir.CLASSIC){
@@ -68,7 +64,7 @@ public class YasemirOHSUSearcher {
 				}
 			}
 			
-		    reader.close();
+		    ssearcher.close();
 
 		} catch (Exception e) {
 			e.printStackTrace();

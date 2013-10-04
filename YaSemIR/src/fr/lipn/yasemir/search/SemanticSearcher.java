@@ -1,5 +1,27 @@
 package fr.lipn.yasemir.search;
+/*
+ * Copyright (C) 2013, Université Paris Nord
+ *
+ * Modifications to the initial code base are copyright of their
+ * respective authors, or their employers as appropriate.  Authorship
+ * of the modifications may be determined from the ChangeLog placed at
+ * the end of this file.
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
 
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+ */
+import java.io.File;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.HashMap;
@@ -25,6 +47,7 @@ import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.search.similarities.BM25Similarity;
+import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Version;
 
 import fr.lipn.yasemir.configuration.Yasemir;
@@ -33,6 +56,11 @@ import fr.lipn.yasemir.ontology.annotation.Annotation;
 import fr.lipn.yasemir.weighting.ckpd.NGramTerm;
 import fr.lipn.yasemir.weighting.ckpd.TermFactory;
 
+/**
+ * Class providing the methods to search semantically a string
+ * @author buscaldi
+ *
+ */
 public class SemanticSearcher {
 	Analyzer analyzer;
 	IndexReader reader;
@@ -41,8 +69,16 @@ public class SemanticSearcher {
 	String basefield = "text";
 	
 	public static int MAX_HITS=1000;
-	
-	public SemanticSearcher(String lang, IndexReader reader) {
+	/**
+	 * Initializes a SemanticSearcher with the given language and IndexReader
+	 * @param lang
+	 * @param reader
+	 * @throws IOException 
+	 */
+	public SemanticSearcher() throws IOException {
+		String lang = Yasemir.COLLECTION_LANG;
+		reader = IndexReader.open(FSDirectory.open(new File(Yasemir.INDEX_DIR)));
+		 
 		if(lang.equals("fr")) analyzer = new FrenchAnalyzer(Version.LUCENE_44);
 	    else if(lang.equals("it")) analyzer = new ItalianAnalyzer(Version.LUCENE_44);
 	    else if(lang.equals("es")) analyzer = new SpanishAnalyzer(Version.LUCENE_44);
@@ -60,7 +96,9 @@ public class SemanticSearcher {
 	    
 		parser = new QueryParser(Version.LUCENE_44, basefield, analyzer);
 	}
-	
+	/**
+	 * Method that returns an ordered list of RankedDocument instances
+	 */
 	public Vector<RankedDocument> search(String line) throws ParseException, IOException {
 		Vector<RankedDocument> ret = new Vector<RankedDocument>();
 		
@@ -190,6 +228,10 @@ public class SemanticSearcher {
 		
 		if(Yasemir.MODE!=Yasemir.CLASSIC) Collections.sort(ret);
 		return ret;
+	}
+	
+	public void close() throws IOException{
+		this.reader.close();
 	}
 
 }

@@ -1,5 +1,26 @@
 package fr.lipn.yasemir.ontology;
+/*
+ * Copyright (C) 2013, Université Paris Nord
+ *
+ * Modifications to the initial code base are copyright of their
+ * respective authors, or their employers as appropriate.  Authorship
+ * of the modifications may be determined from the ChangeLog placed at
+ * the end of this file.
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
 
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+ */
 import java.io.File;
 import java.util.Vector;
 
@@ -70,7 +91,8 @@ public class KnowledgeBattery {
 	}
 	
 	/**
-	 * Method used to index terminology. The index is created at the position indicated in the config.xml file
+	 * Method used to index terminology. The index is created at the position indicated in the configuration file
+	 * Terminology is analyzed using a StandardAnalyzer provided by Lucene
 	 * This method is called only if Yasemir is set in indexing mode
 	 */
 	public static void createTermIndex() {
@@ -86,7 +108,7 @@ public class KnowledgeBattery {
 		 		return;
 		 	}
 		 	*/
-		    Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_44); //Whitespace?
+		    Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_44);
 		    IndexWriterConfig iwc = new IndexWriterConfig(Version.LUCENE_44, analyzer);
 		    iwc.setSimilarity(new BM25Similarity()); //NEW! set BM25 as default similarity for term index
 		    

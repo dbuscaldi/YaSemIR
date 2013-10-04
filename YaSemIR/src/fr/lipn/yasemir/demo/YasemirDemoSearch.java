@@ -1,5 +1,26 @@
 package fr.lipn.yasemir.demo;
+/*
+ * Copyright (C) 2013, Université Paris Nord
+ *
+ * Modifications to the initial code base are copyright of their
+ * respective authors, or their employers as appropriate.  Authorship
+ * of the modifications may be determined from the ChangeLog placed at
+ * the end of this file.
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
 
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+ */
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -12,22 +33,23 @@ import fr.lipn.yasemir.configuration.Yasemir;
 import fr.lipn.yasemir.search.RankedDocument;
 import fr.lipn.yasemir.search.SemanticSearcher;
 
-
+/**
+ * This class implements an interactive search tool based on Yasemir, based on the Lucene search example.
+ * @author buscaldi
+ *
+ */
 public class YasemirDemoSearch {
 	
 	 /** Simple command-line based on lucene search demo. */
 	  public static void main(String[] args) throws Exception {
 	    String usage =
-	      "Usage:\tjava fr.lipn.yasemir.search.YasemirInteractiveSearch [-index dir] [-repeat n] [-queries file] [-query string] [-raw] [-paging hitsPerPage]\n\nSee http://lucene.apache.org/java/4_0/demo.html for details.";
+	      "Usage:\tjava fr.lipn.yasemir.search.YasemirInteractiveSearch [-repeat n] [-queries file] [-query string] [-raw] [-paging hitsPerPage]\n\nSee http://lucene.apache.org/java/4_0/demo.html for details.";
 	    if (args.length > 0 && ("-h".equals(args[0]) || "-help".equals(args[0]))) {
 	      System.out.println(usage);
 	      System.exit(0);
 	    }
 		
-		Yasemir.init("config.xml");
-		
-	    String index = Yasemir.INDEX_DIR; //it can be overridden by the command line -index parameter
-		String lang = Yasemir.COLLECTION_LANG;
+		Yasemir.init("demo/democonf.xml");
 		
 	    String queries = null;
 	    int repeat = 0;
@@ -36,10 +58,7 @@ public class YasemirDemoSearch {
 	    int hitsPerPage = 5;
 	    
 	    for(int i = 0;i < args.length;i++) {
-	      if ("-index".equals(args[i])) {
-	        index = args[i+1];
-	        i++;
-	      } else if ("-queries".equals(args[i])) {
+	      if ("-queries".equals(args[i])) {
 	        queries = args[i+1];
 	        i++;
 	      } else if ("-query".equals(args[i])) {
@@ -60,8 +79,7 @@ public class YasemirDemoSearch {
 	      }
 	    }
 	    
-	    IndexReader reader = IndexReader.open(FSDirectory.open(new File(index)));
-	    SemanticSearcher ssearcher = new SemanticSearcher(lang, reader);
+	    SemanticSearcher ssearcher = new SemanticSearcher();
 		
 	    BufferedReader in = null;
 	    if (queries != null) {
@@ -96,7 +114,7 @@ public class YasemirDemoSearch {
 	        break;
 	      }
 	    }
-	    reader.close();
+	    ssearcher.close();
 	  }
 
 	  /**

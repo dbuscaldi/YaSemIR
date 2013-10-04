@@ -1,5 +1,27 @@
 package fr.lipn.yasemir.configuration;
+/*
+ * Copyright (C) 2013, Université Paris Nord
+ *
+ * Modifications to the initial code base are copyright of their
+ * respective authors, or their employers as appropriate.  Authorship
+ * of the modifications may be determined from the ChangeLog placed at
+ * the end of this file.
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
 
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+ */
+import java.lang.reflect.Constructor;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
@@ -15,7 +37,11 @@ import fr.lipn.yasemir.ontology.annotation.IndexBasedAnnotator;
 import fr.lipn.yasemir.ontology.annotation.KNNAnnotator;
 import fr.lipn.yasemir.ontology.annotation.SemanticAnnotator;
 import fr.lipn.yasemir.ontology.skos.SKOSTerminology;
-
+/**
+ * This class provides all the parameters required by the modules
+ * @author buscaldi
+ *
+ */
 public class Yasemir {
 	//debug mode
 	public static boolean DEBUG=true;
@@ -50,7 +76,10 @@ public class Yasemir {
 	public static String SCORE;
 
 	private static boolean INDEXING_MODE=false;
-	
+	/**
+	 * Initialisation method to be called before every action
+	 * @param configFile
+	 */
 	public static void init(String configFile){
 		System.err.println("Reading config file...");
 		ConfigurationHandler.init(configFile);
@@ -96,7 +125,16 @@ public class Yasemir {
 		ANNOTATOR=ConfigurationHandler.ANNOTENGINE;
 		annotator=new IndexBasedAnnotator(TERM_DIR);
 		//annotator=new KNNAnnotator(TERM_DIR); //TODO: not finished (select annotator depending on configuration file)
-		
+		try{
+			Class<?> cls = Class.forName(ANNOTATOR);
+			Constructor<?> constructor = cls.getConstructor(String.class);
+			annotator = (SemanticAnnotator) constructor.newInstance(TERM_DIR);
+			//Object instance = constructor.newInstance("stringparam");
+		} catch (Exception e){
+			e.printStackTrace();
+			System.err.println("[YaSemIR]: failed to load the specified annotator, falling back to IndexBasedAnnotator");
+			annotator=annotator=new IndexBasedAnnotator(TERM_DIR);
+		}
 		//setting ngrams enabled or not
 		CKPD_ENABLED=ConfigurationHandler.NGRAMS_ENABLED;
 		
@@ -127,10 +165,10 @@ public class Yasemir {
 			SKOSTerminology t=null;
 			if(!termPath.trim().isEmpty()) {
 				System.err.println("[YaSemIR]: loading terminology from "+termPath);
-				t = new SKOSTerminology(termPath);
+				t = new SKOSTerminology(o.getOntologyID(), termPath);
 			}
 			else {
-				System.err.println("[YaSemIR]: no terminology provided: generating trivial terminology...");
+				System.err.println("[YaSemIR]: no terminology provided: generating trivial terminology from "+o.getBaseAddr()+"...");
 				t = o.generateTerminology();
 			}
 			System.err.println("[YaSemIR]: loaded terminology: "+t.getTerminologyID());
@@ -143,15 +181,27 @@ public class Yasemir {
 		
 		
 	}
-	
+	/**
+	 * Tells whether the content of the documents tagged by the argument XML tag is processed by the semantic annotator or not
+	 * @param tag
+	 * @return
+	 */
 	public static boolean isSemanticTag(String tag){
 		return semBalises.contains(tag);
 	}
-	
+	/**
+	 * Tells whether the content of the documents tagged by the argument XML tag is indexed or not
+	 * @param tag
+	 * @return
+	 */
 	public static boolean isClassicTag(String tag){
 		return clsBalises.contains(tag);
 	}
-	
+	/**
+	 * Tells whether the argument XML tag represents an ID tag or not
+	 * @param tag
+	 * @return
+	 */
 	public static boolean isIDTag(String tag){
 		return tag.equalsIgnoreCase(idField);
 	}

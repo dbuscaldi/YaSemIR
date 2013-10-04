@@ -44,6 +44,11 @@ import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
 import com.hp.hpl.jena.util.FileManager;
 
+/**
+ * Class used to access and create a SKOS terminology 
+ * @author buscaldi
+ *
+ */
 public class SKOSTerminology {
 	boolean isStemmed=false; //used to track whether the terminology is stored in stemmed form or not
 	Model model;
@@ -51,18 +56,21 @@ public class SKOSTerminology {
 	String dc, skos; //NameSpace Prefixes URIs
 	private String path;
 	private ResIterator sharedResIterator;
+	private String ontoID;
 	
 	/**
-	 * Creates an empty terminology
+	 * Creates an empty terminology connected to the related ontology
 	 */
-	public SKOSTerminology(){
+	public SKOSTerminology(String ontoID){
 		model = ModelFactory.createDefaultModel();
-		this.path="trivial terminology";
+		this.ontoID=ontoID;
+		this.path=ontoID+"_trivial";
 	}
 	
-	public SKOSTerminology(String path){
+	public SKOSTerminology(String ontoID, String path){
 		model = ModelFactory.createDefaultModel();
 		InputStream in = FileManager.get().open( path );
+		this.ontoID=ontoID;
 		this.path=path;
 		
 		if (in == null) {
@@ -87,8 +95,7 @@ public class SKOSTerminology {
 		    if(subject.hasURI("http://org.snu.bike/MeSH#tangier_disease")){
 		    	System.err.println(stmt);
 		    }
-		    
-			
+
 		}*/
 	}
 	

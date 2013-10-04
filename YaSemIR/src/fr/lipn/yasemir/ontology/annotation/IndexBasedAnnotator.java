@@ -1,5 +1,26 @@
 package fr.lipn.yasemir.ontology.annotation;
+/*
+ * Copyright (C) 2013, Université Paris Nord
+ *
+ * Modifications to the initial code base are copyright of their
+ * respective authors, or their employers as appropriate.  Authorship
+ * of the modifications may be determined from the ChangeLog placed at
+ * the end of this file.
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
 
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+ */
 import java.io.File;
 import java.util.Collection;
 import java.util.Comparator;
@@ -12,7 +33,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.lucene.analysis.Analyzer;
-import org.apache.lucene.analysis.en.EnglishAnalyzer;
+import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.index.IndexReader;
@@ -27,8 +48,13 @@ import org.apache.lucene.util.Version;
 import org.semanticweb.owlapi.model.OWLClass;
 import org.tartarus.snowball.ext.EnglishStemmer;
 
-
+/**
+ * SemanticAnnotator implementation that uses a terminology index to assign tags to a document
+ * @author buscaldi
+ *
+ */
 public class IndexBasedAnnotator implements SemanticAnnotator {
+	private static int MAX_ANNOTS=10;
 	private String termIndexPath;
 	/**
 	 * Base constructor for IndexBasedAnnotator
@@ -56,7 +82,8 @@ public class IndexBasedAnnotator implements SemanticAnnotator {
 			IndexSearcher searcher = new IndexSearcher(reader);
 			searcher.setSimilarity(new BM25Similarity());
 			
-			Analyzer analyzer = new EnglishAnalyzer(Version.LUCENE_44);
+			//Analyzer analyzer = new EnglishAnalyzer(Version.LUCENE_44);
+			Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_44);
 			
 			document=document.replaceAll("Support, .+?;", "");
 			document=document.replaceAll("\\[.*?\\]", "").trim();
@@ -93,12 +120,12 @@ public class IndexBasedAnnotator implements SemanticAnnotator {
 			    
 			    if(numTotalHits > 0) {
 				    hits = searcher.search(query, numTotalHits).scoreDocs;
-				    for(int i=0; i<numTotalHits; i++){
+				    for(int i=0; i< Math.min(numTotalHits, MAX_ANNOTS); i++){
 				    	Document doc = searcher.doc(hits[i].doc);
 				    	String ptrn = "(?i)("+doc.get("labels").replaceAll(", ", "|")+")";
 				    	//System.err.println("OWLClass="+doc.get("id")+" score="+hits[i].score);
 				    	if(checkPattern(fragment, ptrn)){
-				    		//System.err.println("OWLClass="+doc.get("id")+" score="+hits[i].score);
+				    		//System.err.println("OK: OWLClass="+doc.get("id")+" score="+hits[i].score);
 				    		Annotation ann = new Annotation(doc.get("id"));
 				    		String ontoID = ann.getRelatedOntology().getOntologyID();
 				    		

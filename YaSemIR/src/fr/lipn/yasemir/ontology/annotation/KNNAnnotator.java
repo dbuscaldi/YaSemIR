@@ -1,5 +1,26 @@
 package fr.lipn.yasemir.ontology.annotation;
+/*
+ * Copyright (C) 2013, Université Paris Nord
+ *
+ * Modifications to the initial code base are copyright of their
+ * respective authors, or their employers as appropriate.  Authorship
+ * of the modifications may be determined from the ChangeLog placed at
+ * the end of this file.
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
 
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+ */
 import java.io.File;
 import java.util.Collection;
 import java.util.Collections;
@@ -10,10 +31,11 @@ import java.util.Set;
 import java.util.Vector;
 
 import org.apache.lucene.analysis.Analyzer;
-import org.apache.lucene.analysis.en.EnglishAnalyzer;
+import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.index.IndexReader;
+import org.apache.lucene.index.IndexableField;
 import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
@@ -24,7 +46,8 @@ import org.apache.lucene.util.Version;
 import org.semanticweb.owlapi.model.OWLClass;
 import org.tartarus.snowball.ext.EnglishStemmer;
 
-import fr.lipn.yasemir.ontology.Ontology;
+import fr.lipn.yasemir.configuration.Yasemir;
+
 /**
  * This class implements the K-NN annotator by Trieschnigg et al., MeSH Up: effective MeSH text classification for document retrieval
  * @author buscaldi
@@ -38,19 +61,29 @@ public class KNNAnnotator implements SemanticAnnotator {
 	private final static int maxTags=5; //limit of tags to extract with the K_NN method
 	private String standardIndexPath;
 	
-	//TODO: adapt to YasemIR
+	public KNNAnnotator(String termIndexPath) {
+		this.standardIndexPath=Yasemir.INDEX_DIR; //uses already indexed documents as training index
+		this.termIndexPath=termIndexPath;
+	}
 	
+	/**
+	 * The first parameter is a "training" index, where documents have been already annotated
+	 * The second parameter is the terminology index
+	 * @param standardIndexDir
+	 * @param termIndexPath
+	 */
 	public KNNAnnotator(String standardIndexDir, String termIndexPath) {
 		this.standardIndexPath=standardIndexDir; //indexed training collection
 		this.termIndexPath=termIndexPath;
 	}
 	
 	public HashMap<String, Vector<Annotation>> annotate(String document){
-		Vector<Annotation> annotations = new Vector<Annotation>();
+		HashMap<String, Vector<Annotation>> ret = new HashMap<String, Vector<Annotation>>();
+		
 		try {
 			IndexReader reader = IndexReader.open(FSDirectory.open(new File(termIndexPath)));
 			IndexSearcher searcher = new IndexSearcher(reader);
-			Analyzer analyzer = new EnglishAnalyzer(Version.LUCENE_31);
+			Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_44);
 			
 			document=document.replaceAll("Support, .+?;", "");
 			document=document.replaceAll("\\[.*?\\]", "").trim();
@@ -74,11 +107,12 @@ public class KNNAnnotator implements SemanticAnnotator {
 				
 				if(fragment.length()==0) continue;
 				//System.err.println("Annotating: "+fragment);
+				
 				//use K-NN annotation (see Trieschnigg et al. 2009)
 				IndexReader docreader = IndexReader.open(FSDirectory.open(new File(this.standardIndexPath)));
 				IndexSearcher docsearcher = new IndexSearcher(docreader);
 				
-				QueryParser parser = new QueryParser(Version.LUCENE_31, "title", analyzer);
+				QueryParser parser = new QueryParser(Version.LUCENE_44, "text", analyzer);
 				Query query = parser.parse(fragment);
 				System.err.println("Looking for: "+query);
 				TopDocs results = docsearcher.search(query, N); //get the first 100 documents
@@ -96,30 +130,42 @@ public class KNNAnnotator implements SemanticAnnotator {
 				    hits = docsearcher.search(query, numTotalHits).scoreDocs;
 					for(int i=0; i<topLimit; i++){
 					  	Document doc = docsearcher.doc(hits[i].doc);
-					   	String tags = doc.get("tag");
-					   	if(tags != null) {
-					   		String [] tagStrings = tags.split(";( )?");
-					    	for(String t : tagStrings){
-					    		t=t.replaceAll("\\W|_", " ");
-					    		Double nt = ttags.get(t);
-					    		if (nt==null) nt= new Double(hits[i].score);
-					    		else nt = new Double(hits[i].score+nt.doubleValue());
-					    		ttags.put(t, nt);
-					    	}
+					  	Vector<String> tags = new Vector<String>();
+					  	List<IndexableField> docFields =doc.getFields();
+				        for(IndexableField f : docFields){
+				        	String fname=f.name();
+				        	if(fname.endsWith("annot")) {
+				        		tags.add(fname+":"+doc.get(fname));
+				        	}
+				        }
+					   	
+					   	String [] tagStrings = (String[]) tags.toArray();
+					    for(String t : tagStrings){
+					    	t=t.replaceAll("\\W|_", " ");
+					    	Double nt = ttags.get(t);
+					    	if (nt==null) nt= new Double(hits[i].score);
+					    	else nt = new Double(hits[i].score+nt.doubleValue());
+					    	ttags.put(t, nt);
 					   	}
 					}
 					for(int i=bottomLimit; i<numTotalHits; i++){
 					  	Document doc = docsearcher.doc(hits[i].doc);
-					   	String tags = doc.get("tag");
-					   	if(tags != null) {
-					   		String [] tagStrings = tags.split(";( )?");
-					    	for(String t : tagStrings){
-					    		t=t.replaceAll("\\W|_", " ");
-					    		Integer nt = btags.get(t);
-					    		if (nt==null) nt= new Integer(1);
-					    		else nt = new Integer((nt.intValue()+1));
-					    		btags.put(t, nt);
-					    	}
+					  	Vector<String> tags = new Vector<String>();
+					  	List<IndexableField> docFields =doc.getFields();
+				        for(IndexableField f : docFields){
+				        	String fname=f.name();
+				        	if(fname.endsWith("annot")) {
+				        		tags.add(fname+":"+doc.get(fname));
+				        	}
+				        }
+					   	
+					   	String [] tagStrings = (String[]) tags.toArray();
+					    for(String t : tagStrings){
+					    	t=t.replaceAll("\\W|_", " ");
+					    	Integer nt = btags.get(t);
+					    	if (nt==null) nt= new Integer(1);
+					    	else nt = new Integer((nt.intValue()+1));
+					    	btags.put(t, nt);
 					   	}
 					}
 				    
@@ -158,10 +204,8 @@ public class KNNAnnotator implements SemanticAnnotator {
 			    	String tag = wt.getName();
 			    	if(i>=maxTags) break;
 			    	if(wt.getWeight() >= limit) {
-				    	QueryParser tagparser = new QueryParser(Version.LUCENE_31, "terms", analyzer);
+				    	QueryParser tagparser = new QueryParser(Version.LUCENE_44, "labels", analyzer);
 						Query tagquery = tagparser.parse("\""+tag+"\"");
-				    	//Query tagquery = tagparser.parse(tag);
-						//System.err.println("Searching for concept related to: " + tagquery.toString("terms"));
 						
 						TopDocs tagresults = searcher.search(tagquery, 5);
 					    ScoreDoc[] taghits = tagresults.scoreDocs;
@@ -171,11 +215,16 @@ public class KNNAnnotator implements SemanticAnnotator {
 					    if(numTagTotalHits > 0) {
 						    taghits = searcher.search(tagquery, numTagTotalHits).scoreDocs;
 						    Document doc = searcher.doc(taghits[0].doc);
-						    String ptrn = "(?i)("+doc.get("terms").replaceAll(", ", "|")+")";
-						    //System.err.println("matching class: "+doc.get("id"));
-					    	Annotation ann = new Annotation(doc.get("id"));
+						    
+						    Annotation ann = new Annotation(doc.get("id"));
 					    	//System.err.println("Adding: "+tag+" w:"+wt.getWeight());
-							annotations.add(ann);
+					    	String ontoID = ann.getRelatedOntology().getOntologyID();
+				    		
+				    		Vector<Annotation> annotations = ret.get(ontoID);
+				    		if(annotations == null) annotations = new Vector<Annotation>();
+					    	annotations.add(ann);
+					    	ret.put(ontoID, annotations);
+					    	
 							i++;
 					    }
 			    	}
@@ -188,36 +237,35 @@ public class KNNAnnotator implements SemanticAnnotator {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return annotations;
+		return ret;
 		 
 	}
 	
 	
-	public void addSemanticAnnotation(Document doc, String text, String field){
-		Vector<Annotation> av = this.annotate(text);
-		  StringBuffer av_repr = new StringBuffer();
-		  for(Annotation a : av){
-			  av_repr.append(a.getOWLClass().getIRI().getFragment());
-			  av_repr.append(" ");
-		  }
-		  if(OHSUMedIndexer.VERBOSE) System.err.println(av_repr);
-		  doc.add(new Field(field+"annot", av_repr.toString().trim(), Field.Store.YES, Field.Index.ANALYZED));
-		  //we add the annotation and the supertypes to an extended index to be used during the beginning of the search process
-		  Set<OWLClass> expansion = new HashSet<OWLClass>();
-		  for(Annotation a : av){
-			  Set<OWLClass> sup_a = a.getRelatedOntology().getAllSuperClasses(a.getOWLClass());
-			  Set<OWLClass> roots = a.getRelatedOntology().getOntologyRoots(); //this is needed to calculate the frequencies of root classes
-			  roots.retainAll(sup_a);
-			  ClassFrequencyCollector.add(roots);
-			  expansion.addAll(sup_a);
-		  }
-		  for(OWLClass c : expansion){
-			  av_repr.append(c.getIRI().getFragment());
-			  av_repr.append(" ");
-		  }
-		  doc.add(new Field(field+"annot_exp", av_repr.toString().trim(), Field.Store.YES, Field.Index.ANALYZED));
-		  if(OHSUMedIndexer.VERBOSE) System.err.println(av_repr);
-
+	public void addSemanticAnnotation(Document doc, String text){
+		HashMap<String, Vector<Annotation>> anns = this.annotate(text);
+		for(String oid : anns.keySet()){
+			StringBuffer av_repr = new StringBuffer();
+			for(Annotation a : anns.get(oid)){
+				av_repr.append(a.getOWLClass().getIRI().getFragment());
+				av_repr.append(" ");
+				//String ontoID=a.getRelatedOntology().getOntologyID();
+			}
+			doc.add(new Field(oid+"annot", av_repr.toString().trim(), Field.Store.YES, Field.Index.ANALYZED));
+			//we add the annotation and the supertypes to an extended index to be used during the beginning of the search process
+			Set<OWLClass> expansion = new HashSet<OWLClass>();
+			for(Annotation a : anns.get(oid)){
+				Set<OWLClass> sup_a = a.getRelatedOntology().getAllSuperClasses(a.getOWLClass());
+				Set<OWLClass> roots = a.getRelatedOntology().getOntologyRoots(); //this is needed to calculate the frequencies of root classes
+				roots.retainAll(sup_a);
+				expansion.addAll(sup_a);
+			}
+			for(OWLClass c : expansion){
+				av_repr.append(c.getIRI().getFragment());
+				av_repr.append(" ");
+			}
+			doc.add(new Field(oid+"annot_exp", av_repr.toString().trim(), Field.Store.YES, Field.Index.ANALYZED));
+		}
 	}
 
 	public Collection<? extends Annotation> extractCategories(List<String> categoryList) {
@@ -227,12 +275,6 @@ public class KNNAnnotator implements SemanticAnnotator {
 			annotations.add(ann);
 		}
 		return annotations;
-	}
-
-	@Override
-	public void addSemanticAnnotation(Document doc, String text) {
-		// TODO Auto-generated method stub
-		
 	}
 	
 

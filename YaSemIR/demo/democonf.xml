@@ -1,0 +1,29 @@
+<config>
+	<score>BM25</score>
+	<basedir>demo</basedir>
+	<indexdir>index</indexdir>
+	<termdir>term_index</termdir> <!-- terminology index to be created at indexing phase and to be used in search. Location: basedir/indexdir/ -->
+	<collection lang="en" >demo/docs</collection>
+	<annotator>fr.lipn.yasemir.ontology.annotation.IndexBasedAnnotator</annotator>
+	<ontologies>
+		<ontology root="http://org.snu.bike/MeSH#All" ofile="demo/ontologies/meshonto.owl" tfile="demo/ontologies/mo_terminology.skos" />
+		<ontology root="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#AnatomicalConcept" ofile="demo/ontologies/heart.owl"/>
+	</ontologies>
+	<params>
+		<weight val="fixed"/> <!-- used to assign weights to concepts: fixed, idf, prob or gauss -->
+		<distance val="pg3"/>
+		<ngrams val="false"/> <!-- enables CKPD schema -->
+		<search_mode val="hybrid" /> <!-- used for search: hybrid, classic or semantic -->
+	</params>
+	<semanticfields>
+		<field>TAG</field>
+		<field>TITLE</field>
+		<field>TEXT</field>
+	</semanticfields>
+	<classicfields>
+		<field>TITLE</field>
+		<field>TEXT</field>
+	</classicfields>
+	<idfield isattr="false">DOCNO</idfield>
+	<docdelim>DOC</docdelim>
+</config>

@@ -17,9 +17,7 @@ public class TestAnnotation {
 	 * @throws IOException 
 	 */
 	public static void main(String[] args) throws IOException {
-		Yasemir.init("config.xml");
-		
-		//IndexBasedAnnotator sa = new IndexBasedAnnotator(Yasemir.TERM_DIR);
+		Yasemir.init("demo/democonf.xml");
 		
 		String queryString = null;
 		BufferedReader in = new BufferedReader(new InputStreamReader(System.in, "iso-8859-1"));

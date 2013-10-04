@@ -32,7 +32,11 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-
+/**
+ * This class is used to load the required informations from the configuration file
+ * @author buscaldi
+ *
+ */
 public class ConfigurationHandler {
 	public static String INDEXDIR;
 	public static String YASEMIR_HOME;

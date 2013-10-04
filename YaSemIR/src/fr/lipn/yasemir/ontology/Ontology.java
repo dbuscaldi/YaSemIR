@@ -46,6 +46,11 @@ import org.tartarus.snowball.ext.EnglishStemmer;
 
 import fr.lipn.yasemir.ontology.skos.SKOSTerminology;
 
+/**
+ * Wrapper class for the OWLOntology, with methods needed to compute semantic relatedness
+ * @author buscaldi
+ *
+ */
 public class Ontology {
 	private OWLOntology onto;
 	private OWLClass root;
@@ -310,7 +315,7 @@ public class Ontology {
 	 * @return
 	 */
 	public SKOSTerminology generateTerminology() {
-		SKOSTerminology terminology = new SKOSTerminology();
+		SKOSTerminology terminology = new SKOSTerminology(this.getOntologyID()); //FIXME: terminologia non generata?
 		terminology.setStemming(true);
 		Set<OWLClass> nodes = onto.getClassesInSignature();
 		for(OWLClass c : nodes) {
