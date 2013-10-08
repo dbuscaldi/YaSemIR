@@ -81,7 +81,7 @@ public class IndexBasedAnnotator implements SemanticAnnotator {
 		try {
 			IndexReader reader = IndexReader.open(FSDirectory.open(new File(termIndexPath)));
 			IndexSearcher searcher = new IndexSearcher(reader);
-			//searcher.setSimilarity(new BM25Similarity());
+			searcher.setSimilarity(new BM25Similarity());
 			
 			//Analyzer analyzer = new EnglishAnalyzer(Version.LUCENE_44);
 			Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_44);

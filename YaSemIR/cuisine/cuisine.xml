@@ -1,5 +1,5 @@
 <config>
-	<score>TFIDF</score>
+	<score>BM25</score>
 	<basedir>cuisine</basedir>
 	<indexdir>index</indexdir>
 	<termdir>term_index</termdir> <!-- terminology index to be created at indexing phase and to be used in search. Location: basedir/indexdir/ -->

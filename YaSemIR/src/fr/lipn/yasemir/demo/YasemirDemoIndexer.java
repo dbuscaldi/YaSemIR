@@ -30,7 +30,7 @@ import fr.lipn.yasemir.indexing.YasemirIndexBuilder;
  * @author Davide Buscaldi, LIPN
  */
 public class YasemirDemoIndexer {
-	
+
 	private YasemirDemoIndexer() {}
 	
 	/** Index all text files under a directory. */
