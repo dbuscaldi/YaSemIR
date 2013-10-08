@@ -320,8 +320,7 @@ public class Ontology {
 		Set<OWLClass> nodes = onto.getClassesInSignature();
 		for(OWLClass c : nodes) {
 			String concLabel = c.getIRI().getFragment();
-			
-			if(!concLabel.equals(concLabel.toUpperCase())){ //concept name is not all in capitals
+			if(!concLabel.equals(concLabel.toUpperCase()) && !concLabel.equals(concLabel.toLowerCase())){ //concept name is not all in capitals or minuscule
 				Pattern p = Pattern.compile("([0-9]+|\\p{Lu}[^\\p{Lu}0-9]+|\\p{Lu}+)");
 				Matcher m = p.matcher(concLabel);
 				
@@ -334,7 +333,6 @@ public class Ontology {
 
 				concLabel=clbuf.toString().trim();
 			}
-			
 			concLabel=concLabel.replace('_', ' ');
 			concLabel=concLabel.replaceAll("\\p{Punct}", " ");
 			concLabel=concLabel.replaceAll(" +", " ");

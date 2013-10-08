@@ -21,13 +21,17 @@ package fr.lipn.yasemir.ontology;
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.StringReader;
 import java.util.Vector;
 
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
+import org.apache.lucene.document.StringField;
+import org.apache.lucene.document.TextField;
 import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
@@ -127,13 +131,19 @@ public class KnowledgeBattery {
 					String classIRI =items.elementAt(0);
 	                String labels =items.elementAt(1);
 	                
-	                //System.err.println("[KnowledgeBattery] indexing "+classIRI+" labels");
-	                doc.add(new Field("id", classIRI, Field.Store.YES, Field.Index.NOT_ANALYZED));
+	                Field pathField = new StringField("id", classIRI, Field.Store.YES);
+	                //System.err.println("[KnowledgeBattery] indexing "+classIRI+" labels: "+labels);
+	                //doc.add(new Field("id", classIRI, Field.Store.YES, Field.Index.NOT_ANALYZED)); //old Lucene versions
+	                doc.add(pathField);
+	                doc.add(new TextField("labels", labels, Field.Store.YES));
+	                /*
 	                if(!t.isStemmed()) {
-	                	doc.add(new Field("labels", labels, Field.Store.YES, Field.Index.ANALYZED));
+	                	doc.add(new TextField("labels", labels, Field.Store.YES));
 	                } else {
-	                	doc.add(new Field("labels", labels, Field.Store.YES, Field.Index.NOT_ANALYZED));
+	                	doc.add(new StringField("labels", labels, Field.Store.YES));
+	                	//doc.add(new Field("labels", labels, Field.Store.YES, Field.Index.NOT_ANALYZED));
 	                }
+	                */
 	                writer.addDocument(doc);
 				}
 			}

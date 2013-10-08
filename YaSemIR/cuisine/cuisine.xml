@@ -1,13 +1,12 @@
 <config>
-	<score>BM25</score>
-	<basedir>demo</basedir>
+	<score>TFIDF</score>
+	<basedir>cuisine</basedir>
 	<indexdir>index</indexdir>
 	<termdir>term_index</termdir> <!-- terminology index to be created at indexing phase and to be used in search. Location: basedir/indexdir/ -->
-	<collection lang="en" >demo/docs</collection>
-	<annotator>fr.lipn.yasemir.ontology.annotation.ChunkBasedAnnotator</annotator>
+	<collection lang="en" >cuisine/docs</collection>
+	<annotator>fr.lipn.yasemir.ontology.annotation.IndexBasedAnnotator</annotator>
 	<ontologies>
-		<ontology root="http://org.snu.bike/MeSH#All" ofile="demo/ontologies/meshonto.owl" tfile="demo/ontologies/mo_terminology.skos" />
-		<ontology root="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#AnatomicalConcept" ofile="demo/ontologies/heart.owl"/>
+		<ontology root="http://www.w3.org/2002/07/owl#Thing" ofile="cuisine/Cuisine.owl" />
 	</ontologies>
 	<params>
 		<weight val="fixed"/> <!-- used to assign weights to concepts: fixed, idf, prob or gauss -->

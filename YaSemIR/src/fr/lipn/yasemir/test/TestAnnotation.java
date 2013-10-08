@@ -17,7 +17,9 @@ public class TestAnnotation {
 	 * @throws IOException 
 	 */
 	public static void main(String[] args) throws IOException {
-		Yasemir.init("demo/democonf.xml");
+		//Yasemir.setIndexing(true);
+		Yasemir.init("cuisine/cuisine.xml");
+		
 		
 		String queryString = null;
 		BufferedReader in = new BufferedReader(new InputStreamReader(System.in, "iso-8859-1"));

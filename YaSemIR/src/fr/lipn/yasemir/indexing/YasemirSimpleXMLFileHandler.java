@@ -24,6 +24,9 @@ package fr.lipn.yasemir.indexing;
 
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
+import org.apache.lucene.document.StringField;
+import org.apache.lucene.document.TextField;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
@@ -143,7 +146,8 @@ public class YasemirSimpleXMLFileHandler extends DefaultHandler {
     if (eName.equals(Yasemir.DOC_DELIM)){
     	//ID
     	System.err.println("[YaSemIR] indexing document "+this.docIDBuffer.toString());
-    	currDoc.add(new Field("id", this.docIDBuffer.toString(), Field.Store.YES, Field.Index.NOT_ANALYZED));
+    	//currDoc.add(new Field("id", this.docIDBuffer.toString(), Field.Store.YES, Field.Index.NOT_ANALYZED));
+    	currDoc.add(new StringField("id", this.docIDBuffer.toString(), Field.Store.YES));
     	//classicText
     	StringBuffer plainText = new StringBuffer();
     	StringBuffer semText = new StringBuffer(); //text to be labelled semantically
@@ -152,7 +156,7 @@ public class YasemirSimpleXMLFileHandler extends DefaultHandler {
     		if(Yasemir.semBalises.contains(field)) semText.append(fieldBuffers.get(field));
     	}
     	//base text
-    	currDoc.add(new Field("text", plainText.toString(), Field.Store.YES, Field.Index.ANALYZED));
+    	currDoc.add(new TextField("text", plainText.toString(), Field.Store.YES));
     	
     	if(Yasemir.DEBUG) System.err.println("[YaSemIR] adding annotations to document "+this.docIDBuffer);
     	//annotation of "semantic" content with each ontology and store one index per ontology

@@ -34,6 +34,7 @@ import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
+import org.apache.lucene.document.TextField;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexableField;
 import org.apache.lucene.queryparser.classic.QueryParser;
@@ -251,7 +252,8 @@ public class KNNAnnotator implements SemanticAnnotator {
 				av_repr.append(" ");
 				//String ontoID=a.getRelatedOntology().getOntologyID();
 			}
-			doc.add(new Field(oid+"annot", av_repr.toString().trim(), Field.Store.YES, Field.Index.ANALYZED));
+			//doc.add(new Field(oid+"annot", av_repr.toString().trim(), Field.Store.YES, Field.Index.ANALYZED));
+			doc.add(new TextField(oid+"annot", av_repr.toString().trim(), Field.Store.YES));
 			//we add the annotation and the supertypes to an extended index to be used during the beginning of the search process
 			Set<OWLClass> expansion = new HashSet<OWLClass>();
 			for(Annotation a : anns.get(oid)){
@@ -264,7 +266,8 @@ public class KNNAnnotator implements SemanticAnnotator {
 				av_repr.append(c.getIRI().getFragment());
 				av_repr.append(" ");
 			}
-			doc.add(new Field(oid+"annot_exp", av_repr.toString().trim(), Field.Store.YES, Field.Index.ANALYZED));
+			//doc.add(new Field(oid+"annot_exp", av_repr.toString().trim(), Field.Store.YES, Field.Index.ANALYZED));
+			doc.add(new TextField(oid+"annot_exp", av_repr.toString().trim(), Field.Store.YES));
 		}
 	}
 
