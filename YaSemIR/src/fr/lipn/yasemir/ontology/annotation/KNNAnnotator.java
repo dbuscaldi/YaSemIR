@@ -31,6 +31,14 @@ import java.util.Set;
 import java.util.Vector;
 
 import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.analysis.ca.CatalanAnalyzer;
+import org.apache.lucene.analysis.de.GermanAnalyzer;
+import org.apache.lucene.analysis.en.EnglishAnalyzer;
+import org.apache.lucene.analysis.es.SpanishAnalyzer;
+import org.apache.lucene.analysis.fr.FrenchAnalyzer;
+import org.apache.lucene.analysis.it.ItalianAnalyzer;
+import org.apache.lucene.analysis.nl.DutchAnalyzer;
+import org.apache.lucene.analysis.pt.PortugueseAnalyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
@@ -84,7 +92,17 @@ public class KNNAnnotator implements SemanticAnnotator {
 		try {
 			IndexReader reader = IndexReader.open(FSDirectory.open(new File(termIndexPath)));
 			IndexSearcher searcher = new IndexSearcher(reader);
-			Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_44);
+			
+			Analyzer analyzer=null;
+			String lang=Yasemir.COLLECTION_LANG;
+			 if(lang.equals("fr")) analyzer = new FrenchAnalyzer(Version.LUCENE_44);
+			 else if(lang.equals("it")) analyzer = new ItalianAnalyzer(Version.LUCENE_44);
+			 else if(lang.equals("es")) analyzer = new SpanishAnalyzer(Version.LUCENE_44);
+			 else if(lang.equals("de")) analyzer = new GermanAnalyzer(Version.LUCENE_44);
+			 else if(lang.equals("pt")) analyzer = new PortugueseAnalyzer(Version.LUCENE_44);
+			 else if(lang.equals("ca")) analyzer = new CatalanAnalyzer(Version.LUCENE_44);
+			 else if(lang.equals("nl")) analyzer = new DutchAnalyzer(Version.LUCENE_44);
+			 else analyzer = new EnglishAnalyzer(Version.LUCENE_44);
 			
 			document=document.replaceAll("Support, .+?;", "");
 			document=document.replaceAll("\\[.*?\\]", "").trim();

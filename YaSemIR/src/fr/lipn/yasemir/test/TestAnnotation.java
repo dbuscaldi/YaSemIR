@@ -43,15 +43,15 @@ public class TestAnnotation {
 		      System.out.println("Annotating: " + line);
 		      
 		      HashMap<String, Vector<Annotation>> anns= null;
-		      System.err.println("[YaSemIr] Annotating: " + line);
+		      //System.err.println("[YaSemIr] Annotating: " + line);
 		      anns = Yasemir.annotator.annotate(line);
 		      
-		      System.err.println("[YaSemIr] Annotations:");
+		      System.out.println("[YaSemIr] Annotations:");
 		      for(String oid : anns.keySet()) {
-		    	  System.err.println("oid: "+oid);
+		    	  System.out.println("oid: "+oid);
 		    	  Vector<Annotation> ann = anns.get(oid);
 		    	  for(Annotation a : ann){
-			    	  System.err.println(a.getOWLClass().getIRI());
+			    	  System.out.println(a.getOWLClass().getIRI());
 			      }
 		      }
 		     

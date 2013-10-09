@@ -27,6 +27,14 @@ import java.io.StringReader;
 import java.util.Vector;
 
 import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.analysis.ca.CatalanAnalyzer;
+import org.apache.lucene.analysis.de.GermanAnalyzer;
+import org.apache.lucene.analysis.en.EnglishAnalyzer;
+import org.apache.lucene.analysis.es.SpanishAnalyzer;
+import org.apache.lucene.analysis.fr.FrenchAnalyzer;
+import org.apache.lucene.analysis.it.ItalianAnalyzer;
+import org.apache.lucene.analysis.nl.DutchAnalyzer;
+import org.apache.lucene.analysis.pt.PortugueseAnalyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
@@ -112,7 +120,19 @@ public class KnowledgeBattery {
 		 		return;
 		 	}
 		 	*/
-		    Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_44);
+			
+			Analyzer analyzer=null;
+			String lang=Yasemir.COLLECTION_LANG;
+			if(lang.equals("fr")) analyzer = new FrenchAnalyzer(Version.LUCENE_44);
+			else if(lang.equals("it")) analyzer = new ItalianAnalyzer(Version.LUCENE_44);
+			else if(lang.equals("es")) analyzer = new SpanishAnalyzer(Version.LUCENE_44);
+			else if(lang.equals("de")) analyzer = new GermanAnalyzer(Version.LUCENE_44);
+			else if(lang.equals("pt")) analyzer = new PortugueseAnalyzer(Version.LUCENE_44);
+			else if(lang.equals("ca")) analyzer = new CatalanAnalyzer(Version.LUCENE_44);
+			else if(lang.equals("nl")) analyzer = new DutchAnalyzer(Version.LUCENE_44);
+			else analyzer = new EnglishAnalyzer(Version.LUCENE_44);
+		    
+			//Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_44);
 		    IndexWriterConfig iwc = new IndexWriterConfig(Version.LUCENE_44, analyzer);
 		    iwc.setSimilarity(new BM25Similarity()); //NEW! set BM25 as default similarity for term index
 		    

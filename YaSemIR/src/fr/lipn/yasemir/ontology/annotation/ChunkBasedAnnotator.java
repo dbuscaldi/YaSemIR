@@ -5,12 +5,26 @@ import java.io.File;
 import java.io.Reader;
 import java.io.StringReader;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.Vector;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.analysis.ca.CatalanAnalyzer;
+import org.apache.lucene.analysis.de.GermanAnalyzer;
+import org.apache.lucene.analysis.en.EnglishAnalyzer;
+import org.apache.lucene.analysis.es.SpanishAnalyzer;
+import org.apache.lucene.analysis.fr.FrenchAnalyzer;
+import org.apache.lucene.analysis.it.ItalianAnalyzer;
+import org.apache.lucene.analysis.nl.DutchAnalyzer;
+import org.apache.lucene.analysis.pt.PortugueseAnalyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
+import org.apache.lucene.document.Field;
+import org.apache.lucene.document.TextField;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.search.IndexSearcher;
@@ -20,6 +34,7 @@ import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.search.similarities.BM25Similarity;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Version;
+import org.semanticweb.owlapi.model.OWLClass;
 import org.tartarus.snowball.ext.EnglishStemmer;
 
 import edu.stanford.nlp.parser.lexparser.LexicalizedParser;
@@ -30,6 +45,7 @@ import edu.stanford.nlp.process.TokenizerFactory;
 import edu.stanford.nlp.trees.Tree;
 import edu.stanford.nlp.ling.CoreLabel;
 import edu.stanford.nlp.ling.HasWord;
+import fr.lipn.yasemir.configuration.Yasemir;
 /**
  * This class uses the Stanford NLP Parser to search terminology clues in Noun Phrases
  * @author buscaldi
@@ -38,6 +54,8 @@ import edu.stanford.nlp.ling.HasWord;
 public class ChunkBasedAnnotator implements SemanticAnnotator {
 	private String termIndexPath;
 	private LexicalizedParser parser;
+	
+	private static int MAX_ANNOTS=10;
 
 	public ChunkBasedAnnotator(String termIndexPath) {
 		this.termIndexPath=termIndexPath;
@@ -54,53 +72,48 @@ public class ChunkBasedAnnotator implements SemanticAnnotator {
 			IndexSearcher searcher = new IndexSearcher(reader);
 			searcher.setSimilarity(new BM25Similarity());
 			
-			//Analyzer analyzer = new EnglishAnalyzer(Version.LUCENE_44);
-			Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_44);
+			Analyzer analyzer=null;
+			String lang=Yasemir.COLLECTION_LANG;
+			 if(lang.equals("fr")) analyzer = new FrenchAnalyzer(Version.LUCENE_44);
+			 else if(lang.equals("it")) analyzer = new ItalianAnalyzer(Version.LUCENE_44);
+			 else if(lang.equals("es")) analyzer = new SpanishAnalyzer(Version.LUCENE_44);
+			 else if(lang.equals("de")) analyzer = new GermanAnalyzer(Version.LUCENE_44);
+			 else if(lang.equals("pt")) analyzer = new PortugueseAnalyzer(Version.LUCENE_44);
+			 else if(lang.equals("ca")) analyzer = new CatalanAnalyzer(Version.LUCENE_44);
+			 else if(lang.equals("nl")) analyzer = new DutchAnalyzer(Version.LUCENE_44);
+			 else analyzer = new EnglishAnalyzer(Version.LUCENE_44);
+			//Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_44);
 			
 			Reader r = new BufferedReader(new StringReader(document));
+			Vector<String> fragments = new Vector<String>();
+			
 			for(List<HasWord> sentence : new DocumentPreprocessor(r)) {
 				Tree parse = parser.apply(sentence);
-				parse.pennPrint();
-				for(Tree p : parse.children()) {
-					System.err.println(p.label().value());
+				for(Tree p : parse){
+					if(p.label().value().equals("NP") && p.isPrePreTerminal()) {
+						//p.pennPrint();
+						StringBuffer tmpstr = new StringBuffer();
+						for(Tree l : p.getLeaves()){
+							
+							tmpstr.append(l.label().toString());
+							tmpstr.append(" ");
+						}
+						fragments.add(tmpstr.toString().trim());
+						System.err.println("[YaSemIR - CBA] Chunk found: "+tmpstr);
+					}
+					
 				}
 			}
-			/*
-			TokenizerFactory<CoreLabel> tokenizerFactory = PTBTokenizer.factory(new CoreLabelTokenFactory(), "");
-			List<CoreLabel> rawWords2 = tokenizerFactory.getTokenizer(new StringReader(document)).tokenize();
-			parse = parser.apply(rawWords2);
-		    TreebankLanguagePack tlp = new PennTreebankLanguagePack();
-		    GrammaticalStructureFactory gsf = tlp.grammaticalStructureFactory();
-		    GrammaticalStructure gs = gsf.newGrammaticalStructure(parse);
-			*/    
 			
-			/****** code from IndexBasedAnnotator
-			document=document.replaceAll("Support, .+?;", "");
-			document=document.replaceAll("\\[.*?\\]", "").trim();
-			String [] fragments = document.split("[;:\\.,]");
-			*/
-			/*
-			for(String ofragment :  fragments) {
-				ofragment=ofragment.replaceAll( "\\p{Punct}", " " );
-				ofragment=ofragment.trim();
-				String sa[] = ofragment.split("(?<=[ \\n])");
-				EnglishStemmer st = new EnglishStemmer();
-				StringBuffer fbuf= new StringBuffer();
-				for(String s : sa){
-					st.setCurrent(s.trim());
-					st.stem();
-					fbuf.append(st.getCurrent());
-					fbuf.append(" ");
-				}
-				
-				String fragment=fbuf.toString().trim(); //stemmed fragment
+			
+			for(String fragment :  fragments) {
 				
 				if(fragment.length()==0) continue;
 				//System.err.println("Annotating: "+fragment);
 						
 				QueryParser parser = new QueryParser(Version.LUCENE_44, "labels", analyzer);
 				Query query = parser.parse(fragment);
-				//System.err.println("Searching for: " + query.toString("terms"));
+				System.err.println("Searching for: " + query.toString("terms"));
 				
 				TopDocs results = searcher.search(query, 20);
 			    ScoreDoc[] hits = results.scoreDocs;
@@ -128,7 +141,7 @@ public class ChunkBasedAnnotator implements SemanticAnnotator {
 			    }
 								 
 			}
-			*/
+			
 			reader.close();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -138,8 +151,43 @@ public class ChunkBasedAnnotator implements SemanticAnnotator {
 
 	@Override
 	public void addSemanticAnnotation(Document doc, String text) {
-		// TODO Auto-generated method stub
+		HashMap<String, Vector<Annotation>> anns = this.annotate(text);
+		for(String oid : anns.keySet()){
+			StringBuffer av_repr = new StringBuffer();
+			for(Annotation a : anns.get(oid)){
+				av_repr.append(a.getOWLClass().getIRI().getFragment());
+				av_repr.append(" ");
+				//String ontoID=a.getRelatedOntology().getOntologyID();
+			}
+			//doc.add(new Field(oid+"annot", av_repr.toString().trim(), Field.Store.YES, Field.Index.ANALYZED));
+			doc.add(new TextField(oid+"annot", av_repr.toString().trim(), Field.Store.YES));
+			//we add the annotation and the supertypes to an extended index to be used during the beginning of the search process
+			Set<OWLClass> expansion = new HashSet<OWLClass>();
+			for(Annotation a : anns.get(oid)){
+				Set<OWLClass> sup_a = a.getRelatedOntology().getAllSuperClasses(a.getOWLClass());
+				Set<OWLClass> roots = a.getRelatedOntology().getOntologyRoots(); //this is needed to calculate the frequencies of root classes
+				roots.retainAll(sup_a);
+				expansion.addAll(sup_a);
+			}
+			for(OWLClass c : expansion){
+				av_repr.append(c.getIRI().getFragment());
+				av_repr.append(" ");
+			}
+			//doc.add(new Field(oid+"annot_exp", av_repr.toString().trim(), Field.Store.YES, Field.Index.ANALYZED));
+			doc.add(new TextField(oid+"annot_exp", av_repr.toString().trim(), Field.Store.YES));
+		}
 		
+	}
+	
+	private boolean checkPattern(String text, String pattern){
+		Pattern p = Pattern.compile(pattern);
+		Matcher m = p.matcher(text.toLowerCase());
+		
+		if(m.find()) {
+			//System.err.println("found pattern: "+m.group());
+			return true;
+		}
+		return false;
 	}
 
 }

@@ -4,7 +4,7 @@
 	<indexdir>index</indexdir>
 	<termdir>term_index</termdir> <!-- terminology index to be created at indexing phase and to be used in search. Location: basedir/indexdir/ -->
 	<collection lang="en" >cuisine/docs</collection>
-	<annotator>fr.lipn.yasemir.ontology.annotation.IndexBasedAnnotator</annotator>
+	<annotator>fr.lipn.yasemir.ontology.annotation.ChunkBasedAnnotator</annotator>
 	<ontologies>
 		<ontology root="http://www.w3.org/2002/07/owl#Thing" ofile="cuisine/Cuisine.owl" />
 	</ontologies>
