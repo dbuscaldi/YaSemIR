@@ -29,7 +29,8 @@ import java.io.InputStreamReader;
 import java.util.Vector;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.store.FSDirectory;
-import fr.lipn.yasemir.configuration.Yasemir;
+
+import fr.lipn.yasemir.Yasemir;
 import fr.lipn.yasemir.search.RankedDocument;
 import fr.lipn.yasemir.search.SemanticSearcher;
 

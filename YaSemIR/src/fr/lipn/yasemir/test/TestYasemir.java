@@ -1,6 +1,6 @@
 package fr.lipn.yasemir.test;
 
-import fr.lipn.yasemir.configuration.Yasemir;
+import fr.lipn.yasemir.Yasemir;
 
 public class TestYasemir {
 

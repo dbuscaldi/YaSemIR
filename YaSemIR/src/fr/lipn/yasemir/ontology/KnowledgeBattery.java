@@ -49,7 +49,7 @@ import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Version;
 import org.semanticweb.owlapi.model.OWLClass;
 
-import fr.lipn.yasemir.configuration.Yasemir;
+import fr.lipn.yasemir.Yasemir;
 import fr.lipn.yasemir.ontology.skos.SKOSTerminology;
 /**
  * Implementation of a Knowledge Battery (KB): a vector of ontologies and their related SKOS terminologies
@@ -121,19 +121,8 @@ public class KnowledgeBattery {
 		 	}
 		 	*/
 			
-			Analyzer analyzer=null;
-			String lang=Yasemir.COLLECTION_LANG;
-			if(lang.equals("fr")) analyzer = new FrenchAnalyzer(Version.LUCENE_44);
-			else if(lang.equals("it")) analyzer = new ItalianAnalyzer(Version.LUCENE_44);
-			else if(lang.equals("es")) analyzer = new SpanishAnalyzer(Version.LUCENE_44);
-			else if(lang.equals("de")) analyzer = new GermanAnalyzer(Version.LUCENE_44);
-			else if(lang.equals("pt")) analyzer = new PortugueseAnalyzer(Version.LUCENE_44);
-			else if(lang.equals("ca")) analyzer = new CatalanAnalyzer(Version.LUCENE_44);
-			else if(lang.equals("nl")) analyzer = new DutchAnalyzer(Version.LUCENE_44);
-			else analyzer = new EnglishAnalyzer(Version.LUCENE_44);
-		    
 			//Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_44);
-		    IndexWriterConfig iwc = new IndexWriterConfig(Version.LUCENE_44, analyzer);
+		    IndexWriterConfig iwc = new IndexWriterConfig(Version.LUCENE_44, Yasemir.analyzer);
 		    iwc.setSimilarity(new BM25Similarity()); //NEW! set BM25 as default similarity for term index
 		    
 		    IndexWriter writer = new IndexWriter(dir, iwc);

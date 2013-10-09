@@ -45,7 +45,8 @@ import edu.stanford.nlp.process.TokenizerFactory;
 import edu.stanford.nlp.trees.Tree;
 import edu.stanford.nlp.ling.CoreLabel;
 import edu.stanford.nlp.ling.HasWord;
-import fr.lipn.yasemir.configuration.Yasemir;
+import fr.lipn.yasemir.Yasemir;
+import fr.lipn.yasemir.tools.Tools;
 /**
  * This class uses the Stanford NLP Parser to search terminology clues in Noun Phrases
  * @author buscaldi
@@ -64,24 +65,15 @@ public class ChunkBasedAnnotator implements SemanticAnnotator {
 	
 	//TODO: finire il ChunkedAnnotator
 	@Override
-	public HashMap<String, Vector<Annotation>> annotate(String document) {
-		HashMap<String, Vector<Annotation>> ret = new HashMap<String, Vector<Annotation>>();
+	public DocumentAnnotation annotate(String document) {
+		DocumentAnnotation ret = new DocumentAnnotation();
 		
 		try {
 			IndexReader reader = IndexReader.open(FSDirectory.open(new File(termIndexPath)));
 			IndexSearcher searcher = new IndexSearcher(reader);
 			searcher.setSimilarity(new BM25Similarity());
 			
-			Analyzer analyzer=null;
-			String lang=Yasemir.COLLECTION_LANG;
-			 if(lang.equals("fr")) analyzer = new FrenchAnalyzer(Version.LUCENE_44);
-			 else if(lang.equals("it")) analyzer = new ItalianAnalyzer(Version.LUCENE_44);
-			 else if(lang.equals("es")) analyzer = new SpanishAnalyzer(Version.LUCENE_44);
-			 else if(lang.equals("de")) analyzer = new GermanAnalyzer(Version.LUCENE_44);
-			 else if(lang.equals("pt")) analyzer = new PortugueseAnalyzer(Version.LUCENE_44);
-			 else if(lang.equals("ca")) analyzer = new CatalanAnalyzer(Version.LUCENE_44);
-			 else if(lang.equals("nl")) analyzer = new DutchAnalyzer(Version.LUCENE_44);
-			 else analyzer = new EnglishAnalyzer(Version.LUCENE_44);
+
 			//Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_44);
 			
 			Reader r = new BufferedReader(new StringReader(document));
@@ -111,7 +103,7 @@ public class ChunkBasedAnnotator implements SemanticAnnotator {
 				if(fragment.length()==0) continue;
 				//System.err.println("Annotating: "+fragment);
 						
-				QueryParser parser = new QueryParser(Version.LUCENE_44, "labels", analyzer);
+				QueryParser parser = new QueryParser(Version.LUCENE_44, "labels", Yasemir.analyzer);
 				Query query = parser.parse(fragment);
 				System.err.println("Searching for: " + query.toString("terms"));
 				
@@ -127,7 +119,7 @@ public class ChunkBasedAnnotator implements SemanticAnnotator {
 				    	Document doc = searcher.doc(hits[i].doc);
 				    	String ptrn = "(?i)("+doc.get("labels").replaceAll(", ", "|")+")";
 				    	//System.err.println("OWLClass="+doc.get("id")+" score="+hits[i].score);
-				    	if(checkPattern(fragment, ptrn)){
+				    	if(Tools.checkPattern(fragment, ptrn)){
 				    		//System.err.println("OK: OWLClass="+doc.get("id")+" score="+hits[i].score);
 				    		Annotation ann = new Annotation(doc.get("id"));
 				    		String ontoID = ann.getRelatedOntology().getOntologyID();
@@ -147,47 +139,6 @@ public class ChunkBasedAnnotator implements SemanticAnnotator {
 			e.printStackTrace();
 		}
 		return ret;
-	}
-
-	@Override
-	public void addSemanticAnnotation(Document doc, String text) {
-		HashMap<String, Vector<Annotation>> anns = this.annotate(text);
-		for(String oid : anns.keySet()){
-			StringBuffer av_repr = new StringBuffer();
-			for(Annotation a : anns.get(oid)){
-				av_repr.append(a.getOWLClass().getIRI().getFragment());
-				av_repr.append(" ");
-				//String ontoID=a.getRelatedOntology().getOntologyID();
-			}
-			//doc.add(new Field(oid+"annot", av_repr.toString().trim(), Field.Store.YES, Field.Index.ANALYZED));
-			doc.add(new TextField(oid+"annot", av_repr.toString().trim(), Field.Store.YES));
-			//we add the annotation and the supertypes to an extended index to be used during the beginning of the search process
-			Set<OWLClass> expansion = new HashSet<OWLClass>();
-			for(Annotation a : anns.get(oid)){
-				Set<OWLClass> sup_a = a.getRelatedOntology().getAllSuperClasses(a.getOWLClass());
-				Set<OWLClass> roots = a.getRelatedOntology().getOntologyRoots(); //this is needed to calculate the frequencies of root classes
-				roots.retainAll(sup_a);
-				expansion.addAll(sup_a);
-			}
-			for(OWLClass c : expansion){
-				av_repr.append(c.getIRI().getFragment());
-				av_repr.append(" ");
-			}
-			//doc.add(new Field(oid+"annot_exp", av_repr.toString().trim(), Field.Store.YES, Field.Index.ANALYZED));
-			doc.add(new TextField(oid+"annot_exp", av_repr.toString().trim(), Field.Store.YES));
-		}
-		
-	}
-	
-	private boolean checkPattern(String text, String pattern){
-		Pattern p = Pattern.compile(pattern);
-		Matcher m = p.matcher(text.toLowerCase());
-		
-		if(m.find()) {
-			//System.err.println("found pattern: "+m.group());
-			return true;
-		}
-		return false;
 	}
 
 }

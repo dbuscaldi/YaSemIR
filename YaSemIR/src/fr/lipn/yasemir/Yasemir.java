@@ -1,4 +1,4 @@
-package fr.lipn.yasemir.configuration;
+package fr.lipn.yasemir;
 /*
  * Copyright (C) 2013, Université Paris Nord
  *
@@ -28,7 +28,18 @@ import java.util.Set;
 
 import org.apache.commons.collections.BidiMap;
 import org.apache.commons.collections.bidimap.TreeBidiMap;
+import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.analysis.ca.CatalanAnalyzer;
+import org.apache.lucene.analysis.de.GermanAnalyzer;
+import org.apache.lucene.analysis.en.EnglishAnalyzer;
+import org.apache.lucene.analysis.es.SpanishAnalyzer;
+import org.apache.lucene.analysis.fr.FrenchAnalyzer;
+import org.apache.lucene.analysis.it.ItalianAnalyzer;
+import org.apache.lucene.analysis.nl.DutchAnalyzer;
+import org.apache.lucene.analysis.pt.PortugueseAnalyzer;
+import org.apache.lucene.util.Version;
 
+import fr.lipn.yasemir.configuration.ConfigurationHandler;
 import fr.lipn.yasemir.ontology.ClassWeightHandler;
 import fr.lipn.yasemir.ontology.ConceptSimilarity;
 import fr.lipn.yasemir.ontology.KnowledgeBattery;
@@ -76,6 +87,10 @@ public class Yasemir {
 	public static String SCORE;
 
 	private static boolean INDEXING_MODE=false;
+	
+	//common Analyzer
+	public static Analyzer analyzer;
+	
 	/**
 	 * Initialisation method to be called before every action
 	 * @param configFile
@@ -94,6 +109,15 @@ public class Yasemir {
 		ID_ASATTR=ConfigurationHandler.IDFIELD_ASATTR;
 		DOC_DELIM=ConfigurationHandler.DOC_DELIM;
 		COLLECTION_LANG=ConfigurationHandler.CORPUSLANG;
+		
+		if(COLLECTION_LANG.equals("fr")) analyzer = new FrenchAnalyzer(Version.LUCENE_44);
+	    else if(COLLECTION_LANG.equals("it")) analyzer = new ItalianAnalyzer(Version.LUCENE_44);
+	    else if(COLLECTION_LANG.equals("es")) analyzer = new SpanishAnalyzer(Version.LUCENE_44);
+	    else if(COLLECTION_LANG.equals("de")) analyzer = new GermanAnalyzer(Version.LUCENE_44);
+	    else if(COLLECTION_LANG.equals("pt")) analyzer = new PortugueseAnalyzer(Version.LUCENE_44);
+	    else if(COLLECTION_LANG.equals("ca")) analyzer = new CatalanAnalyzer(Version.LUCENE_44);
+	    else if(COLLECTION_LANG.equals("nl")) analyzer = new DutchAnalyzer(Version.LUCENE_44);
+	    else analyzer = new EnglishAnalyzer(Version.LUCENE_44);
 		
 		//setting search mode
 		String sm = ConfigurationHandler.SEARCH_MODE;

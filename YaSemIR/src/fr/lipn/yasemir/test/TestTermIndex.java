@@ -11,7 +11,7 @@ import org.apache.lucene.search.similarities.BM25Similarity;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Version;
 
-import fr.lipn.yasemir.configuration.Yasemir;
+import fr.lipn.yasemir.Yasemir;
 
 public class TestTermIndex {
 

@@ -6,7 +6,7 @@ import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Vector;
 
-import fr.lipn.yasemir.configuration.Yasemir;
+import fr.lipn.yasemir.Yasemir;
 import fr.lipn.yasemir.ontology.annotation.Annotation;
 
 

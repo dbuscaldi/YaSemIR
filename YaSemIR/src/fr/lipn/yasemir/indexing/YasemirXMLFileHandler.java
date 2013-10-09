@@ -31,23 +31,28 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Set;
 import java.util.Stack;
 import java.util.Vector;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
+
+import org.semanticweb.owlapi.model.OWLClass;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
-import fr.lipn.yasemir.configuration.Yasemir;
+import fr.lipn.yasemir.Yasemir;
+import fr.lipn.yasemir.ontology.annotation.Annotation;
+import fr.lipn.yasemir.ontology.annotation.DocumentAnnotation;
 /**
  * This class provides an handler for XML files
  * @author buscaldi
  *
  */
-public class YasemirSimpleXMLFileHandler extends DefaultHandler {
+public class YasemirXMLFileHandler extends DefaultHandler {
   protected HashMap<String, StringBuffer> fieldBuffers = new HashMap<String, StringBuffer>();
   protected StringBuffer docIDBuffer = new StringBuffer();
   
@@ -55,7 +60,7 @@ public class YasemirSimpleXMLFileHandler extends DefaultHandler {
   protected Document currDoc;
   protected Vector<Document> parsedDocuments;
   
-  public YasemirSimpleXMLFileHandler(File xmlFile) 
+  public YasemirXMLFileHandler(File xmlFile) 
   	throws ParserConfigurationException, SAXException, IOException {
     
     SAXParserFactory spf = SAXParserFactory.newInstance();
@@ -159,13 +164,42 @@ public class YasemirSimpleXMLFileHandler extends DefaultHandler {
     	currDoc.add(new TextField("text", plainText.toString(), Field.Store.YES));
     	
     	if(Yasemir.DEBUG) System.err.println("[YaSemIR] adding annotations to document "+this.docIDBuffer);
+    	
     	//annotation of "semantic" content with each ontology and store one index per ontology
-    	Yasemir.annotator.addSemanticAnnotation(currDoc, semText.toString());
+    	DocumentAnnotation annotations = Yasemir.annotator.annotate(semText.toString());
+    	addSemanticAnnotation(currDoc, annotations);
     	
     	//now store the parsed document 
     	parsedDocuments.add(currDoc);
     }
   }
+  
+  private void addSemanticAnnotation(Document doc, DocumentAnnotation anns){
+		for(String oid : anns.keySet()){
+			StringBuffer av_repr = new StringBuffer();
+			for(Annotation a : anns.get(oid)){
+				av_repr.append(a.getOWLClass().getIRI().getFragment());
+				av_repr.append(" ");
+				//String ontoID=a.getRelatedOntology().getOntologyID();
+			}
+			//doc.add(new Field(oid+"annot", av_repr.toString().trim(), Field.Store.YES, Field.Index.ANALYZED));
+			doc.add(new TextField(oid+"annot", av_repr.toString().trim(), Field.Store.YES));
+			//we add the annotation and the supertypes to an extended index to be used during the beginning of the search process
+			Set<OWLClass> expansion = new HashSet<OWLClass>();
+			for(Annotation a : anns.get(oid)){
+				Set<OWLClass> sup_a = a.getRelatedOntology().getAllSuperClasses(a.getOWLClass());
+				Set<OWLClass> roots = a.getRelatedOntology().getOntologyRoots(); //this is needed to calculate the frequencies of root classes
+				roots.retainAll(sup_a);
+				expansion.addAll(sup_a);
+			}
+			for(OWLClass c : expansion){
+				av_repr.append(c.getIRI().getFragment());
+				av_repr.append(" ");
+			}
+			//doc.add(new Field(oid+"annot_exp", av_repr.toString().trim(), Field.Store.YES, Field.Index.ANALYZED));
+			doc.add(new TextField(oid+"annot_exp", av_repr.toString().trim(), Field.Store.YES));
+		}
+	}
   
   public Document getLastParsedDocument() {
 	  return this.currDoc;

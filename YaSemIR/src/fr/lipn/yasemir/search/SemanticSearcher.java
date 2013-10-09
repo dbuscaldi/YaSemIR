@@ -50,7 +50,7 @@ import org.apache.lucene.search.similarities.BM25Similarity;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Version;
 
-import fr.lipn.yasemir.configuration.Yasemir;
+import fr.lipn.yasemir.Yasemir;
 import fr.lipn.yasemir.ontology.ClassWeightHandler;
 import fr.lipn.yasemir.ontology.annotation.Annotation;
 import fr.lipn.yasemir.weighting.ckpd.NGramTerm;
@@ -62,7 +62,6 @@ import fr.lipn.yasemir.weighting.ckpd.TermFactory;
  *
  */
 public class SemanticSearcher {
-	Analyzer analyzer;
 	IndexReader reader;
 	IndexSearcher searcher;
 	QueryParser parser;
@@ -76,25 +75,15 @@ public class SemanticSearcher {
 	 * @throws IOException 
 	 */
 	public SemanticSearcher() throws IOException {
-		String lang = Yasemir.COLLECTION_LANG;
 		reader = IndexReader.open(FSDirectory.open(new File(Yasemir.INDEX_DIR)));
-		 
-		if(lang.equals("fr")) analyzer = new FrenchAnalyzer(Version.LUCENE_44);
-	    else if(lang.equals("it")) analyzer = new ItalianAnalyzer(Version.LUCENE_44);
-	    else if(lang.equals("es")) analyzer = new SpanishAnalyzer(Version.LUCENE_44);
-	    else if(lang.equals("de")) analyzer = new GermanAnalyzer(Version.LUCENE_44);
-	    else if(lang.equals("pt")) analyzer = new PortugueseAnalyzer(Version.LUCENE_44);
-	    else if(lang.equals("ca")) analyzer = new CatalanAnalyzer(Version.LUCENE_44);
-	    else if(lang.equals("nl")) analyzer = new DutchAnalyzer(Version.LUCENE_44);
-	    else analyzer = new EnglishAnalyzer(Version.LUCENE_44);
 		
 		this.searcher = new IndexSearcher(reader);
 	    if(Yasemir.SCORE.equals("BM25")) searcher.setSimilarity(new BM25Similarity());
 	    
 	    ClassWeightHandler.init(reader);
-	    if(Yasemir.CKPD_ENABLED) TermFactory.init(reader, analyzer);
+	    if(Yasemir.CKPD_ENABLED) TermFactory.init(reader, Yasemir.analyzer);
 	    
-		parser = new QueryParser(Version.LUCENE_44, basefield, analyzer);
+		parser = new QueryParser(Version.LUCENE_44, basefield, Yasemir.analyzer);
 	}
 	/**
 	 * Method that returns an ordered list of RankedDocument instances

@@ -21,20 +21,19 @@ package fr.lipn.yasemir.ontology.annotation;
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
+import java.util.HashMap;
+import java.util.Vector;
 
 /**
- * All Semantic annotation module should implement this interface
+ * Alias for HashMap<String, Vector<Annotation>>
+ * Maps an ontology ID to an annotation vector
  * @author buscaldi
  *
  */
-public interface SemanticAnnotator {
+public class DocumentAnnotation extends HashMap<String, Vector<Annotation>> {
+	private static final long serialVersionUID = 383804499398146661L;
 
-	/**
-	 * Returns the annotation map (linking an ontology ID to the list of annotations referring to that ontology)
-	 * for a given text
-	 * @param document
-	 * @return
-	 */
-	public DocumentAnnotation annotate(String text);
-
+	public DocumentAnnotation() {
+		super();
+	}
 }

@@ -27,7 +27,7 @@ import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.Term;
 import org.semanticweb.owlapi.model.OWLClass;
 
-import fr.lipn.yasemir.configuration.Yasemir;
+import fr.lipn.yasemir.Yasemir;
 
 /**
  * This class provides weights for concepts, depending on the parameters contained in the configuration file.

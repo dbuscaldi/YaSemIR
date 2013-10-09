@@ -44,7 +44,7 @@ import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Version;
 
-import fr.lipn.yasemir.configuration.Yasemir;
+import fr.lipn.yasemir.Yasemir;
 /**
  * Class providing the necessary methods to index the document collection specified in the configuration file
  * @author buscaldi
@@ -54,7 +54,6 @@ public class YasemirIndexBuilder {
 	private String indexPath;
 	private String docsPath;
 	private String lang;
-	private Analyzer analyzer;
 	private File docDir;
 	
 	boolean create = true; //NOTE: should we allow an update mode?
@@ -82,15 +81,6 @@ public class YasemirIndexBuilder {
 	      System.exit(1);
 	    }
 	    
-	    if(lang.equals("fr")) analyzer = new FrenchAnalyzer(Version.LUCENE_44);
-	    else if(lang.equals("it")) analyzer = new ItalianAnalyzer(Version.LUCENE_44);
-	    else if(lang.equals("es")) analyzer = new SpanishAnalyzer(Version.LUCENE_44);
-	    else if(lang.equals("de")) analyzer = new GermanAnalyzer(Version.LUCENE_44);
-	    else if(lang.equals("pt")) analyzer = new PortugueseAnalyzer(Version.LUCENE_44);
-	    else if(lang.equals("ca")) analyzer = new CatalanAnalyzer(Version.LUCENE_44);
-	    else if(lang.equals("nl")) analyzer = new DutchAnalyzer(Version.LUCENE_44);
-	    else analyzer = new EnglishAnalyzer(Version.LUCENE_44);
-	    
 
 	    
 	}
@@ -105,7 +95,7 @@ public class YasemirIndexBuilder {
 	      Directory dir = FSDirectory.open(new File(indexPath));
 
 	      //IndexWriter Configuration
-	      IndexWriterConfig iwc = new IndexWriterConfig(Version.LUCENE_44, analyzer);
+	      IndexWriterConfig iwc = new IndexWriterConfig(Version.LUCENE_44, Yasemir.analyzer);
 	      if(Yasemir.SCORE.equals("BM25")) iwc.setSimilarity(new BM25Similarity());
 	      else iwc.setSimilarity(new DefaultSimilarity());
 
@@ -145,9 +135,9 @@ public class YasemirIndexBuilder {
 	      } else {
 	    	if(file.getName().endsWith(".xml")) {
 	    		System.err.println("[YaSemIR] indexing " + file);
-	    		YasemirSimpleXMLFileHandler hdlr = null;
+	    		YasemirXMLFileHandler hdlr = null;
 	            try {
-	            		hdlr = new YasemirSimpleXMLFileHandler(file);
+	            		hdlr = new YasemirXMLFileHandler(file);
 	            		
 	            } catch (Exception e) {
 	            	e.printStackTrace();
