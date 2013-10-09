@@ -105,7 +105,7 @@ public class ChunkBasedAnnotator implements SemanticAnnotator {
 						
 				QueryParser parser = new QueryParser(Version.LUCENE_44, "labels", Yasemir.analyzer);
 				Query query = parser.parse(fragment);
-				System.err.println("Searching for: " + query.toString("terms"));
+				//System.err.println("Searching for: " + query.toString("terms"));
 				
 				TopDocs results = searcher.search(query, 20);
 			    ScoreDoc[] hits = results.scoreDocs;
