@@ -44,7 +44,7 @@ import fr.lipn.yasemir.ontology.ClassWeightHandler;
 import fr.lipn.yasemir.ontology.ConceptSimilarity;
 import fr.lipn.yasemir.ontology.KnowledgeBattery;
 import fr.lipn.yasemir.ontology.Ontology;
-import fr.lipn.yasemir.ontology.annotation.IndexBasedAnnotator;
+import fr.lipn.yasemir.ontology.annotation.SentenceBasedAnnotator;
 import fr.lipn.yasemir.ontology.annotation.KNNAnnotator;
 import fr.lipn.yasemir.ontology.annotation.SemanticAnnotator;
 import fr.lipn.yasemir.ontology.skos.SKOSTerminology;
@@ -147,7 +147,7 @@ public class Yasemir {
 		
 		//setting annotator
 		ANNOTATOR=ConfigurationHandler.ANNOTENGINE;
-		annotator=new IndexBasedAnnotator(TERM_DIR);
+		annotator=new SentenceBasedAnnotator(TERM_DIR);
 		//annotator=new KNNAnnotator(TERM_DIR); //TODO: not finished (select annotator depending on configuration file)
 		try{
 			Class<?> cls = Class.forName(ANNOTATOR);
@@ -157,7 +157,7 @@ public class Yasemir {
 		} catch (Exception e){
 			e.printStackTrace();
 			System.err.println("[YaSemIR]: failed to load the specified annotator, falling back to IndexBasedAnnotator");
-			annotator=annotator=new IndexBasedAnnotator(TERM_DIR);
+			annotator=annotator=new SentenceBasedAnnotator(TERM_DIR);
 		}
 		//setting ngrams enabled or not
 		CKPD_ENABLED=ConfigurationHandler.NGRAMS_ENABLED;

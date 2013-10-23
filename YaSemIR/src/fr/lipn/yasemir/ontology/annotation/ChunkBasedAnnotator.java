@@ -105,7 +105,8 @@ public class ChunkBasedAnnotator implements SemanticAnnotator {
 						
 				QueryParser parser = new QueryParser(Version.LUCENE_44, "labels", Yasemir.analyzer);
 				Query query = parser.parse(fragment);
-				//System.err.println("Searching for: " + query.toString("terms"));
+				
+				String stemmedFragment = query.toString("labels").replaceAll("labels:", "");
 				
 				TopDocs results = searcher.search(query, 20);
 			    ScoreDoc[] hits = results.scoreDocs;
@@ -119,7 +120,7 @@ public class ChunkBasedAnnotator implements SemanticAnnotator {
 				    	Document doc = searcher.doc(hits[i].doc);
 				    	String ptrn = "(?i)("+doc.get("labels").replaceAll(", ", "|")+")";
 				    	//System.err.println("OWLClass="+doc.get("id")+" score="+hits[i].score);
-				    	if(Tools.checkPattern(fragment, ptrn)){
+				    	if(Tools.checkPattern(stemmedFragment, ptrn)){
 				    		//System.err.println("OK: OWLClass="+doc.get("id")+" score="+hits[i].score);
 				    		Annotation ann = new Annotation(doc.get("id"));
 				    		String ontoID = ann.getRelatedOntology().getOntologyID();
