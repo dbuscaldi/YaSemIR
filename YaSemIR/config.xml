@@ -4,7 +4,7 @@
 	<indexdir>indexOHSUMed87_sem</indexdir>
 	<termdir>term_index_0.6</termdir> <!-- terminology index to be created at indexing phase and to be used in search. Location: basedir/indexdir/ -->
 	<collection lang="en" >/tempo/corpora/OHSUMed/</collection>
-	<annotator>fr.lipn.yasemir.ontology.annotation.IndexBasedAnnotator</annotator>
+	<annotator>fr.lipn.yasemir.ontology.annotation.SentenceBasedAnnotator</annotator>
 	<ontologies>
 		<ontology root="http://org.snu.bike/MeSH#All" ofile="/users/buscaldi/Works/YaSemIR/ontologies/meshonto.owl"/>
 		<ontology root="http://smi.stanford.edu/people/dameron/ontology/anatomy/heart#AnatomicalConcept" ofile="/users/buscaldi/Works/YaSemIR/ontologies/heart.owl"/>

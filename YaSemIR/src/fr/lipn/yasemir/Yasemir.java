@@ -26,9 +26,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.apache.commons.collections.BidiMap;
-import org.apache.commons.collections.bidimap.TreeBidiMap;
 import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.analysis.ar.ArabicAnalyzer;
 import org.apache.lucene.analysis.ca.CatalanAnalyzer;
 import org.apache.lucene.analysis.de.GermanAnalyzer;
 import org.apache.lucene.analysis.en.EnglishAnalyzer;
@@ -45,7 +44,6 @@ import fr.lipn.yasemir.ontology.ConceptSimilarity;
 import fr.lipn.yasemir.ontology.KnowledgeBattery;
 import fr.lipn.yasemir.ontology.Ontology;
 import fr.lipn.yasemir.ontology.annotation.SentenceBasedAnnotator;
-import fr.lipn.yasemir.ontology.annotation.KNNAnnotator;
 import fr.lipn.yasemir.ontology.annotation.SemanticAnnotator;
 import fr.lipn.yasemir.ontology.skos.SKOSTerminology;
 /**
@@ -117,6 +115,7 @@ public class Yasemir {
 	    else if(COLLECTION_LANG.equals("pt")) analyzer = new PortugueseAnalyzer(Version.LUCENE_44);
 	    else if(COLLECTION_LANG.equals("ca")) analyzer = new CatalanAnalyzer(Version.LUCENE_44);
 	    else if(COLLECTION_LANG.equals("nl")) analyzer = new DutchAnalyzer(Version.LUCENE_44);
+	    else if(COLLECTION_LANG.equals("ar")) analyzer = new ArabicAnalyzer(Version.LUCENE_44);
 	    else analyzer = new EnglishAnalyzer(Version.LUCENE_44);
 		
 		//setting search mode
