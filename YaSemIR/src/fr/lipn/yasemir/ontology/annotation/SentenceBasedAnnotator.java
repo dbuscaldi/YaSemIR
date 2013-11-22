@@ -22,6 +22,9 @@ package fr.lipn.yasemir.ontology.annotation;
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 import java.io.File;
+import java.io.StringReader;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Vector;
 
 import org.apache.lucene.document.Document;
@@ -36,6 +39,8 @@ import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Version;
 import org.tartarus.snowball.ext.EnglishStemmer;
 
+import edu.stanford.nlp.ling.HasWord;
+import edu.stanford.nlp.process.DocumentPreprocessor;
 import fr.lipn.yasemir.Yasemir;
 import fr.lipn.yasemir.tools.Tools;
 
@@ -74,10 +79,13 @@ public class SentenceBasedAnnotator implements SemanticAnnotator {
 			searcher.setSimilarity(new BM25Similarity());
 			
 			
-			document=document.replaceAll("Support, .+?;", "");
+			/*
 			document=document.replaceAll("\\[.*?\\]", "").trim();
 			//document = document.replaceAll( "\\p{Punct}", " " );
 			String [] fragments = document.split("[;:\\.,]");
+			*/
+			
+			String [] fragments = (String[]) getSentences(document).toArray();
 			
 			for(String ofragment :  fragments) {
 				ofragment=ofragment.replaceAll( "\\p{Punct}", " " );
@@ -134,6 +142,35 @@ public class SentenceBasedAnnotator implements SemanticAnnotator {
 		return ret;
 		 
 	}
+	/**
+	 * Method that uses DocumentPreprocessor from Stanford Parser to split text into sentences
+	 * @param text
+	 * @return
+	 */
+	private Vector<String> getSentences(String text){
+		  Vector<String> sentenceList = new Vector<String>();
+		  DocumentPreprocessor dp = new DocumentPreprocessor(new StringReader(text));
+		  
+		  Iterator<List<HasWord>> it = dp.iterator();
+		  while (it.hasNext()) {
+		     StringBuilder sentenceSb = new StringBuilder();
+		     List<HasWord> sentence = it.next();
+		     for (HasWord token : sentence) {
+		        if(sentenceSb.length()>1) {
+		           sentenceSb.append(" ");
+		        }
+		        sentenceSb.append(token);
+		     }
+		     sentenceList.add(sentenceSb.toString());
+		  }
+		  /*
+		  for(String sentence:sentenceList) {
+		     System.err.println(sentence);
+		  }
+		  */
+		  return sentenceList;
+		  
+	  }
 	
 }
 
