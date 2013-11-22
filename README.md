@@ -9,4 +9,4 @@ See manual.odt in the doc directory for further information
 
 A demo has been included! See the demo directory
 
-Current version: 1.0.2
+Current version: 1.1.4
