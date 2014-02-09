@@ -51,7 +51,7 @@ public class TestAnnotation {
 		    	  System.out.println("oid: "+oid);
 		    	  Vector<Annotation> ann = anns.get(oid);
 		    	  for(Annotation a : ann){
-			    	  System.out.println(a.getOWLClass().getIRI());
+			    	  System.out.println(a.getOWLClass().getURI());
 			      }
 		      }
 		     

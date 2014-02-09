@@ -23,14 +23,10 @@ package fr.lipn.yasemir.ontology.skos;
  */
 
 import java.io.InputStream;
-import java.net.URI;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Vector;
 
-import org.semanticweb.owlapi.model.OWLClass;
-
-import com.hp.hpl.jena.graph.Node;
+import com.hp.hpl.jena.ontology.OntClass;
 import com.hp.hpl.jena.rdf.model.Literal;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
@@ -39,9 +35,6 @@ import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.ResIterator;
 import com.hp.hpl.jena.rdf.model.Resource;
-import com.hp.hpl.jena.rdf.model.SimpleSelector;
-import com.hp.hpl.jena.rdf.model.Statement;
-import com.hp.hpl.jena.rdf.model.StmtIterator;
 import com.hp.hpl.jena.util.FileManager;
 
 /**
@@ -114,9 +107,9 @@ public class SKOSTerminology {
 		
 	}
 	
-	public List<String> getLabels(OWLClass concept){
+	public List<String> getLabels(OntClass concept){
 		Vector<String> labels = new Vector<String>();
-		String cID = concept.toStringID();
+		String cID = concept.getURI();
 		Resource subj = model.createResource(cID);
 		Property pref = model.createProperty(skos, "prefLabel");
 		Property alt = model.createProperty(skos, "altLabel");
@@ -217,11 +210,11 @@ public class SKOSTerminology {
 	 * @param c
 	 * @param label
 	 */
-	public void makeConceptLabel(OWLClass c, String label){
+	public void makeConceptLabel(OntClass c, String label){
 		if(!label.trim().isEmpty()) {
-			String ss = c.getIRI().toString();
+			String ss = c.getURI();
 			//System.err.println("adding "+ss+" prefLabel:"+label);
-			Resource subj = model.createResource(c.getIRI().toString());
+			Resource subj = model.createResource(c.getURI());
 			Property pref = model.createProperty(skos, "prefLabel");
 			subj.addProperty(pref, label);
 		}

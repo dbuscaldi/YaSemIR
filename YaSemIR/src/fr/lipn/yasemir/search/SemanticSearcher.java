@@ -145,7 +145,7 @@ public class SemanticSearcher {
 			      for(String oid : queryAnnotation.keySet()) {
 			    	  Vector<Annotation> ann = queryAnnotation.get(oid);
 			    	  for(Annotation a : ann){
-				    	  System.err.println(a.getOWLClass().getIRI());
+				    	  System.err.println(a.getOWLClass().getURI());
 				      }
 			      }
 			      System.err.println("---------------------------");
@@ -157,7 +157,7 @@ public class SemanticSearcher {
 	    	  for(String oid : queryAnnotation.keySet()) {
 		    	  Vector<Annotation> ann = queryAnnotation.get(oid);
 		    	  for(Annotation a : ann){
-		    		  extQueryText.append(oid+"annot_exp:\""+a.getOWLClass().getIRI().getFragment()+"\"");
+		    		  extQueryText.append(oid+"annot_exp:\""+a.getOWLClass().getLocalName()+"\"");
 		    		  extQueryText.append(" ");
 			      }
 		      }

@@ -34,7 +34,8 @@ import org.apache.lucene.search.similarities.BM25Similarity;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Version;
-import org.semanticweb.owlapi.model.OWLClass;
+
+import com.hp.hpl.jena.ontology.OntClass;
 
 import fr.lipn.yasemir.Yasemir;
 import fr.lipn.yasemir.ontology.skos.SKOSTerminology;
@@ -160,7 +161,7 @@ public class KnowledgeBattery {
 	public static Ontology ontoForClassID(String str) {
 		for(int i=0; i < ontologies.size(); i++){
 			Ontology o = ontologies.elementAt(i);
-			OWLClass cls = o.classForID(str);
+			OntClass cls = o.classForID(str);
 			if(cls != null) return o;
 		}
 		return null;
@@ -180,14 +181,14 @@ public class KnowledgeBattery {
 	}
 	
 	/**
-	 * Returns the ontology corresponding to the provided scheme
+	 * Returns the ontology corresponding to the provided namespace
 	 * @param scheme
 	 * @return
 	 */
 	public static Ontology ontoForScheme(String scheme) {
 		for(int i=0; i < ontologies.size(); i++){
 			Ontology o = ontologies.elementAt(i);
-			if(!scheme.endsWith("#")) scheme=scheme+"#";
+			//if(!scheme.endsWith("#")) scheme=scheme+"#";
 			if(o.getBaseAddr().equals(scheme)) return o;
 		}
 		return null;

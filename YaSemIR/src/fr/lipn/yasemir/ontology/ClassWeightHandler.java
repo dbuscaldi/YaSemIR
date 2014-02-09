@@ -25,7 +25,8 @@ import java.io.IOException;
 
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.Term;
-import org.semanticweb.owlapi.model.OWLClass;
+
+import com.hp.hpl.jena.ontology.OntClass;
 
 import fr.lipn.yasemir.Yasemir;
 
@@ -56,10 +57,10 @@ public class ClassWeightHandler {
 		WEIGHT_TYPE=Yasemir.CONCEPT_WEIGHTS;
 	}
 	
-	private static double getProb(OWLClass cls){
+	private static double getProb(OntClass cls){
 		if (cls==null) return 1d;
-		String oid = KnowledgeBattery.ontoForScheme(cls.getIRI().getStart()).getOntologyID();
-		String text = cls.getIRI().getFragment();
+		String oid = KnowledgeBattery.ontoForScheme(cls.getNameSpace()).getOntologyID();
+		String text = cls.getLocalName();
 		Term t = new Term(oid+"annot_exp", text);
 		
 		double tfreq;
@@ -72,11 +73,11 @@ public class ClassWeightHandler {
 		}
 	}
 	
-	private static double getGaussProb(OWLClass cls){
+	private static double getGaussProb(OntClass cls){
 		double f=6d;
 		if (cls==null) return 1d;
-		String oid = KnowledgeBattery.ontoForScheme(cls.getIRI().getStart()).getOntologyID();
-		String text = cls.getIRI().getFragment();
+		String oid = KnowledgeBattery.ontoForScheme(cls.getNameSpace()).getOntologyID();
+		String text = cls.getLocalName();
 		Term t = new Term(oid+"annot_exp", text);
 		
 		double tfreq;
@@ -89,10 +90,10 @@ public class ClassWeightHandler {
 		}
 	}
 	
-	private static double getIDF(OWLClass cls){
+	private static double getIDF(OntClass cls){
 		if (cls==null) return 1d;
-		String oid = KnowledgeBattery.ontoForScheme(cls.getIRI().getStart()).getOntologyID();
-		String text = cls.getIRI().getFragment();
+		String oid = KnowledgeBattery.ontoForScheme(cls.getNameSpace()).getOntologyID();
+		String text = cls.getLocalName();
 		Term t = new Term(oid+"annot_exp", text);
 		
 		//String rep=cls.toStringID();
@@ -106,11 +107,11 @@ public class ClassWeightHandler {
 		}
 	}
 	
-	private static double get1(OWLClass cls){
+	private static double get1(OntClass cls){
 		return 1d; //method that corresponds to giving all classes the same weight
 	}
 
-	public static double getWeight(OWLClass root) {
+	public static double getWeight(OntClass root) {
 		switch(WEIGHT_TYPE) {
 			case FIXED: return get1(root);
 			case IDF: return getIDF(root);

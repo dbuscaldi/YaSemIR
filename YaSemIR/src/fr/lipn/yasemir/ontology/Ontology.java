@@ -22,27 +22,23 @@ package fr.lipn.yasemir.ontology;
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-import java.io.File;
+import java.io.InputStream;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map.Entry;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.semanticweb.owlapi.apibinding.OWLManager;
-import org.semanticweb.owlapi.model.IRI;
-import org.semanticweb.owlapi.model.OWLClass;
-import org.semanticweb.owlapi.model.OWLClassExpression;
-import org.semanticweb.owlapi.model.OWLEntity;
-import org.semanticweb.owlapi.model.OWLOntology;
-import org.semanticweb.owlapi.model.OWLOntologyCreationException;
-import org.semanticweb.owlapi.model.OWLOntologyManager;
 import org.tartarus.snowball.ext.EnglishStemmer;
+
+import com.hp.hpl.jena.ontology.OntClass;
+import com.hp.hpl.jena.ontology.OntModel;
+import com.hp.hpl.jena.ontology.OntTools;
+import com.hp.hpl.jena.rdf.model.ModelFactory;
+import com.hp.hpl.jena.util.FileManager;
+import com.hp.hpl.jena.util.iterator.ExtendedIterator;
 
 import fr.lipn.yasemir.ontology.skos.SKOSTerminology;
 
@@ -52,30 +48,40 @@ import fr.lipn.yasemir.ontology.skos.SKOSTerminology;
  *
  */
 public class Ontology {
-	private OWLOntology onto;
-	private OWLClass root;
+	private OntModel onto;
+	private OntClass root;
+	private String mainNameSpace;
 	
 	/**
 	 * Constructor that uses owl:Thing as root concept
 	 * @param ontologyFileLocation
 	 */
 	public Ontology(String ontologyFileLocation){
-		OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
-        File file = new File(ontologyFileLocation);
-        // Now load the local copy
-        try {
-			onto = manager.loadOntologyFromOntologyDocument(file);
-		} catch (OWLOntologyCreationException e) {
-			e.printStackTrace();
-			onto = null;
+		onto = ModelFactory.createOntologyModel();
+		InputStream in = FileManager.get().open( ontologyFileLocation );
+		if (in == null) {
+			System.err.println("[YaSemIR]: Impossible to load ontology from file: "+ontologyFileLocation);
+			System.exit(-1);
 		}
-        Set<OWLClass> allClasses = onto.getClassesInSignature(true);
-        for(OWLClass c : allClasses) {
-        	if(c.isTopEntity()){
-        		this.root=c;
-        		break;
-        	}
-        }
+		
+		onto.read(in, null);
+		
+		/*
+		String docURI= "http://yasemir.org/ontology";
+		onto = ModelFactory.createOntologyModel();
+		OntDocumentManager dm = onto.getDocumentManager();
+		dm.addAltEntry(docURI, ontologyFileLocation);
+		onto.read( docURI );
+		*/
+		
+		ExtendedIterator<OntClass> itr = onto.listHierarchyRootClasses();
+	 	while(itr.hasNext()){
+	 		OntClass c = itr.next();
+	 		if(c.isHierarchyRoot()) {
+	 			this.root=c;
+	 			break;
+	 		}
+	 	}
         
         if(this.root==null) System.err.println("[YaSemIR]: ERROR: No root class found!!!");
         else System.err.println("[YaSemIR]: Warning: no root class given, using "+this.root);
@@ -108,25 +114,44 @@ public class Ontology {
 	 * @param root
 	 */
 	public Ontology(String ontologyFileLocation, String root){
-		OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
-        File file = new File(ontologyFileLocation);
-        // Now load the local copy
-        try {
-			onto = manager.loadOntologyFromOntologyDocument(file);
-		} catch (OWLOntologyCreationException e) {
-			e.printStackTrace();
-			onto = null;
+		onto = ModelFactory.createOntologyModel();
+		InputStream in = FileManager.get().open( ontologyFileLocation );
+		if (in == null) {
+			System.err.println("[YaSemIR]: Impossible to load ontology from file: "+ontologyFileLocation);
+			System.exit(-1);
 		}
+		
+		String rootNS = null;
+		int gatePos = root.lastIndexOf('#');
+		if(gatePos > -1) {
+			rootNS=root.substring(0, gatePos);
+		} else {
+			gatePos=root.lastIndexOf('/');
+			rootNS=root.substring(0, gatePos);
+		}
+		
+		onto.read(in, rootNS);
+		
+		this.mainNameSpace=rootNS;
+		
+		/*
+		 *     Note to the above method:
+		 *     in - the input stream
+		 *     base - the base uri to be used when converting relative URI's to absolute URI's. (Resolving relative URIs and fragment IDs is done by prepending the base URI to the relative URI/fragment.) If there are no relative URIs in the source, this argument may safely be null. If the base is the empty string, then relative URIs will be retained in the model. This is typically unwise and will usually generate errors when writing the model back out.
+		 */
+		
 		this.root = classForID(root);
 		
-		System.err.println("[YaSemIR]: Loaded ontology: " + onto + " with root class "+root);
+		System.err.println("[YaSemIR]: Loaded ontology: " + rootNS + " with root class "+root);
 	}
 	/**
-	 * Returns the namespace of the ontoogy followed by a "#" symbol
+	 * Returns the main namespace of the ontology
 	 * @return
 	 */
 	public String getBaseAddr(){
-		return onto.getOntologyID().getOntologyIRI().toString()+"#"; //FIXME: lasciare il # o no?
+		return mainNameSpace;
+		//return onto.getNsPrefixURI(onto.toString())+"#";
+		//return onto.getOntologyID().getOntologyIRI().toString()+"#";
 		//return "http://org.snu.bike/MeSH#";
 	}
 	/**
@@ -135,9 +160,9 @@ public class Ontology {
 	 * @param b
 	 * @return
 	 */
-	public Set<OWLClass> comparableRoots(OWLClass a, OWLClass b){
-		Set<OWLClass> pa = getConceptSuperTypes(a);
-		Set<OWLClass> pb = getConceptSuperTypes(b);
+	public Set<OntClass> comparableRoots(OntClass a, OntClass b){
+		Set<OntClass> pa = getConceptSuperTypes(a);
+		Set<OntClass> pb = getConceptSuperTypes(b);
 		pa.retainAll(pb);
 		return pa; //if this is not empty, the classes are comparable; if its size is more than 1, then we have multiple inheritance		
 	}
@@ -147,9 +172,9 @@ public class Ontology {
 	 * @param c
 	 * @return
 	 */
-	public Set<OWLClass> getConceptSuperTypes(OWLClass c){
-		Set<OWLClass> pa = getAllSuperClasses(c);
-		Set<OWLClass> lr = getOntologyRoots();
+	public Set<OntClass> getConceptSuperTypes(OntClass c){
+		Set<OntClass> pa = getAllSuperClasses(c);
+		Set<OntClass> lr = getOntologyRoots();
 		pa.retainAll(lr);
 		return pa;		
 	}
@@ -159,17 +184,21 @@ public class Ontology {
 	 * @param localRoot (maybe the least common subsumer or the domain root)
 	 * @return
 	 */
-	public int computeDepth(OWLClass c, OWLClass localRoot){
+	public int computeDepth(OntClass c, OntClass localRoot){
 		int d=0;
-		HashSet<OWLClass> f = new HashSet<OWLClass>(); //frontier set
+		HashSet<OntClass> f = new HashSet<OntClass>(); //frontier set
 		f.add(c);
 		while(!f.contains(localRoot) && !f.isEmpty()){
-			HashSet<OWLClass> newF = new HashSet<OWLClass>(); //frontier set
+			HashSet<OntClass> newF = new HashSet<OntClass>(); //frontier set
 			newF.addAll(f);
-			for(OWLClass cf : newF){
+			for(OntClass cf : newF){
 				f.remove(cf);
-				Set<OWLClassExpression> tmp = cf.getSuperClasses(onto);
-				for(OWLClassExpression ce : tmp) f.add(ce.asOWLClass());
+				ExtendedIterator<OntClass> itr = cf.listSuperClasses(true);
+				Set<OntClass> tmp = new HashSet<OntClass>();
+				while(itr.hasNext()){
+					tmp.add(itr.next());
+				}
+				for(OntClass ce : tmp) f.add(ce);
 			}
 			d++;
 		}
@@ -180,31 +209,13 @@ public class Ontology {
 	 * @param c
 	 * @return
 	 */
-	public Set<OWLClass> getAllSuperClasses(OWLClass c){
-		Set<OWLClass> ret = new HashSet<OWLClass>();
-		Set<OWLClassExpression> tmp = new HashSet<OWLClassExpression>();
-		buildHierarchy(c, tmp);
-		for(OWLClassExpression ce : tmp){
-			ret.add(ce.asOWLClass());
+	public Set<OntClass> getAllSuperClasses(OntClass c){
+		Set<OntClass> ret = new HashSet<OntClass>();
+		ExtendedIterator<OntClass> itr = c.listSuperClasses();
+		while(itr.hasNext()) {
+			ret.add(itr.next());
 		}
 		return ret;
-	}
-	
-	/**
-	 * Auxiliary recursive method used by AllSuperClasses
-	 * @param c
-	 * @param visited
-	 */
-	private void buildHierarchy(OWLClass c, Set<OWLClassExpression> visited){
-		Set<OWLClassExpression> sc = c.getSuperClasses(onto);
-		for(OWLClassExpression ce : sc){
-			if(!ce.isAnonymous()){
-				if(!isGeneric(ce.asOWLClass()) && !visited.contains(ce)){
-					visited.add(ce);
-					buildHierarchy(ce.asOWLClass(), visited);
-				}
-			}
-		}
 	}
 	
 	/**
@@ -212,32 +223,35 @@ public class Ontology {
 	 * @param c
 	 * @return
 	 */
-	public boolean isGeneric(OWLClass c){
+	public boolean isGeneric(OntClass c){
 		return c.equals(this.root);
 	}
 	/**
 	 * Returns the classes corresponding to the top-domains in the Ontology (exactly under root or All for MeSH)
 	 * @return the classes corresponding to the top-domains
 	 */
-	public Set<OWLClass> getOntologyRoots(){
-		//OWLClass all = classForID("http://org.snu.bike/MeSH#All");
-		HashSet<OWLClass> ret = new HashSet<OWLClass>();
-		for(OWLClassExpression ce : this.root.getSubClasses(onto)){
-			ret.add(ce.asOWLClass());
+	public Set<OntClass> getOntologyRoots(){
+		//OntClass all = classForID("http://org.snu.bike/MeSH#All");
+		HashSet<OntClass> ret = new HashSet<OntClass>();
+		ExtendedIterator<OntClass> itr = this.root.listSubClasses(true);
+		while(itr.hasNext()) {
+			ret.add(itr.next());
 		}
 		return ret;
 	}
 	
 	/**
-	 * Returns an OWLClass corresponding to the passed id string (IRI format)
+	 * Returns an OntClass corresponding to the passed id string (IRI format)
 	 * @param id a String representing the class, e.g. "http://org.snu.bike/MeSH#All"
-	 * @return The corresponding OWLClass in the Ontology, null if it is not in the ontology
+	 * @return The corresponding OntClass in the Ontology, null if it is not in the ontology
 	 */
-	public OWLClass classForID(String id){
-		Set<OWLEntity> s = onto.getEntitiesInSignature(IRI.create(id));
+	public OntClass classForID(String id){
+		return this.onto.getOntClass(id);
+		/*Set<OWLEntity> s = onto.getEntitiesInSignature(IRI.create(id));
 		if(s.isEmpty()) s= onto.getEntitiesInSignature(IRI.create(this.getBaseAddr()+id));
-		if(!s.isEmpty()) return s.iterator().next().asOWLClass();
+		if(!s.isEmpty()) return s.iterator().next().asOntClass();
 		else return null;
+		*/
 	}
 	
 	/**
@@ -246,59 +260,9 @@ public class Ontology {
 	 * @param b
 	 * @return
 	 */
-	public OWLClass leastCommonSubsumer(OWLClass a, OWLClass b){
-		Set<OWLClass> sup_a= getAllSuperClasses(a);
-		sup_a.add(a);//add itself
-		Set<OWLClass> sup_b= getAllSuperClasses(b);
-		sup_b.add(b);
-		
-		HashMap<OWLClass, Integer> dist_a=dijkstra(a, sup_a);
-		//HashMap<OWLClass, Integer> dist_b=dijkstra(a, sup_b);
-		
-		sup_a.retainAll(sup_b);
-		Set<GraphElement> dist = new HashSet<GraphElement>();
-		for(OWLClass c : sup_a){
-			dist.add(new GraphElement(c, dist_a.get(c)));
-		}
-		GraphElement min = Collections.min(dist);
-		
-		return min.getOWLClass();
+	public OntClass leastCommonSubsumer(OntClass a, OntClass b){
+		return OntTools.getLCA(onto, a, b);
  	}
-	
-	private HashMap<OWLClass, Integer> dijkstra(OWLClass c, Set<OWLClass> graph){
-		HashMap<OWLClass, Integer> dist = new HashMap<OWLClass, Integer>();
-		for(OWLClass o : graph) dist.put(o, Integer.MAX_VALUE);
-		dist.put(c, new Integer(0));
-		
-		Set<GraphElement> queue = new HashSet<GraphElement>();
-		for(Entry<OWLClass, Integer> e : dist.entrySet()){
-			GraphElement ge = new GraphElement(e.getKey(), e.getValue());
-			queue.add(ge);
-		}
-		
-		while(!queue.isEmpty()){
-			GraphElement min=Collections.min(queue);
-			queue.remove(min);
-			if(min.weight==Integer.MAX_VALUE) break;
-			OWLClass n = min.getOWLClass();
-			Set<OWLClassExpression> ss = n.getSuperClasses(onto);
-			for(OWLClassExpression sce : ss) {
-				OWLClass neighbour=sce.asOWLClass();
-				Integer alt = new Integer(1);
-				alt+=min.getDistance();
-				if(dist.containsKey(neighbour)) {
-					if(alt < dist.get(neighbour)){
-						GraphElement gn = new GraphElement(neighbour, alt); 
-						queue.remove(gn);
-						queue.add(gn);
-						dist.put(neighbour, alt);
-					}
-				}
-			}
-		}
-		
-		return dist;
-	}
 	
 	/**
 	 * Returns the hashCode of ontology ID
@@ -315,11 +279,13 @@ public class Ontology {
 	 * @return
 	 */
 	public SKOSTerminology generateTerminology() {
-		SKOSTerminology terminology = new SKOSTerminology(this.getOntologyID()); //FIXME: terminologia non generata?
+		SKOSTerminology terminology = new SKOSTerminology(this.getOntologyID());
 		terminology.setStemming(true);
-		Set<OWLClass> nodes = onto.getClassesInSignature();
-		for(OWLClass c : nodes) {
-			String concLabel = c.getIRI().getFragment();
+		ExtendedIterator<OntClass> itr = onto.listClasses();
+		while(itr.hasNext()) {
+			OntClass c = itr.next();
+			if (c.getURI()==null) continue; //TODO: verificare perchè ci sono classi con URI null
+			String concLabel = c.getLocalName();
 			if(!concLabel.equals(concLabel.toUpperCase()) && !concLabel.equals(concLabel.toLowerCase())){ //concept name is not all in capitals or minuscule
 				Pattern p = Pattern.compile("([0-9]+|\\p{Lu}[^\\p{Lu}0-9]+|\\p{Lu}+)");
 				Matcher m = p.matcher(concLabel);
@@ -364,7 +330,7 @@ public class Ontology {
 	 * @param localRoot
 	 * @return
 	 */
-	public float computeSimilarity(int type, OWLClass c1, OWLClass c2, OWLClass localRoot){
+	public float computeSimilarity(int type, OntClass c1, OntClass c2, OntClass localRoot){
 		float res=0f;
 		switch(type){
 			case ConceptSimilarity.WU: res=computeWuPalmerSimilarity(c1, c2, localRoot); break;
@@ -383,17 +349,17 @@ public class Ontology {
 	 * @param localRoot
 	 * @return
 	 */
-	public float computeWuPalmerSimilarity(OWLClass c1, OWLClass c2, OWLClass localRoot)
+	public float computeWuPalmerSimilarity(OntClass c1, OntClass c2, OntClass localRoot)
 	{
 
-		Set<OWLClass> subsumers1 = this.getAllSuperClasses(c1);
+		Set<OntClass> subsumers1 = this.getAllSuperClasses(c1);
 		subsumers1.add(c1);
-		Set<OWLClass> subsumers2 = this.getAllSuperClasses(c2);
+		Set<OntClass> subsumers2 = this.getAllSuperClasses(c2);
 		subsumers2.add(c2);
 		subsumers1.retainAll(subsumers2);
 		subsumers1.removeAll(this.getAllSuperClasses(localRoot));
 		int greatestDepth = 1;
-		for (OWLClass father:subsumers1)
+		for (OntClass father:subsumers1)
 		{
 			int currentDepth = this.computeDepth(father,localRoot);
 			if (currentDepth>greatestDepth)
@@ -413,17 +379,17 @@ public class Ontology {
 	 * @param localRoot
 	 * @return
 	 */
-	public float computeProxiGenea(OWLClass c1, OWLClass c2, OWLClass localRoot)
+	public float computeProxiGenea(OntClass c1, OntClass c2, OntClass localRoot)
 	{
-		Set<OWLClass> subsumers1 = this.getAllSuperClasses(c1);
+		Set<OntClass> subsumers1 = this.getAllSuperClasses(c1);
 		subsumers1.add(c1);
-		Set<OWLClass> subsumers2 = this.getAllSuperClasses(c2);
+		Set<OntClass> subsumers2 = this.getAllSuperClasses(c2);
 		subsumers2.add(c2);
 		subsumers1.retainAll(subsumers2);
 		subsumers1.removeAll(this.getAllSuperClasses(localRoot));
 		subsumers1.remove(localRoot);
 		int greatestDepth = 1;
-		for (OWLClass father:subsumers1)
+		for (OntClass father:subsumers1)
 		{
 			int currentDepth = this.computeDepth(father,localRoot);
 			if (currentDepth>greatestDepth)
@@ -444,16 +410,16 @@ public class Ontology {
 	 * @param localRoot
 	 * @return
 	 */
-	public float computeProxiGenea2(OWLClass c1, OWLClass c2, OWLClass localRoot)
+	public float computeProxiGenea2(OntClass c1, OntClass c2, OntClass localRoot)
 	{
-		Set<OWLClass> subsumers1 = this.getAllSuperClasses(c1);
+		Set<OntClass> subsumers1 = this.getAllSuperClasses(c1);
 		subsumers1.add(c1);
-		Set<OWLClass> subsumers2 = this.getAllSuperClasses(c2);
+		Set<OntClass> subsumers2 = this.getAllSuperClasses(c2);
 		subsumers2.add(c2);
 		subsumers1.retainAll(subsumers2);
 		subsumers1.removeAll(this.getAllSuperClasses(localRoot));
 		int greatestDepth = 1;
-		for (OWLClass father:subsumers1)
+		for (OntClass father:subsumers1)
 		{
 			int currentDepth = this.computeDepth(father,localRoot);
 			if (currentDepth>greatestDepth)
@@ -473,16 +439,16 @@ public class Ontology {
 	 * @param localRoot
 	 * @return
 	 */
-	public float computeProxiGenea3(OWLClass c1, OWLClass c2, OWLClass localRoot)
+	public float computeProxiGenea3(OntClass c1, OntClass c2, OntClass localRoot)
 	{
-		Set<OWLClass> subsumers1 = this.getAllSuperClasses(c1);
+		Set<OntClass> subsumers1 = this.getAllSuperClasses(c1);
 		subsumers1.add(c1);
-		Set<OWLClass> subsumers2 = this.getAllSuperClasses(c2);
+		Set<OntClass> subsumers2 = this.getAllSuperClasses(c2);
 		subsumers2.add(c2);
 		subsumers1.retainAll(subsumers2);
 		subsumers1.removeAll(this.getAllSuperClasses(localRoot));
 		int greatestDepth = 1;
-		for (OWLClass father:subsumers1)
+		for (OntClass father:subsumers1)
 		{
 			int currentDepth = this.computeDepth(father,localRoot);
 			if (currentDepth>greatestDepth)
@@ -497,15 +463,15 @@ public class Ontology {
 }
 
 class GraphElement implements Comparable<GraphElement> {
-	OWLClass cl;
+	OntClass cl;
 	Integer weight;
 	
-	public GraphElement(OWLClass c, Integer w){
+	public GraphElement(OntClass c, Integer w){
 		this.cl=c;
 		this.weight=w;
 	}
 	
-	public OWLClass getOWLClass(){
+	public OntClass getOntClass(){
 		return this.cl;
 	}
 	

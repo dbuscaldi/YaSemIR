@@ -21,7 +21,8 @@ package fr.lipn.yasemir.ontology.annotation;
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
-import org.semanticweb.owlapi.model.OWLClass;
+
+import com.hp.hpl.jena.ontology.OntClass;
 
 import fr.lipn.yasemir.ontology.KnowledgeBattery;
 import fr.lipn.yasemir.ontology.Ontology;
@@ -32,7 +33,7 @@ import fr.lipn.yasemir.ontology.Ontology;
  */
 public class Annotation {
 	private String cname;
-	private OWLClass owlClass;
+	private OntClass owlClass;
 	private Ontology refOnto;
 
 	public Annotation(String str) {
@@ -49,7 +50,7 @@ public class Annotation {
 		else owlClass=null; //NOTE: class not found in the KB!
 	}
 
-	public OWLClass getOWLClass(){
+	public OntClass getOWLClass(){
 		return owlClass;
 	}
 	

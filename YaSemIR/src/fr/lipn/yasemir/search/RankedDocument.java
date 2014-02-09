@@ -25,7 +25,7 @@ import java.util.HashMap;
 import java.util.Set;
 import java.util.Vector;
 
-import org.semanticweb.owlapi.model.OWLClass;
+import com.hp.hpl.jena.ontology.OntClass;
 
 import fr.lipn.yasemir.ontology.ClassWeightHandler;
 import fr.lipn.yasemir.ontology.KnowledgeBattery;
@@ -184,16 +184,16 @@ public class RankedDocument implements Comparable<RankedDocument> {
 		for(int i=0; i< queryAnnot.size(); i++){
 			Annotation qa = queryAnnot.elementAt(i);
 			float max=0f;
-			OWLClass bestLocalRoot=null;
-			OWLClass q= qa.getOWLClass();
+			OntClass bestLocalRoot=null;
+			OntClass q= qa.getOWLClass();
 			for(int j=0; j < docAnnot.size(); j++){
 				Annotation da = docAnnot.elementAt(j);
-				OWLClass d = da.getOWLClass();
+				OntClass d = da.getOWLClass();
 				if(da.fromSameOntology(qa)) {
 					Ontology o = qa.getRelatedOntology();
-					Set<OWLClass> roots = o.comparableRoots(q, d);
+					Set<OntClass> roots = o.comparableRoots(q, d);
 					if(!roots.isEmpty()){
-						OWLClass localRoot=roots.iterator().next();
+						OntClass localRoot=roots.iterator().next();
 						//OWLClass lcs = Ontology.leastCommonSubsumer(q, d); //not needed
 						float tmp = o.computeSimilarity(measure, q, d, localRoot);					
 						//System.err.println("Least common subsumer of "+q+" and "+" "+d+" : "+lcs);
